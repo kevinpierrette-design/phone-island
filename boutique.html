@@ -1,0 +1,731 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Boutique · Phone Island</title>
+<meta name="description" content="La boutique de Phone Island, en Martinique : iPhone reconditionnés, AirPods et accessoires (chargeurs, vitres de protection, batteries externes). Réservez sur WhatsApp.">
+<link rel="icon" type="image/png" href="assets/favicon-64.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap">
+<style>
+:root { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+[hidden] { display: none !important; }
+/* Layout: Apple-style bands, all black (near-black with a breath of the brand's brown). Each band carries one idea:
+   a short headline, one line of text, then one large thing (a phone drawn in code, a price tool, an
+   exploded view, a map, a form). Text is left-aligned on a 1120px column.
+   One typeface, Poppins, for text and every number; the Phone Island name is the logo artwork itself.
+   The hero phone, the price tool and the buy-back screen are drawn in CSS/SVG; repairs, the bench and the
+   shop use real photographs (the owner's own, and Unsplash pictures, free for commercial use). */
+:root {
+  --espresso: #1B140D;     /* brand brown: dark fills, text on gold and cream */
+  --ink: #060504;          /* the page: black with a breath of warmth */
+  --ink-2: #0B0907;        /* alternate bands */
+  --card: #15110D;         /* tiles and cards */
+  --card-2: #211A14;       /* raised: inputs, small buttons on cards */
+  --roast: #271D14;
+  --roast-2: #3A2D20;
+  --cream: #F3EBDD;        /* text */
+  --sand: #B9AE9C;         /* secondary text */
+  --stone: #A99F91;        /* tertiary text */
+  --gold: #E2B662;         /* brand gold: primary buttons, accents */
+  --gold-hi: #ECC47A;
+  --bronze: #D9AE5F;       /* links, icons, marks */
+  --white: #FFFFFF;
+  --rule: rgba(243, 235, 221, .1);
+  --rule-strong: rgba(243, 235, 221, .17);
+  --wa-bg: #0B141A;        /* WhatsApp, dark mode */
+  --wa-bubble: #005C4B;
+  --wa-ink: #E9EDEF;
+  --wa-muted: #8696A0;
+  --zone-0: #E2B662;       /* Fort-de-France: 10 € */
+  --zone-1: #A17A45;       /* proche: 20 € */
+  --zone-2: #735634;       /* un peu plus loin: 25 € */
+  --zone-3: #50402C;       /* sud et nord: 35 € */
+  --sans: "Poppins", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --serif: "Playfair Display", Georgia, "Times New Roman", serif;
+  --gutter: clamp(20px, 5vw, 44px);
+  --radius: clamp(22px, 2.6vw, 30px);
+  --nav-h: 56px;
+  --ease: cubic-bezier(.2, .75, .2, 1);
+  color-scheme: dark;
+}
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+}
+body {
+  margin: 0; background: var(--ink); color: var(--cream);
+  font: 400 1.0625rem/1.55 var(--sans);
+  -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility;
+}
+img, video, svg, picture { display: block; max-width: 100%; }
+img { height: auto; }
+a { color: inherit; }
+button, input, select, textarea { font: inherit; color: inherit; }
+h1, h2, h3, p, ol, ul, figure, fieldset { margin: 0; }
+h1, h2, h3 { font-weight: 600; text-wrap: balance; }
+p { text-wrap: pretty; }
+.wrap { width: 100%; max-width: calc(1120px + 2 * var(--gutter)); margin-inline: auto; padding-inline: var(--gutter); }
+.visually-hidden { position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+.light :focus-visible, .alt :focus-visible { outline-color: var(--gold); }
+main section[id], .promo[id] { scroll-margin-top: calc(var(--nav-h) + 8px); }
+.num { font-variant-numeric: lining-nums tabular-nums; }
+
+/* bands */
+.band { padding-block: clamp(76px, 11vw, 140px); }
+.light { background: var(--ink); color: var(--cream); }
+.alt { background: var(--ink-2); color: var(--cream); }
+.dark { background: var(--ink); color: var(--cream); }
+.band-head { max-width: 46rem; margin-bottom: clamp(36px, 5.5vw, 64px); }
+.band-head h2 { font-size: clamp(2.1rem, 6.2vw, 3.75rem); line-height: 1.04; letter-spacing: -0.035em; }
+.lead { margin-top: 18px; max-width: 38rem; font-size: clamp(1.0625rem, 1.9vw, 1.375rem); line-height: 1.45; color: var(--stone); }
+.dark .lead { color: var(--sand); }
+
+/* scroll-linked entrances: elements rise into place as they enter; they stay readable at rest */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .rv { animation: rv linear both; animation-timeline: view(); animation-range: entry 0% cover 26%; }
+    .rv-2 { animation-range: entry 8% cover 32%; }
+    .rv-3 { animation-range: entry 16% cover 38%; }
+    @keyframes rv { from { opacity: .22; transform: translateY(64px) scale(.965); } to { opacity: 1; transform: none; } }
+  }
+}
+
+/* buttons and links */
+.pill {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  min-height: 50px; padding: 12px 26px; border: 0; border-radius: 999px;
+  background: var(--gold); color: var(--espresso); font-size: 1rem; font-weight: 500; line-height: 1.2;
+  text-align: center; text-decoration: none; cursor: pointer; -webkit-tap-highlight-color: transparent;
+  transition: background-color .2s ease, transform .15s ease;
+}
+.pill:hover { background: var(--gold-hi); }
+.pill:active { transform: scale(.97); }
+.pill svg { width: 20px; height: 20px; flex: none; }
+.pill-ink { background: var(--cream); color: var(--espresso); }
+.pill-ink:hover { background: #FFF7EA; }
+.pill-sm { min-height: 36px; padding: 6px 16px; font-size: .875rem; }
+.link { display: inline-flex; align-items: center; gap: 2px; color: var(--bronze); font-weight: 500; text-decoration: none; }
+.link svg { width: 18px; height: 18px; transition: transform .2s ease; }
+.link:hover { text-decoration: underline; text-underline-offset: 4px; }
+.link:hover svg { transform: translateX(3px); }
+.dark .link { color: var(--gold); }
+.cta-row { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 28px; }
+
+/* navigation */
+.site-nav {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 60;
+  background: rgba(6, 5, 4, .8); color: var(--cream);
+  -webkit-backdrop-filter: saturate(160%) blur(18px); backdrop-filter: saturate(160%) blur(18px);
+  border-bottom: 1px solid rgba(243, 235, 221, .08);
+}
+.nav-row { display: flex; align-items: center; gap: 18px; height: var(--nav-h); }
+.brand { display: inline-flex; align-items: center; gap: 8px; margin-right: auto; text-decoration: none; }
+.brand-mark { width: auto; height: 38px; }
+.brand-name { width: auto; height: 24px; margin-top: 2px; }
+.nav-links { display: none; align-items: center; gap: clamp(18px, 2.2vw, 30px); }
+.nav-links a { color: var(--sand); text-decoration: none; font-size: .875rem; transition: color .2s; }
+.nav-links a:hover { color: var(--cream); }
+.burger { display: inline-grid; place-items: center; width: 44px; height: 44px; margin-right: -10px; padding: 0; border: 0; background: none; color: var(--cream); cursor: pointer; }
+.burger svg { width: 22px; height: 22px; overflow: visible; }
+.burger line { transition: transform .3s ease; transform-origin: 12px 12px; }
+.burger[aria-expanded="true"] .l1 { transform: translateY(3.5px) rotate(45deg); }
+.burger[aria-expanded="true"] .l2 { transform: translateY(-3.5px) rotate(-45deg); }
+@media (min-width: 960px) { .nav-links { display: flex; } .burger { display: none; } }
+@media (max-width: 379px) { .nav-row .pill-sm { display: none; } }
+.menu {
+  position: fixed; z-index: 55; left: 0; right: 0; bottom: 0; top: calc(var(--nav-h) + env(safe-area-inset-top, 0px));
+  overflow-y: auto; background: var(--ink); color: var(--cream);
+  padding-block: 8px calc(32px + env(safe-area-inset-bottom, 0px));
+}
+.menu nav { display: grid; }
+.menu nav a {
+  padding-block: 14px; border-bottom: 1px solid rgba(243, 235, 221, .1);
+  font-size: 1.75rem; font-weight: 600; letter-spacing: -0.02em; text-decoration: none;
+  animation: menu-in .42s var(--ease) both; animation-delay: calc(var(--i) * 35ms);
+}
+@keyframes menu-in { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: none; } }
+.menu .pill { width: 100%; margin-top: 28px; }
+.menu-contact { margin-top: 18px; color: var(--sand); font-size: .9375rem; }
+html.menu-open { overflow: hidden; }
+
+.badge { display: inline-flex; align-items: center; min-height: 24px; padding: 2px 10px; border-radius: 999px; background: rgba(226, 182, 98, .14); color: var(--gold); font-size: .75rem; font-weight: 600; letter-spacing: .02em; }
+/* ---------- booking ---------- */
+.book { display: grid; gap: clamp(28px, 4vw, 48px); align-items: start; }
+@media (min-width: 900px) { .book { grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); } }
+.form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 14px; }
+@media (max-width: 520px) { .form { grid-template-columns: minmax(0, 1fr); } }
+.field { display: grid; gap: 8px; min-width: 0; }
+.field.full { grid-column: 1 / -1; }
+.field label { font-size: .875rem; font-weight: 500; }
+.field .opt { color: var(--stone); font-weight: 400; }
+.input {
+  display: block; width: 100%; min-width: 0; min-height: 52px; padding: 12px 16px;
+  border: 1px solid rgba(243, 235, 221, .2); border-radius: 14px; background: var(--card); color: var(--cream);
+  font-size: 1rem; line-height: 1.4; transition: border-color .2s, box-shadow .2s; -webkit-appearance: none; appearance: none;
+}
+.input::placeholder { color: #8A8073; }
+.input:hover { border-color: rgba(243, 235, 221, .38); }
+.input:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 4px rgba(226, 182, 98, .2); }
+textarea.input { min-height: 110px; resize: vertical; }
+select.input {
+  padding-right: 44px; background-repeat: no-repeat; background-position: right 16px center; background-size: 14px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14'%3E%3Cpath d='M2.5 5l4.5 4.5L11.5 5' fill='none' stroke='%23F3EBDD' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+input[type="date"].input { line-height: 26px; }
+.wa-card { display: grid; gap: 16px; min-width: 0; padding: clamp(18px, 2.6vw, 26px); border-radius: var(--radius); background: var(--wa-bg); color: var(--wa-ink); }
+@media (min-width: 900px) { .wa-card { position: sticky; top: calc(var(--nav-h) + 24px); } }
+.wa-head { display: flex; align-items: center; gap: 12px; padding-bottom: 14px; border-bottom: 1px solid rgba(233, 237, 239, .08); }
+.wa-avatar { display: grid; place-items: center; width: 42px; height: 42px; flex: none; border-radius: 50%; background: #000; box-shadow: inset 0 0 0 1px rgba(233, 237, 239, .12); }
+.wa-avatar img { width: 30px; height: auto; }
+.wa-name { font-weight: 600; font-size: .9375rem; line-height: 1.3; }
+.wa-sub { color: var(--wa-muted); font-size: .8125rem; }
+.bubble {
+  justify-self: end; max-width: 94%; padding: 11px 14px; border-radius: 16px 16px 4px 16px; background: var(--wa-bubble); color: var(--wa-ink);
+  box-shadow: 0 1px .5px rgba(0, 0, 0, .3); font-size: .9375rem; line-height: 1.5; white-space: pre-wrap; overflow-wrap: anywhere;
+}
+.bubble .ph { color: #9FC7BD; }
+.bubble.bump { animation: bump .35s var(--ease); }
+@keyframes bump { 0% { transform: scale(.985); } 100% { transform: none; } }
+.wa-card .pill { width: 100%; }
+.wa-alt { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; color: var(--wa-muted); font-size: .875rem; }
+.wa-alt .num { color: var(--wa-ink); font-weight: 500; user-select: all; }
+.copy {
+  min-height: 32px; padding: 4px 12px; border: 1px solid rgba(233, 237, 239, .22); border-radius: 999px; background: transparent;
+  color: var(--wa-ink); font-size: .8125rem; font-weight: 500; cursor: pointer; transition: background-color .2s;
+}
+.copy:hover { background: rgba(233, 237, 239, .08); }
+
+/* where the repair happens: asked before the message can go */
+.place { margin: 0; padding: 0; border: 0; min-width: 0; }
+.place legend { padding: 0; margin-bottom: 8px; font-size: .875rem; font-weight: 500; }
+.places { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+@media (max-width: 420px) { .places { grid-template-columns: minmax(0, 1fr); } }
+.place-opt { position: relative; display: flex; min-width: 0; }
+.place-opt input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; }
+.place-opt > span {
+  display: grid; grid-template-columns: 26px minmax(0, 1fr); grid-template-rows: auto 1fr; column-gap: 12px; row-gap: 3px; align-content: start; width: 100%;
+  padding: 14px 16px; border-radius: 14px; background: var(--card); box-shadow: inset 0 0 0 1px rgba(243, 235, 221, .2);
+  transition: background-color .3s, box-shadow .3s, color .3s;
+}
+.place-opt svg { grid-row: span 2; width: 26px; height: 26px; fill: none; stroke: var(--bronze); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; transition: stroke .3s; }
+.place-opt b { font-size: .9375rem; font-weight: 600; line-height: 1.3; }
+.place-opt small { color: var(--stone); font-size: .8125rem; line-height: 1.4; transition: color .3s; }
+.place-opt input:hover + span { box-shadow: inset 0 0 0 1px rgba(243, 235, 221, .45); }
+.place-opt input:checked + span { background: var(--cream); color: var(--espresso); box-shadow: inset 0 0 0 1px var(--cream); }
+.place-opt input:checked + span small { color: #6B5E4D; }
+.place-opt input:checked + span svg { stroke: var(--espresso); }
+.place-opt input:focus-visible + span { outline: 2px solid var(--gold); outline-offset: 2px; }
+.place.want .place-opt > span { box-shadow: inset 0 0 0 1px var(--gold); }
+.come { gap: 10px; padding: 18px; border-radius: 16px; background: rgba(243, 235, 221, .04); box-shadow: inset 0 0 0 1px rgba(243, 235, 221, .1); }
+.come[hidden], .meet[hidden], .wa-need[hidden] { display: none; }
+.come-title { font-size: 1.0625rem; font-weight: 600; letter-spacing: -.01em; }
+.come-fee { color: var(--sand); font-size: .9375rem; line-height: 1.45; }
+.come-fee b { color: var(--gold); font-weight: 600; }
+.come.want #f-town { border-color: var(--gold); }
+.come-zones { display: grid; gap: 7px; margin: 2px 0 0; padding: 0; list-style: none; color: var(--stone); font-size: .8125rem; line-height: 1.35; }
+.come-zones li { display: grid; grid-template-columns: 10px minmax(0, 1fr) auto; align-items: center; gap: 10px; transition: color .3s; }
+.come-zones .sw { width: 10px; height: 10px; border-radius: 3px; }
+.come-zones b { color: var(--sand); font-weight: 500; font-variant-numeric: tabular-nums; transition: color .3s; }
+.come-zones li.on { color: var(--cream); }
+.come-zones li.on b { color: var(--gold); }
+.come-map { justify-self: start; color: var(--bronze); font-size: .875rem; text-decoration: underline; text-underline-offset: 3px; }
+.meet { padding: 14px 16px; border-radius: 14px; background: rgba(243, 235, 221, .04); box-shadow: inset 0 0 0 1px rgba(243, 235, 221, .1); color: var(--sand); font-size: .9375rem; line-height: 1.45; }
+.wa-need { color: #E9D3A6; font-size: .875rem; line-height: 1.45; }
+.wa-card .pill.is-off { opacity: .42; }
+.wa-card .pill.is-off:hover { background: var(--gold); }
+
+/* footer */
+.foot { padding-block: clamp(56px, 8vw, 88px) clamp(28px, 4vw, 40px); }
+.foot-grid { display: grid; gap: 40px; }
+@media (min-width: 800px) { .foot-grid { grid-template-columns: minmax(0, 1.3fr) repeat(2, minmax(0, 1fr)); } }
+.foot-brand img { width: 150px; height: auto; }
+.foot-brand p { max-width: 28ch; margin-top: 18px; color: var(--sand); font-size: .9375rem; }
+.foot h3 { margin-bottom: 12px; color: var(--sand); font-size: .875rem; font-weight: 500; }
+.foot-links { display: grid; justify-items: start; gap: 9px; }
+.foot-links a { color: var(--cream); font-size: .9375rem; text-decoration: none; }
+.foot-links a:hover { text-decoration: underline; text-underline-offset: 4px; }
+.foot-num { font-size: 1.5rem; font-weight: 600; letter-spacing: -0.02em; line-height: 1.2; user-select: all; }
+.foot .copy { margin-block: 10px 6px; border-color: rgba(243, 235, 221, .25); color: var(--cream); }
+.foot .copy:hover { background: rgba(243, 235, 221, .08); }
+.foot { border-top: 1px solid var(--rule); }
+.foot-base { margin-top: 52px; padding-top: 22px; border-top: 1px solid rgba(243, 235, 221, .1); color: var(--sand); font-size: .8125rem; }
+@media (max-width: 899px) { .foot { padding-bottom: calc(108px + env(safe-area-inset-bottom, 0px)); } }
+
+
+/* ---------- pages: home, prices, refurbished phones, buy-back ---------- */
+.nav-links a[aria-current="page"] { color: var(--cream); }
+.menu nav a[aria-current="page"] { color: var(--gold); }
+.foot-links a[aria-current="page"] { color: var(--gold); }
+.page-top { padding-top: clamp(18px, 3.4vw, 40px); }
+.crumbs { display: flex; flex-wrap: wrap; align-items: center; gap: 2px 3px; margin-bottom: clamp(28px, 4.4vw, 50px); color: var(--stone); font-size: .875rem; }
+.crumbs a { color: var(--sand); text-decoration: none; }
+.crumbs a:hover { color: var(--cream); text-decoration: underline; text-underline-offset: 4px; }
+.crumbs svg { width: 14px; height: 14px; flex: none; }
+.page-head h1 { font-size: clamp(2.4rem, 7.4vw, 4.375rem); line-height: 1.02; letter-spacing: -0.042em; }
+.page-head .lead { max-width: 40rem; }
+
+/* ---------- the shop: three sections (iPhone, AirPods, accessories, the last one in three), then what is for sale ---------- */
+.page-head { margin-bottom: clamp(28px, 4vw, 44px); }
+.cats { display: flex; gap: 6px; margin-inline: calc(-1 * var(--gutter)); padding: 2px var(--gutter) 4px; overflow-x: auto; scrollbar-width: none; }
+.cats::-webkit-scrollbar { display: none; }
+@media (min-width: 700px) { .cats { gap: 10px; margin-inline: -14px; padding-inline: 0; overflow: visible; } }
+.cat { display: grid; justify-items: center; align-content: start; gap: 10px; flex: none; min-width: 108px; padding: 16px 16px 14px; border-radius: 22px;
+  color: var(--sand); font-size: .9375rem; font-weight: 500; text-decoration: none; -webkit-tap-highlight-color: transparent;
+  transition: background-color .35s var(--ease), color .35s var(--ease); }
+.cat svg { width: 54px; height: 54px; fill: none; stroke: currentColor; stroke-width: 1.35; stroke-linecap: round; stroke-linejoin: round; transition: transform .45s var(--ease); }
+.cat:hover { color: var(--cream); }
+.cat:hover svg { transform: translateY(-3px); }
+.cat[aria-current="true"] { background: var(--card); color: var(--cream); }
+.cat[aria-current="true"] svg { color: var(--gold); }
+.cat-n { margin-left: 2px; color: var(--stone); font-size: .8125rem; font-weight: 500; font-variant-numeric: tabular-nums; }
+.subcat[aria-current="true"] .cat-n { color: #6B5E4D; }
+.cat:focus-visible, .subcat:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+.subcats { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+.subcat { display: inline-flex; align-items: center; gap: 8px; min-height: 46px; padding: 0 18px 0 12px; border-radius: 999px; background: var(--card);
+  box-shadow: inset 0 0 0 1px var(--rule-strong); color: var(--cream); font-size: .9375rem; font-weight: 500; text-decoration: none;
+  transition: background-color .3s, box-shadow .3s, color .3s; }
+.subcat svg { width: 26px; height: 26px; fill: none; stroke: var(--bronze); stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; transition: stroke .3s; }
+.subcat:hover { box-shadow: inset 0 0 0 1px rgba(243, 235, 221, .5); }
+.subcat[aria-current="true"] { background: var(--cream); box-shadow: inset 0 0 0 1px var(--cream); color: var(--espresso); }
+.subcat[aria-current="true"] svg { stroke: var(--espresso); }
+.subcats.show { animation: panelIn .5s var(--ease) both; }
+@media (max-width: 599px) {
+  .subcat { min-height: 42px; gap: 6px; padding: 0 14px 0 10px; font-size: .875rem; }
+  .subcat svg { width: 22px; height: 22px; }
+}
+.shelf { margin-top: clamp(26px, 3.6vw, 40px); }
+.shelf.show { animation: panelIn .5s var(--ease) both; }
+@keyframes panelIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+.shelf-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 20px; margin-bottom: 18px; }
+.shelf-t { font-size: clamp(1.375rem, 2.6vw, 1.875rem); letter-spacing: -0.03em; line-height: 1.15; }
+.shelf-n { color: var(--stone); font-size: .875rem; }
+/* nothing in this section yet: a quiet card, the way a store says the bag is empty */
+.none { display: grid; justify-items: center; gap: 12px; padding: clamp(40px, 6vw, 72px) clamp(22px, 5vw, 56px); border-radius: var(--radius); background: var(--card); text-align: center; }
+.none h2 { max-width: 22ch; font-size: clamp(1.5rem, 3.2vw, 2.25rem); letter-spacing: -0.035em; line-height: 1.1; }
+.none p { max-width: 44ch; color: var(--sand); }
+.none .pill { margin-top: 10px; }
+
+/* the cards of what is for sale */
+.stock { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr)); gap: 14px; margin: 0; padding: 0; list-style: none; }
+.ph-card { display: flex; flex-direction: column; min-width: 0; overflow: hidden; border-radius: var(--radius); background: var(--card); }
+.ph-pic { position: relative; display: grid; place-items: center; aspect-ratio: 4 / 4.4; margin: 10px 10px 0; overflow: hidden; border-radius: calc(var(--radius) - 10px); background: var(--card-2); }
+.ph-pic img { width: 100%; height: 100%; object-fit: cover; }
+.ph-pic svg { width: 38%; height: auto; fill: none; stroke: var(--bronze); stroke-width: 1.1; stroke-linecap: round; stroke-linejoin: round; opacity: .85; }
+.ph-body { display: grid; align-content: start; gap: 3px; flex: 1 0 auto; padding: 18px 20px 20px; }
+.ph-grade { color: var(--bronze); font-size: .8125rem; font-weight: 500; }
+.ph-name { font-size: 1.375rem; letter-spacing: -0.025em; line-height: 1.15; }
+.ph-spec { color: var(--sand); font-size: .9375rem; }
+.ph-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 14px; }
+.ph-price { font-size: 1.875rem; font-weight: 600; letter-spacing: -0.04em; line-height: 1; font-variant-numeric: tabular-nums; }
+.ph-price small { margin-left: .2em; color: var(--stone); font-size: .56em; font-weight: 500; letter-spacing: 0; }
+.ph-card.sold .ph-pic, .ph-card.sold .ph-name, .ph-card.sold .ph-price { opacity: .45; }
+@media (max-width: 599px) {
+  .stock { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .ph-card { border-radius: 22px; }
+  .ph-pic { margin: 8px 8px 0; border-radius: 15px; }
+  .ph-body { padding: 14px 14px 16px; }
+  .ph-name { font-size: 1.0625rem; letter-spacing: -0.015em; }
+  .ph-spec, .ph-grade { font-size: .8125rem; }
+  .ph-foot { flex-direction: column; align-items: stretch; gap: 10px; margin-top: 10px; }
+  .ph-price { font-size: 1.5rem; }
+  .ph-foot .badge { align-self: start; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .stock.show .ph-card { animation: cardIn .6s var(--ease) both; animation-delay: calc(var(--k, 0) * 60ms); }
+  @keyframes cardIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+}
+
+/* the « je cherche » form: an amount in euros */
+.unit { position: relative; }
+.unit .input { padding-right: 40px; }
+.unit span { position: absolute; top: 50%; right: 16px; transform: translateY(-50%); color: var(--stone); pointer-events: none; }
+@media (max-width: 899px) { .foot { padding-bottom: calc(40px + env(safe-area-inset-bottom, 0px)); } }
+</style>
+</head>
+<body>
+<header class="site-nav">
+  <div class="wrap nav-row">
+    <a class="brand" href="index.html" aria-label="Phone Island, accueil">
+      <img class="brand-mark" src="assets/mark-96.webp" srcset="assets/mark-96.webp 1x, assets/mark-192.webp 2x" alt="" width="96" height="98">
+      <img class="brand-name" src="assets/name-48.webp" srcset="assets/name-48.webp 1x, assets/name-96.webp 2x" alt="" width="107" height="48">
+    </a>
+    <nav class="nav-links" aria-label="Navigation principale">
+      <a href="index.html#reparations">Réparations</a>
+      <a href="tarifs.html">Tarifs</a>
+      <a href="index.html#savoir-faire">Savoir-faire</a>
+      <a href="boutique.html" aria-current="page">Boutique</a>
+      <a href="rachat.html">Rachat</a>
+      <a href="index.html#zone">Zone</a>
+    </nav>
+    <a class="pill pill-sm" href="index.html#rendez-vous">Rendez-vous</a>
+    <button class="burger" id="burger" type="button" aria-expanded="false" aria-controls="menu" aria-label="Ouvrir le menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><line class="l1" x1="4" y1="8.5" x2="20" y2="8.5"/><line class="l2" x1="4" y1="15.5" x2="20" y2="15.5"/></svg>
+    </button>
+  </div>
+</header>
+<div class="menu" id="menu" hidden>
+  <div class="wrap">
+    <nav aria-label="Menu">
+      <a href="index.html" style="--i:0">Accueil</a>
+      <a href="index.html#reparations" style="--i:1">Réparations</a>
+      <a href="tarifs.html" style="--i:2">Tarifs</a>
+      <a href="index.html#savoir-faire" style="--i:3">Savoir-faire</a>
+      <a href="boutique.html" aria-current="page" style="--i:4">Boutique</a>
+      <a href="rachat.html" style="--i:5">Rachat</a>
+      <a href="index.html#zone" style="--i:6">Zone</a>
+    </nav>
+    <a class="pill" href="index.html#rendez-vous">Prendre rendez-vous</a>
+    <p class="menu-contact">WhatsApp et téléphone&nbsp;: <span class="num">0696 17 47 32</span></p>
+  </div>
+</div>
+
+<main id="top">
+  <section class="band alt page-top" aria-labelledby="shop-title">
+    <div class="wrap">
+      <nav class="crumbs" aria-label="Vous êtes ici"><a href="index.html">Accueil</a><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 6l6 6-6 6"/></svg><span aria-current="page">Boutique</span></nav>
+      <header class="band-head page-head">
+        <h1 id="shop-title">Boutique.</h1>
+        <p class="lead">iPhone reconditionnés, AirPods et accessoires, en vente chez Phone Island.</p>
+      </header>
+      <nav class="cats" id="cats" aria-label="Rayons">
+        <a class="cat" href="#iphone" data-cat="iphone" aria-current="true"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="13.5" y="4.5" width="21" height="39" rx="5.5"/><rect x="20.5" y="8.2" width="7" height="2.4" rx="1.2"/></svg><span>iPhone</span></a>
+        <a class="cat" href="#airpods" data-cat="airpods"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M18.2 21.47V32.8a2.2 2.2 0 0 0 4.4 0V16a5.6 5.6 0 1 0-4.4 5.47z"/><path d="M29.8 21.47V32.8a2.2 2.2 0 0 1-4.4 0V16a5.6 5.6 0 1 1 4.4 5.47z"/></svg><span>AirPods</span></a>
+        <a class="cat" href="#accessoires" data-cat="accessoires"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="7.5" y="11.5" width="17" height="17" rx="4.5"/><path d="M12.5 11.5V7M19.5 11.5V7"/><path d="M16 28.5v3.5c0 4.4 3.6 8 8 8h5.5c4.1 0 7.5-3.4 7.5-7.5V20.5"/><rect x="33.5" y="9.5" width="7" height="11" rx="2.2"/><path d="M35.5 9.5V6.5h3v3"/></svg><span>Accessoires</span></a>
+      </nav>
+      <nav class="subcats" id="subcats" aria-label="Accessoires" hidden>
+        <a class="subcat" href="#chargeurs" data-cat="chargeurs"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="12" y="15" width="24" height="24" rx="6"/><path d="M19.5 15V9.5M28.5 15V9.5"/><rect x="20" y="25.75" width="8" height="2.5" rx="1.25"/></svg><span>Chargeurs</span></a>
+        <a class="subcat" href="#vitres" data-cat="vitres"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="13.5" y="4.5" width="21" height="39" rx="5.5"/><path d="M18 17.5l9-9M18 26l13.5-13.5"/></svg><span>Vitres de protection</span></a>
+        <a class="subcat" href="#batteries" data-cat="batteries"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="12" y="8.5" width="24" height="31" rx="6"/><path d="M25.4 14l-4.6 8.4h6.4l-4.6 8.6"/><path d="M19.5 34.8h.01M22.5 34.8h.01M25.5 34.8h.01M28.5 34.8h.01" stroke-width="2.2"/></svg><span>Batteries externes</span></a>
+      </nav>
+      <div class="shelf" id="shelf">
+        <div class="shelf-head" id="shelf-head" hidden>
+          <h2 class="shelf-t" id="shelf-t">iPhone reconditionnés</h2>
+          <p class="shelf-n" id="shelf-n" aria-live="polite"></p>
+        </div>
+        <ul class="stock" id="stock" aria-labelledby="shelf-t" hidden></ul>
+        <div class="none" id="none">
+          <h2 id="none-t">Aucun iPhone disponible pour le moment.</h2>
+          <p id="none-p">Les reconditionnés partent vite. Dites-nous ce que vous cherchez&nbsp;: on vous écrit dès qu’un iPhone correspond.</p>
+          <a class="pill" href="#je-cherche" id="none-go">Dire ce que je cherche</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band light" id="je-cherche" aria-labelledby="want-title">
+    <div class="wrap">
+      <header class="band-head rv">
+        <h2 id="want-title">Vous cherchez quelque chose&nbsp;?</h2>
+        <p class="lead">Dites-nous quoi. Votre message s’ouvre dans WhatsApp, prêt à être envoyé, et on vous répond.</p>
+      </header>
+      <div class="book">
+        <form class="form rv" id="want" novalidate>
+          <div class="field">
+            <label for="w-cat">Ce que vous cherchez</label>
+            <select class="input" id="w-cat">
+              <option value="iphone">Un iPhone</option><option value="airpods">Des AirPods</option><option value="chargeurs">Un chargeur</option>
+              <option value="vitres">Une vitre de protection</option><option value="batteries">Une batterie externe</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="w-model" id="w-model-l">Modèle</label>
+            <input class="input" id="w-model" type="text" list="w-list-iphone" placeholder="ex. iPhone 13 Pro" autocomplete="off">
+            <datalist id="w-list-iphone"><option value="iPhone 8"></option><option value="iPhone 8 Plus"></option><option value="iPhone SE (2022)"></option><option value="iPhone X"></option><option value="iPhone XS"></option><option value="iPhone XS Max"></option><option value="iPhone XR"></option><option value="iPhone 11"></option><option value="iPhone 11 Pro"></option><option value="iPhone 11 Pro Max"></option><option value="iPhone 12 mini"></option><option value="iPhone 12"></option><option value="iPhone 12 Pro"></option><option value="iPhone 12 Pro Max"></option><option value="iPhone 13 mini"></option><option value="iPhone 13"></option><option value="iPhone 13 Pro"></option><option value="iPhone 13 Pro Max"></option><option value="iPhone 14"></option><option value="iPhone 14 Plus"></option><option value="iPhone 14 Pro"></option><option value="iPhone 14 Pro Max"></option><option value="iPhone 15"></option><option value="iPhone 15 Plus"></option><option value="iPhone 15 Pro"></option><option value="iPhone 15 Pro Max"></option><option value="iPhone 16e"></option><option value="iPhone 16"></option><option value="iPhone 16 Plus"></option><option value="iPhone 16 Pro"></option><option value="iPhone 16 Pro Max"></option><option value="iPhone 17e"></option><option value="iPhone 17"></option><option value="iPhone Air"></option><option value="iPhone 17 Pro"></option><option value="iPhone 17 Pro Max"></option></datalist>
+            <datalist id="w-list-airpods"><option value="AirPods 2"></option><option value="AirPods 3"></option><option value="AirPods 4"></option><option value="AirPods 4 (réduction de bruit)"></option><option value="AirPods Pro"></option><option value="AirPods Pro 2"></option><option value="AirPods Pro 3"></option><option value="AirPods Max"></option></datalist>
+            <datalist id="w-list-phones"><option value="iPhone 8"></option><option value="iPhone 8 Plus"></option><option value="iPhone SE (2022)"></option><option value="iPhone X"></option><option value="iPhone XS"></option><option value="iPhone XS Max"></option><option value="iPhone XR"></option><option value="iPhone 11"></option><option value="iPhone 11 Pro"></option><option value="iPhone 11 Pro Max"></option><option value="iPhone 12 mini"></option><option value="iPhone 12"></option><option value="iPhone 12 Pro"></option><option value="iPhone 12 Pro Max"></option><option value="iPhone 13 mini"></option><option value="iPhone 13"></option><option value="iPhone 13 Pro"></option><option value="iPhone 13 Pro Max"></option><option value="iPhone 14"></option><option value="iPhone 14 Plus"></option><option value="iPhone 14 Pro"></option><option value="iPhone 14 Pro Max"></option><option value="iPhone 15"></option><option value="iPhone 15 Plus"></option><option value="iPhone 15 Pro"></option><option value="iPhone 15 Pro Max"></option><option value="iPhone 16e"></option><option value="iPhone 16"></option><option value="iPhone 16 Plus"></option><option value="iPhone 16 Pro"></option><option value="iPhone 16 Pro Max"></option><option value="iPhone 17e"></option><option value="iPhone 17"></option><option value="iPhone Air"></option><option value="iPhone 17 Pro"></option><option value="iPhone 17 Pro Max"></option><option value="Galaxy S10e"></option><option value="Galaxy S10"></option><option value="Galaxy S10+"></option><option value="Galaxy S20"></option><option value="Galaxy S20+"></option><option value="Galaxy S20 Ultra"></option><option value="Galaxy S20 FE"></option><option value="Galaxy S20 FE 5G"></option><option value="Galaxy S21"></option><option value="Galaxy S21+"></option><option value="Galaxy S21 Ultra"></option><option value="Galaxy S21 FE"></option><option value="Galaxy S22"></option><option value="Galaxy S22+"></option><option value="Galaxy S22 Ultra"></option><option value="Galaxy S23"></option><option value="Galaxy S23+"></option><option value="Galaxy S23 Ultra"></option><option value="Galaxy S23 FE"></option><option value="Galaxy S24"></option><option value="Galaxy S24+"></option><option value="Galaxy S24 Ultra"></option><option value="Galaxy S24 FE"></option><option value="Galaxy S25"></option><option value="Galaxy S25+"></option><option value="Galaxy S25 Ultra"></option><option value="Galaxy S25 Edge"></option><option value="Galaxy S25 FE"></option><option value="Galaxy S26"></option><option value="Galaxy S26+"></option><option value="Galaxy S26 Ultra"></option><option value="Galaxy Note 20"></option><option value="Galaxy Note 20 Ultra"></option><option value="Galaxy Z Flip (2020)"></option><option value="Galaxy Z Flip 3"></option><option value="Galaxy Z Flip 4"></option><option value="Galaxy Z Flip 5"></option><option value="Galaxy Z Flip 6"></option><option value="Galaxy Z Flip 7"></option><option value="Galaxy Z Flip 8"></option><option value="Galaxy Z Fold 2"></option><option value="Galaxy Z Fold 3"></option><option value="Galaxy Z Fold 4"></option><option value="Galaxy Z Fold 5"></option><option value="Galaxy Z Fold 6"></option><option value="Galaxy Z Fold 7"></option><option value="Galaxy Z Fold 8"></option><option value="Galaxy A02s"></option><option value="Galaxy A03"></option><option value="Galaxy A04s"></option><option value="Galaxy A05s"></option><option value="Galaxy A06"></option><option value="Galaxy A07 5G"></option><option value="Galaxy A10"></option><option value="Galaxy A11"></option><option value="Galaxy A12"></option><option value="Galaxy A13"></option><option value="Galaxy A14 4G"></option><option value="Galaxy A15"></option><option value="Galaxy A16"></option><option value="Galaxy A17 4G"></option><option value="Galaxy A17 5G"></option><option value="Galaxy A20e"></option><option value="Galaxy A21s"></option><option value="Galaxy A22 5G"></option><option value="Galaxy A23 5G"></option><option value="Galaxy A24"></option><option value="Galaxy A25"></option><option value="Galaxy A26"></option><option value="Galaxy A27"></option><option value="Galaxy A31"></option><option value="Galaxy A32 4G"></option><option value="Galaxy A32 5G"></option><option value="Galaxy A33"></option><option value="Galaxy A34"></option><option value="Galaxy A35"></option><option value="Galaxy A36"></option><option value="Galaxy A37"></option><option value="Galaxy A40"></option><option value="Galaxy A41"></option><option value="Galaxy A42"></option><option value="Galaxy A50"></option><option value="Galaxy A51"></option><option value="Galaxy A52"></option><option value="Galaxy A52s"></option><option value="Galaxy A53"></option><option value="Galaxy A54"></option><option value="Galaxy A55"></option><option value="Galaxy A56"></option><option value="Galaxy A57"></option><option value="Galaxy A70"></option><option value="Galaxy A71"></option><option value="Galaxy A72"></option><option value="Galaxy A73"></option><option value="Galaxy M12"></option><option value="Galaxy M13"></option><option value="Galaxy M23"></option><option value="Galaxy M33"></option><option value="Galaxy M53"></option><option value="Galaxy M55"></option><option value="Galaxy XCover 5"></option><option value="Galaxy XCover 6 Pro"></option><option value="Galaxy XCover 7"></option></datalist>
+          </div>
+          <div class="field" id="w-storage-f">
+            <label for="w-storage">Capacité</label>
+            <select class="input" id="w-storage">
+              <option value="">Peu importe</option><option>64 Go</option><option>128 Go</option><option>256 Go</option><option>512 Go</option><option>1 To</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="w-budget">Budget maximum <span class="opt">(facultatif)</span></label>
+            <div class="unit"><input class="input" id="w-budget" type="text" inputmode="numeric" maxlength="5" placeholder="ex. 400" autocomplete="off"><span aria-hidden="true">€</span></div>
+          </div>
+          <div class="field full">
+            <label for="w-name">Prénom <span class="opt">(facultatif)</span></label>
+            <input class="input" id="w-name" type="text" autocomplete="given-name">
+          </div>
+          <div class="field full">
+            <label for="w-notes">Précisions <span class="opt">(facultatif)</span></label>
+            <textarea class="input" id="w-notes" placeholder="ex. une couleur, l’état de la batterie, pour quand vous en avez besoin"></textarea>
+          </div>
+        </form>
+        <aside class="wa-card rv rv-2" aria-label="Aperçu du message WhatsApp">
+          <div class="wa-head">
+            <span class="wa-avatar"><img src="assets/mark-96.webp" alt="" width="96" height="98"></span>
+            <div><p class="wa-name">Phone Island</p><p class="wa-sub">Votre message, prêt à partir</p></div>
+          </div>
+          <div class="bubble" id="w-preview" aria-live="polite"></div>
+          <a class="pill" id="w-send" href="https://wa.me/596696174732" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.9c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3Z"/></svg>Envoyer sur WhatsApp</a>
+          <p class="wa-alt">Ou écrivez-nous au <span class="num" id="num-want">0696 17 47 32</span><button class="copy" type="button" data-copy="0696 17 47 32" data-target="num-want">Copier</button></p>
+        </aside>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot dark">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <img src="assets/logo-360.webp" srcset="assets/logo-360.webp 360w, assets/logo-720.webp 720w" sizes="150px" alt="Phone Island" width="360" height="439" loading="lazy">
+        <p>Réparation et vente de smartphones, à domicile partout en Martinique.</p>
+      </div>
+      <div>
+        <h3>WhatsApp et téléphone</h3>
+        <p class="foot-num num" id="num-foot">0696 17 47 32</p>
+        <button class="copy" type="button" data-copy="0696 17 47 32" data-target="num-foot">Copier le numéro</button>
+        <div class="foot-links">
+          <a id="foot-wa" href="https://wa.me/596696174732" target="_blank" rel="noopener">Écrire sur WhatsApp</a>
+          <a href="https://www.instagram.com/phone._island/" target="_blank" rel="noopener">Instagram @phone._island</a>
+        </div>
+      </div>
+      <div>
+        <h3>Services</h3>
+        <div class="foot-links">
+          <a href="index.html#reparations">Réparations</a>
+          <a href="tarifs.html">Tarifs</a>
+          <a href="boutique.html" aria-current="page">Boutique</a>
+          <a href="rachat.html">Rachat</a>
+          <a href="index.html#zone">Zone et déplacement</a>
+        </div>
+      </div>
+    </div>
+    <p class="foot-base">© <span id="year">2026</span> Phone Island, Fort-de-France, Martinique</p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  'use strict';
+  var WA = '596696174732';
+  var CHEVRON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 6l6 6-6 6"/></svg>';
+  var $ = function (id) { return document.getElementById(id); };
+  var all = function (sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); };
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var waLink = function (t) { return 'https://wa.me/' + WA + '?text=' + encodeURIComponent(t); };
+  var euro = function (v) { return v + ' €'; };
+  var clamp = function (v, a, b) { return Math.max(a, Math.min(b, v)); };
+  function iphone(m) { return m === 'Air' ? 'iPhone Air' : m === 'SE 2022' ? 'iPhone SE (2022)' : 'iPhone ' + m; }
+
+  /* ---------- menu ---------- */
+  var burger = $('burger'), menu = $('menu');
+  function setMenu(open) {
+    menu.hidden = !open;
+    burger.setAttribute('aria-expanded', String(open));
+    burger.setAttribute('aria-label', open ? 'Fermer le menu' : 'Ouvrir le menu');
+    document.documentElement.classList.toggle('menu-open', open);
+  }
+  burger.addEventListener('click', function () { setMenu(menu.hidden); });
+  menu.addEventListener('click', function (e) { if (e.target.closest('a')) setMenu(false); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !menu.hidden) { setMenu(false); burger.focus(); } });
+  window.matchMedia('(min-width: 960px)').addEventListener('change', function (m) { if (m.matches) setMenu(false); });
+
+  /* ---------- the WhatsApp message, shown as it will be sent ---------- */
+  // lines: [text] for a sentence, [label, value] for an answer; a value in [brackets] is still to be given:
+  // it shows in the preview, and stays out of the message
+  function bubble(box, lines) {
+    var plain = [];
+    box.textContent = '';
+    lines.forEach(function (l, i) {
+      if (i) box.appendChild(document.createTextNode('\n'));
+      box.appendChild(document.createTextNode(l[0]));
+      if (l.length < 2) { plain.push(l[0]); return; }
+      var v = String(l[1]), ph = v.charAt(0) === '[';
+      var s = document.createElement('span'); s.textContent = v; if (ph) s.className = 'ph';
+      box.appendChild(s);
+      plain.push(l[0] + (ph ? '' : v));
+    });
+    return plain.join('\n');
+  }
+  function bump(box) { if (reduce.matches) return; box.classList.remove('bump'); void box.offsetWidth; box.classList.add('bump'); }
+
+  /* ---------- the shop ----------
+     What is for sale, one entry per item, in the order it shows. cat: 'iphone', 'airpods', 'chargeurs', 'vitres' or
+     'batteries'; name; detail (capacity and colour for an iPhone, anything useful otherwise); grade: its condition, in
+     words; battery: in % (iPhone, optional); price: in euros; photo: a picture in assets/ (optional, the section's
+     drawing otherwise); sold: true shows it as sold. For example:
+     { cat: 'iphone', name: 'iPhone 13', detail: '128 Go · Minuit', grade: 'Très bon état', battery: 89, price: 0, photo: 'assets/stock-1.jpg' } */
+  var STOCK = [];
+
+  // the sections; the accessories have three of their own
+  var SECTIONS = {
+    iphone: { title: 'iPhone reconditionnés', one: 'iPhone disponible', many: 'iPhone disponibles',
+              none: 'Aucun iPhone disponible pour le moment.',
+              text: 'Les reconditionnés partent vite. Dites-nous ce que vous cherchez : on vous écrit dès qu’un iPhone correspond.',
+              want: 'un iPhone reconditionné', field: 'Modèle', hint: 'ex. iPhone 13 Pro', list: 'w-list-iphone', end: 'Prévenez-moi si vous en avez un, merci.' },
+    airpods: { title: 'AirPods', one: 'paire disponible', many: 'paires disponibles',
+               none: 'Pas encore d’AirPods sur le site.',
+               text: 'Dites-nous le modèle que vous voulez : on vous répond sur WhatsApp.',
+               want: 'des AirPods', field: 'Modèle', hint: 'ex. AirPods Pro 2, AirPods 4', list: 'w-list-airpods', end: 'Vous en avez en ce moment ?' },
+    chargeurs: { title: 'Chargeurs', one: 'chargeur disponible', many: 'chargeurs disponibles', parent: 'accessoires',
+                 none: 'Pas encore de chargeur sur le site.',
+                 text: 'Demandez-nous ce qu’on a en ce moment, et pour quel téléphone : on vous répond sur WhatsApp.',
+                 want: 'un chargeur', field: 'Pour quel téléphone ?', hint: 'ex. iPhone 15, Galaxy S23', list: 'w-list-phones', end: 'Vous en avez en ce moment ?' },
+    vitres: { title: 'Vitres de protection', one: 'vitre disponible', many: 'vitres disponibles', parent: 'accessoires',
+              none: 'Pas encore de vitre de protection sur le site.',
+              text: 'Dites-nous pour quel téléphone : on vous répond sur WhatsApp.',
+              want: 'une vitre de protection', field: 'Pour quel téléphone ?', hint: 'ex. iPhone 15 Pro', list: 'w-list-phones', end: 'Vous en avez en ce moment ?' },
+    batteries: { title: 'Batteries externes', one: 'batterie disponible', many: 'batteries disponibles', parent: 'accessoires',
+                 none: 'Pas encore de batterie externe sur le site.',
+                 text: 'Dites-nous pour quel téléphone, et si vous la voulez MagSafe : on vous répond sur WhatsApp.',
+                 want: 'une batterie externe', field: 'Pour quel téléphone ?', hint: 'ex. iPhone 16, MagSafe', list: 'w-list-phones', end: 'Vous en avez en ce moment ?' }
+  };
+  var ACCESSORIES = ['chargeurs', 'vitres', 'batteries'];
+  function own(o, k) { return Object.prototype.hasOwnProperty.call(o, k); }
+  var cats = all('.cat'), subcats = all('.subcat'), subBox = $('subcats'), shelf = $('shelf'), stockBox = $('stock'), noneBox = $('none');
+  var current = 'iphone', lastAccessory = 'chargeurs';
+  function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+  function drawing(cat) {                      // the section's drawing, for an item without a photo
+    var src = document.querySelector('[data-cat="' + cat + '"] svg');
+    var svg = src.cloneNode(true); svg.setAttribute('aria-hidden', 'true');
+    return svg;
+  }
+  function card(p, k) {
+    var li = el('li', 'ph-card' + (p.sold ? ' sold' : '')), pic = el('div', 'ph-pic'), body = el('div', 'ph-body');
+    li.style.setProperty('--k', k);
+    if (p.photo) {
+      var im = el('img'); im.src = p.photo; im.alt = p.name + (p.detail ? ', ' + p.detail : ''); im.loading = 'lazy'; im.decoding = 'async';
+      pic.appendChild(im);
+    } else pic.appendChild(drawing(p.cat));
+    if (p.grade) body.appendChild(el('p', 'ph-grade', p.grade));
+    body.appendChild(el('h3', 'ph-name', p.name));
+    if (p.detail) body.appendChild(el('p', 'ph-spec', p.detail));
+    if (p.battery) body.appendChild(el('p', 'ph-spec', 'Batterie ' + p.battery + ' %'));
+    var foot = el('div', 'ph-foot');
+    if (p.price) { var pr = el('p', 'ph-price', String(p.price)); pr.appendChild(el('small', '', '€')); foot.appendChild(pr); }
+    if (p.sold) foot.appendChild(el('span', 'badge', 'Vendu'));
+    else {
+      var a = el('a', 'pill pill-sm', 'Réserver');
+      var what = [p.name, p.detail, p.grade ? p.grade.toLowerCase() : '', p.price ? p.price + ' €' : ''].filter(Boolean).join(', ');
+      a.href = waLink('Bonjour Phone Island, ' + (p.cat === 'iphone' ? 'cet iPhone reconditionné' : 'cet article') + ' m’intéresse : ' + what + '. Est-il toujours disponible ?');
+      a.target = '_blank'; a.rel = 'noopener';
+      a.setAttribute('aria-label', 'Réserver ' + p.name + ' sur WhatsApp');
+      foot.appendChild(a);
+    }
+    body.appendChild(foot);
+    li.appendChild(pic); li.appendChild(body);
+    return li;
+  }
+  function show(cat, animate) {
+    current = cat;
+    var s = SECTIONS[cat], top = s.parent || cat;
+    if (s.parent) lastAccessory = cat;
+    cats.forEach(function (c) { c.setAttribute('aria-current', String(c.getAttribute('data-cat') === top)); });
+    subcats.forEach(function (c) { c.setAttribute('aria-current', String(c.getAttribute('data-cat') === cat)); });
+    var wasHidden = subBox.hidden;
+    subBox.hidden = top !== 'accessoires';
+    if (!subBox.hidden && wasHidden && animate && !reduce.matches) { subBox.classList.remove('show'); void subBox.offsetWidth; subBox.classList.add('show'); }
+    // what is for sale in this section, the sold ones last
+    var items = STOCK.filter(function (p) { return p.cat === cat; }), open = items.filter(function (p) { return !p.sold; });
+    items = open.concat(items.filter(function (p) { return p.sold; }));
+    $('shelf-t').textContent = s.title;
+    $('shelf-head').hidden = stockBox.hidden = !open.length;
+    noneBox.hidden = open.length > 0;
+    stockBox.textContent = '';
+    if (open.length) {
+      items.forEach(function (p, k) { stockBox.appendChild(card(p, k)); });
+      $('shelf-n').textContent = open.length + ' ' + (open.length > 1 ? s.many : s.one);
+    } else {
+      $('none-t').textContent = s.none; $('none-p').textContent = s.text;
+    }
+    if (animate && !reduce.matches) { shelf.classList.remove('show'); void shelf.offsetWidth; shelf.classList.add('show'); }
+    if (animate && !reduce.matches && open.length) { stockBox.classList.remove('show'); void stockBox.offsetWidth; stockBox.classList.add('show'); }
+    // the request form follows the section
+    $('w-cat').value = cat; wantFields();
+    try { sessionStorage.setItem('pi-shop', cat); } catch (e) {}
+  }
+  function fromHash(animate) {
+    var h = location.hash.slice(1);
+    if (h === 'accessoires') h = lastAccessory;
+    if (own(SECTIONS, h)) { show(h, animate); return true; }
+    return false;
+  }
+  window.addEventListener('hashchange', function () { fromHash(true); });
+  // how many items each section has, next to its name (the accessories count their three sections)
+  Object.keys(SECTIONS).concat('accessoires').forEach(function (k) {
+    var keys = k === 'accessoires' ? ACCESSORIES : [k], label = document.querySelector('[data-cat="' + k + '"] span');
+    var n = STOCK.filter(function (p) { return keys.indexOf(p.cat) > -1 && !p.sold; }).length;
+    if (n && label) label.appendChild(el('small', 'cat-n', ' ' + n));
+  });
+
+  /* ---------- « je cherche » ---------- */
+  var wPrev = $('w-preview'), wLast = '';
+  function wantFields() {
+    var s = SECTIONS[$('w-cat').value];
+    $('w-model-l').textContent = s.field;
+    $('w-model').placeholder = s.hint;
+    $('w-model').setAttribute('list', s.list);
+    $('w-storage-f').hidden = $('w-cat').value !== 'iphone';
+    want();
+  }
+  function want() {
+    var cat = $('w-cat').value, s = SECTIONS[cat], m = $('w-model').value.trim(), st = $('w-storage').value,
+        bu = $('w-budget').value.replace(/[^\d]/g, ''), nm = $('w-name').value.trim(), no = $('w-notes').value.trim();
+    var lines = [['Bonjour Phone Island, je cherche ' + s.want + '.']];
+    if (cat === 'iphone' || cat === 'airpods') lines.push(['Modèle : ', m || '[le modèle]']);
+    else lines.push(['Pour : ', m || '[votre téléphone]']);
+    if (cat === 'iphone') lines.push(['Capacité : ', st || 'peu importe']);
+    if (bu) lines.push(['Budget maximum : ', bu + ' €']);
+    if (nm) lines.push(['Prénom : ', nm]);
+    if (no) lines.push(['Précisions : ', no]);
+    lines.push([s.end]);
+    var msg = bubble(wPrev, lines);
+    $('w-send').href = waLink(msg);
+    if (wLast && msg !== wLast) bump(wPrev);
+    wLast = msg;
+  }
+  $('w-cat').addEventListener('change', wantFields);
+  ['w-model', 'w-storage', 'w-budget', 'w-name', 'w-notes'].forEach(function (id) {
+    $(id).addEventListener('input', want); $(id).addEventListener('change', want);
+  });
+  $('want').addEventListener('submit', function (e) { e.preventDefault(); });
+
+  // open on the section asked for (boutique.html#airpods), or the one seen last during this visit
+  if (!fromHash(false)) {
+    var kept = '';
+    try { kept = sessionStorage.getItem('pi-shop') || ''; } catch (e) {}
+    show(own(SECTIONS, kept) ? kept : 'iphone', false);
+  }
+
+  /* ---------- prefilled WhatsApp links ---------- */
+  var hello = 'Bonjour Phone Island, ';
+  $('foot-wa').href = waLink(hello);
+  $('year').textContent = new Date().getFullYear();
+
+  /* ---------- copy number ---------- */
+  all('.copy').forEach(function (b) {
+    var label = b.textContent;
+    b.addEventListener('click', function () {
+      var done = function () { b.textContent = 'Copié'; setTimeout(function () { b.textContent = label; }, 1800); };
+      var fallback = function () {
+        var t = $(b.getAttribute('data-target')); if (!t) return;
+        var r = document.createRange(); r.selectNodeContents(t);
+        var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+        b.textContent = 'Numéro sélectionné'; setTimeout(function () { b.textContent = label; }, 2200);
+      };
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(b.getAttribute('data-copy')).then(done, fallback);
+        else fallback();
+      } catch (err) { fallback(); }
+    });
+  });
+
+  /* ---------- the welcome screen of the home page plays on a first visit only, not after this page ---------- */
+  try { sessionStorage.setItem('pi-intro', '1'); } catch (e) {}
+
+})();
+</script>
+</body>
+</html>

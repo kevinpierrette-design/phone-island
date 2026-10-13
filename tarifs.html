@@ -1,0 +1,1196 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tarifs · Phone Island</title>
+<meta name="description" content="Les prix de nos réparations sur iPhone, Samsung, iPad et Nintendo Switch, pièce et main-d’œuvre comprises. Réservez la vôtre sur WhatsApp.">
+<link rel="icon" type="image/png" href="assets/favicon-64.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap">
+<style>
+:root { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+[hidden] { display: none !important; }
+/* Layout: Apple-style bands, all black (near-black with a breath of the brand's brown). Each band carries one idea:
+   a short headline, one line of text, then one large thing (a phone drawn in code, a price tool, an
+   exploded view, a map, a form). Text is left-aligned on a 1120px column.
+   One typeface, Poppins, for text and every number; the Phone Island name is the logo artwork itself.
+   The hero phone, the price tool and the buy-back screen are drawn in CSS/SVG; repairs, the bench and the
+   shop use real photographs (the owner's own, and Unsplash pictures, free for commercial use). */
+:root {
+  --espresso: #1B140D;     /* brand brown: dark fills, text on gold and cream */
+  --ink: #060504;          /* the page: black with a breath of warmth */
+  --ink-2: #0B0907;        /* alternate bands */
+  --card: #15110D;         /* tiles and cards */
+  --card-2: #211A14;       /* raised: inputs, small buttons on cards */
+  --roast: #271D14;
+  --roast-2: #3A2D20;
+  --cream: #F3EBDD;        /* text */
+  --sand: #B9AE9C;         /* secondary text */
+  --stone: #A99F91;        /* tertiary text */
+  --gold: #E2B662;         /* brand gold: primary buttons, accents */
+  --gold-hi: #ECC47A;
+  --bronze: #D9AE5F;       /* links, icons, marks */
+  --white: #FFFFFF;
+  --rule: rgba(243, 235, 221, .1);
+  --rule-strong: rgba(243, 235, 221, .17);
+  --wa-bg: #0B141A;        /* WhatsApp, dark mode */
+  --wa-bubble: #005C4B;
+  --wa-ink: #E9EDEF;
+  --wa-muted: #8696A0;
+  --zone-0: #E2B662;       /* Fort-de-France: 10 € */
+  --zone-1: #A17A45;       /* proche: 20 € */
+  --zone-2: #735634;       /* un peu plus loin: 25 € */
+  --zone-3: #50402C;       /* sud et nord: 35 € */
+  --sans: "Poppins", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --serif: "Playfair Display", Georgia, "Times New Roman", serif;
+  --gutter: clamp(20px, 5vw, 44px);
+  --radius: clamp(22px, 2.6vw, 30px);
+  --nav-h: 56px;
+  --ease: cubic-bezier(.2, .75, .2, 1);
+  color-scheme: dark;
+}
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+}
+body {
+  margin: 0; background: var(--ink); color: var(--cream);
+  font: 400 1.0625rem/1.55 var(--sans);
+  -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility;
+}
+img, video, svg, picture { display: block; max-width: 100%; }
+img { height: auto; }
+a { color: inherit; }
+button, input, select, textarea { font: inherit; color: inherit; }
+h1, h2, h3, p, ol, ul, figure, fieldset { margin: 0; }
+h1, h2, h3 { font-weight: 600; text-wrap: balance; }
+p { text-wrap: pretty; }
+.wrap { width: 100%; max-width: calc(1120px + 2 * var(--gutter)); margin-inline: auto; padding-inline: var(--gutter); }
+.visually-hidden { position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+.light :focus-visible, .alt :focus-visible { outline-color: var(--gold); }
+main section[id], .promo[id] { scroll-margin-top: calc(var(--nav-h) + 8px); }
+.num { font-variant-numeric: lining-nums tabular-nums; }
+
+/* bands */
+.band { padding-block: clamp(76px, 11vw, 140px); }
+.light { background: var(--ink); color: var(--cream); }
+.alt { background: var(--ink-2); color: var(--cream); }
+.dark { background: var(--ink); color: var(--cream); }
+.band-head { max-width: 46rem; margin-bottom: clamp(36px, 5.5vw, 64px); }
+.band-head h2 { font-size: clamp(2.1rem, 6.2vw, 3.75rem); line-height: 1.04; letter-spacing: -0.035em; }
+.lead { margin-top: 18px; max-width: 38rem; font-size: clamp(1.0625rem, 1.9vw, 1.375rem); line-height: 1.45; color: var(--stone); }
+.dark .lead { color: var(--sand); }
+
+/* scroll-linked entrances: elements rise into place as they enter; they stay readable at rest */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .rv { animation: rv linear both; animation-timeline: view(); animation-range: entry 0% cover 26%; }
+    .rv-2 { animation-range: entry 8% cover 32%; }
+    .rv-3 { animation-range: entry 16% cover 38%; }
+    @keyframes rv { from { opacity: .22; transform: translateY(64px) scale(.965); } to { opacity: 1; transform: none; } }
+  }
+}
+
+/* buttons and links */
+.pill {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  min-height: 50px; padding: 12px 26px; border: 0; border-radius: 999px;
+  background: var(--gold); color: var(--espresso); font-size: 1rem; font-weight: 500; line-height: 1.2;
+  text-align: center; text-decoration: none; cursor: pointer; -webkit-tap-highlight-color: transparent;
+  transition: background-color .2s ease, transform .15s ease;
+}
+.pill:hover { background: var(--gold-hi); }
+.pill:active { transform: scale(.97); }
+.pill svg { width: 20px; height: 20px; flex: none; }
+.pill-ink { background: var(--cream); color: var(--espresso); }
+.pill-ink:hover { background: #FFF7EA; }
+.pill-sm { min-height: 36px; padding: 6px 16px; font-size: .875rem; }
+.link { display: inline-flex; align-items: center; gap: 2px; color: var(--bronze); font-weight: 500; text-decoration: none; }
+.link svg { width: 18px; height: 18px; transition: transform .2s ease; }
+.link:hover { text-decoration: underline; text-underline-offset: 4px; }
+.link:hover svg { transform: translateX(3px); }
+.dark .link { color: var(--gold); }
+.cta-row { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 28px; }
+
+/* navigation */
+.site-nav {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 60;
+  background: rgba(6, 5, 4, .8); color: var(--cream);
+  -webkit-backdrop-filter: saturate(160%) blur(18px); backdrop-filter: saturate(160%) blur(18px);
+  border-bottom: 1px solid rgba(243, 235, 221, .08);
+}
+.nav-row { display: flex; align-items: center; gap: 18px; height: var(--nav-h); }
+.brand { display: inline-flex; align-items: center; gap: 8px; margin-right: auto; text-decoration: none; }
+.brand-mark { width: auto; height: 38px; }
+.brand-name { width: auto; height: 24px; margin-top: 2px; }
+.nav-links { display: none; align-items: center; gap: clamp(18px, 2.2vw, 30px); }
+.nav-links a { color: var(--sand); text-decoration: none; font-size: .875rem; transition: color .2s; }
+.nav-links a:hover { color: var(--cream); }
+.burger { display: inline-grid; place-items: center; width: 44px; height: 44px; margin-right: -10px; padding: 0; border: 0; background: none; color: var(--cream); cursor: pointer; }
+.burger svg { width: 22px; height: 22px; overflow: visible; }
+.burger line { transition: transform .3s ease; transform-origin: 12px 12px; }
+.burger[aria-expanded="true"] .l1 { transform: translateY(3.5px) rotate(45deg); }
+.burger[aria-expanded="true"] .l2 { transform: translateY(-3.5px) rotate(-45deg); }
+@media (min-width: 960px) { .nav-links { display: flex; } .burger { display: none; } }
+@media (max-width: 379px) { .nav-row .pill-sm { display: none; } }
+.menu {
+  position: fixed; z-index: 55; left: 0; right: 0; bottom: 0; top: calc(var(--nav-h) + env(safe-area-inset-top, 0px));
+  overflow-y: auto; background: var(--ink); color: var(--cream);
+  padding-block: 8px calc(32px + env(safe-area-inset-bottom, 0px));
+}
+.menu nav { display: grid; }
+.menu nav a {
+  padding-block: 14px; border-bottom: 1px solid rgba(243, 235, 221, .1);
+  font-size: 1.75rem; font-weight: 600; letter-spacing: -0.02em; text-decoration: none;
+  animation: menu-in .42s var(--ease) both; animation-delay: calc(var(--i) * 35ms);
+}
+@keyframes menu-in { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: none; } }
+.menu .pill { width: 100%; margin-top: 28px; }
+.menu-contact { margin-top: 18px; color: var(--sand); font-size: .9375rem; }
+html.menu-open { overflow: hidden; }
+
+.badge { display: inline-flex; align-items: center; min-height: 24px; padding: 2px 10px; border-radius: 999px; background: rgba(226, 182, 98, .14); color: var(--gold); font-size: .75rem; font-weight: 600; letter-spacing: .02em; }
+/* ---------- prices: pick a generation and a model, the drawn iPhone takes its shape, the tiles give the prices ---------- */
+.pz { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; }
+.pz > * { min-width: 0; }
+@media (min-width: 900px) {
+  .pz { grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); grid-template-rows: auto 1fr; grid-template-areas: "stage pick" "stage prices"; gap: 30px 28px; align-items: start; }
+  .pz-stage { grid-area: stage; position: sticky; top: calc(var(--nav-h) + 24px); }
+  .pz-pick { grid-area: pick; }
+  .pz-prices { grid-area: prices; }
+}
+.pz-label { margin: 0 0 10px; color: var(--stone); font-size: .875rem; font-weight: 500; }
+.pz-label ~ .pz-label { margin-top: 20px; }
+/* generations: a rail that scrolls sideways on phones */
+.rail { display: flex; gap: 8px; margin-inline: calc(-1 * var(--gutter)); padding: 2px var(--gutter) 4px; overflow-x: auto; scroll-snap-type: x proximity; scrollbar-width: none; overscroll-behavior-x: contain;
+  -webkit-mask: linear-gradient(90deg, transparent, #000 var(--gutter), #000 calc(100% - var(--gutter)), transparent); mask: linear-gradient(90deg, transparent, #000 var(--gutter), #000 calc(100% - var(--gutter)), transparent); }
+.rail::-webkit-scrollbar { display: none; }
+@media (min-width: 900px) { .rail { flex-wrap: wrap; margin: 0; padding: 0; overflow: visible; -webkit-mask: none; mask: none; } }
+.chip { position: relative; display: inline-flex; flex: none; scroll-snap-align: center; }
+.chip input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; }
+.chip span {
+  display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 999px;
+  background: var(--card); box-shadow: inset 0 0 0 1px var(--rule-strong); font-size: .9375rem; font-weight: 500; white-space: nowrap;
+  transition: background-color .3s, box-shadow .3s, color .3s, transform .2s;
+}
+.chip input:hover + span { box-shadow: inset 0 0 0 1px rgba(243, 235, 221, .5); }
+.chip input:active + span { transform: scale(.95); }
+.chip input:checked + span { background: var(--cream); box-shadow: inset 0 0 0 1px var(--cream); color: var(--espresso); }
+.chip input:focus-visible + span { outline: 2px solid var(--bronze); outline-offset: 2px; }
+/* models: a segmented control with a sliding thumb */
+.seg { position: relative; display: flex; gap: 2px; width: max-content; max-width: 100%; padding: 4px; border-radius: 999px; background: var(--card); overflow-x: auto; scrollbar-width: none; }
+.seg::-webkit-scrollbar { display: none; }
+.seg-thumb { position: absolute; z-index: 0; top: 4px; bottom: 4px; left: 0; width: 0; border-radius: 999px; background: #3B3129; box-shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 6px 14px -6px rgba(0, 0, 0, .6); transition: transform .5s var(--ease), width .5s var(--ease); }
+.seg-opt { position: relative; z-index: 1; display: inline-flex; flex: none; }
+.seg-opt input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; }
+.seg-opt span { display: inline-flex; align-items: center; min-height: 40px; padding: 0 12px; border-radius: 999px; color: var(--stone); font-size: .875rem; font-weight: 500; white-space: nowrap; transition: color .3s; }
+@media (min-width: 400px) { .seg-opt span { padding: 0 15px; font-size: .9375rem; } }
+.seg-opt input:hover + span { color: var(--cream); }
+.seg-opt input:checked + span { color: var(--cream); }
+.seg-opt input:focus-visible + span { outline: 2px solid var(--bronze); outline-offset: -2px; }
+.seg-in .seg-opt { animation: segIn .4s var(--ease) both; }
+@keyframes segIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: none; } }
+
+/* the stage: a drawn iPhone of the chosen model, its name, what the price includes */
+.pz-stage { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 18px; padding: 16px 20px 16px 14px; border-radius: var(--radius); background: var(--card); }
+.pz-device { position: relative; display: grid; place-items: center; width: 92px; height: 150px; }
+@media (min-width: 900px) {
+  .pz-stage { grid-template-columns: none; justify-items: center; gap: 26px; padding: 44px 32px 30px; text-align: center; }
+  .pz-device { width: 100%; height: 300px; }
+}
+.pz-phone { position: relative; width: auto; height: 92%; aspect-ratio: 71.6 / 147.6; border-radius: 16%/8%;
+  background: linear-gradient(155deg, #8a8077, #3a332c 18%, #17120e 46%, #0e0b08 72%, #5a5048);
+  box-shadow: inset 0 0 0 1.2px rgba(255, 255, 255, .34), inset 0 0 0 3px rgba(0, 0, 0, .6), 0 0 0 1px rgba(243, 235, 221, .08), 0 26px 40px -22px rgba(0, 0, 0, .9);
+  transition: width .65s var(--ease), height .65s var(--ease), border-radius .65s var(--ease); }
+.pz-screen { position: absolute; inset: 2.5%; overflow: hidden; border-radius: 12%/6%;
+  background: radial-gradient(140% 70% at 50% 120%, rgba(122, 88, 54, .55) 0%, rgba(80, 56, 34, .35) 42%, rgba(40, 27, 16, 0) 72%), linear-gradient(180deg, #110b07, #241910);
+  transition: top .65s var(--ease), right .65s var(--ease), bottom .65s var(--ease), left .65s var(--ease), border-radius .65s var(--ease); }
+.pz-screen::after { content: ""; position: absolute; inset: 0; background: linear-gradient(118deg, rgba(255, 255, 255, .13) 0 22%, rgba(255, 255, 255, 0) 38%); }
+.pz-time { position: absolute; left: 0; right: 0; top: 17%; color: rgba(243, 235, 221, .94); font-weight: 500; line-height: 1; letter-spacing: -0.03em; text-align: center; transition: font-size .65s var(--ease), top .65s var(--ease); }
+.pz-notch { position: absolute; left: 50%; top: 0; width: 0; height: 0; background: #070504; transform: translateX(-50%); transition: all .65s var(--ease); }
+.pz-home { position: absolute; left: 50%; bottom: 0; width: 0; height: 0; border-radius: 50%; box-shadow: inset 0 0 0 1.3px rgba(255, 255, 255, .26); opacity: 0; transform: translateX(-50%); transition: all .65s var(--ease); }
+.pz-still, .pz-still * { transition: none !important; }
+.pz-phone[data-shape="tablet"] { background: linear-gradient(155deg, #a39d96, #3d3833 18%, #191512 48%, #0f0c0a 72%, #615a52); }
+.pz-phone[data-shape="console"] { background: linear-gradient(165deg, #45454b, #1b1b1e 46%, #121214 70%, #34343a); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .16), 0 26px 40px -22px rgba(0, 0, 0, .9); }
+.pz-phone[data-shape="console"] .pz-screen { background: linear-gradient(160deg, #15110d, #0a0806); }
+.pz-jc { position: absolute; top: 0; bottom: 0; width: 0; opacity: 0; background: linear-gradient(165deg, #5a5a61, #2a2a2f 50%, #3a3a40); transition: all .65s var(--ease); }
+.pz-jl { left: 0; box-shadow: inset -1.5px 0 0 rgba(0, 0, 0, .55); }
+.pz-jr { right: 0; box-shadow: inset 1.5px 0 0 rgba(0, 0, 0, .55); }
+.pz-phone[data-lite] .pz-jc { background: none; box-shadow: none; }
+.pz-jc::before, .pz-jc::after { content: ""; position: absolute; left: 50%; width: 46%; aspect-ratio: 1; transform: translate(-50%, -50%); border-radius: 50%; }
+.pz-jl::before, .pz-jr::after { background: radial-gradient(circle, #0e0e10 0 52%, #46464d 54% 66%, #151517 68%); }
+.pz-jl::before { top: 30%; } .pz-jr::after { top: 68%; }
+.pz-jl::after, .pz-jr::before { border-radius: 0; background:
+  radial-gradient(circle at 50% 16%, #0e0e10 0 15%, transparent 16%), radial-gradient(circle at 16% 50%, #0e0e10 0 15%, transparent 16%),
+  radial-gradient(circle at 84% 50%, #0e0e10 0 15%, transparent 16%), radial-gradient(circle at 50% 84%, #0e0e10 0 15%, transparent 16%); }
+.pz-jl::after { top: 66%; } .pz-jr::before { top: 32%; }
+@media (max-width: 899px) {
+  .pz-stage[data-shape="console"] { grid-template-columns: none; justify-items: center; gap: 16px; padding: 24px 20px 20px; text-align: center; }
+  .pz-stage[data-shape="console"] .pz-device { width: min(100%, 300px); height: 128px; }
+  .pz-stage[data-shape="console"] .pz-incl { justify-content: center; }
+  .pz-stage[data-shape="console"] .pz-help p { margin-inline: auto; }
+}
+.pz-model { font-size: clamp(1.5rem, 3vw, 2.25rem); font-weight: 600; letter-spacing: -0.035em; line-height: 1.1; }
+.pz-model.flip { animation: nameIn .45s var(--ease) both; }
+@keyframes nameIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+.pz-incl { display: flex; flex-wrap: wrap; gap: 4px 14px; margin-top: 8px; padding: 0; list-style: none; color: var(--stone); font-size: .8125rem; }
+.pz-incl li { display: inline-flex; align-items: center; gap: 6px; }
+.pz-incl svg { width: 16px; height: 16px; flex: none; color: var(--bronze); }
+.pz-help { margin-top: 10px; color: var(--stone); font-size: .8125rem; }
+.pz-help summary { display: inline; color: var(--bronze); font-weight: 500; cursor: pointer; list-style: none; }
+.pz-help summary::-webkit-details-marker { display: none; }
+.pz-help summary svg { display: inline-block; width: 15px; height: 15px; margin-left: 2px; vertical-align: -3px; transition: transform .25s; }
+.pz-help[open] summary svg { transform: rotate(90deg); }
+.pz-help .nw { white-space: nowrap; }
+.pz-help p { max-width: 34ch; margin-top: 6px; line-height: 1.5; }
+@media (min-width: 900px) { .pz-incl { justify-content: center; font-size: .875rem; } .pz-help p { margin-inline: auto; } }
+
+/* the prices */
+.pz-group { margin: 30px 0 12px; font-size: 1rem; font-weight: 600; letter-spacing: -0.01em; }
+.pz-prices > .pz-group:first-child { margin-top: 6px; }
+.pz-tiles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.pz-tile { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-template-rows: auto auto 1fr; align-content: start; min-height: 158px; padding: 18px 16px 16px 18px; border-radius: 22px;
+  background: var(--card); color: inherit; text-decoration: none; transition: transform .4s var(--ease), box-shadow .4s var(--ease), background-color .3s; }
+.pz-tile:hover { transform: translateY(-3px); background: #1B1611; box-shadow: 0 24px 34px -28px rgba(0, 0, 0, .9); }
+.pz-tile:active { transform: scale(.98); }
+.pz-ico { width: 30px; height: 30px; color: var(--bronze); }
+.pz-ico svg { width: 100%; height: 100%; }
+.pz-go { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: var(--card-2); color: var(--cream); transition: background-color .25s, color .25s, transform .25s; }
+.pz-go svg { width: 16px; height: 16px; }
+.pz-tile:hover .pz-go { background: var(--gold); color: var(--espresso); }
+.pz-txt { grid-column: 1 / -1; display: grid; margin-top: 14px; }
+.pz-name { font-size: 1.0625rem; font-weight: 600; letter-spacing: -0.01em; line-height: 1.25; }
+.pz-sub { color: var(--stone); font-size: .8125rem; }
+.pz-price { grid-column: 1 / -1; align-self: end; margin-top: 12px; font-size: clamp(1.875rem, 2.8vw, 2.375rem); font-weight: 600; letter-spacing: -0.04em; line-height: 1; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.pz-price small { margin-left: .2em; color: var(--stone); font-size: .56em; font-weight: 500; letter-spacing: 0; }
+.pz-price.pz-quote { font-size: 1.0625rem; font-weight: 500; letter-spacing: 0; color: var(--stone); }
+.pz-tile.wide { grid-column: 1 / -1; grid-template-columns: auto minmax(0, 1fr) auto auto; grid-template-rows: none; align-items: center; gap: 16px; min-height: 0; padding: 16px 16px 16px 18px; }
+.pz-tile.wide .pz-txt, .pz-tile.wide .pz-price { grid-column: auto; grid-row: 1; margin: 0; }
+.pz-tile.wide .pz-ico { grid-column: 1; grid-row: 1; }
+.pz-tile.wide .pz-txt { grid-column: 2; }
+.pz-tile.wide .pz-price { grid-column: 3; align-self: center; }
+.pz-tile.wide .pz-go { grid-column: 4; grid-row: 1; }
+.pz-list { margin: 0; padding: 2px 18px; border-radius: 22px; background: var(--card); list-style: none; }
+.pz-row { display: grid; grid-template-columns: minmax(0, 1fr) auto 16px; align-items: center; gap: 12px; min-height: 54px; padding-block: 8px; border-bottom: 1px solid var(--rule); color: inherit; text-decoration: none; }
+.pz-list li:last-child .pz-row { border-bottom: 0; }
+.pz-n { font-size: .9375rem; }
+.pz-v { font-size: 1.125rem; font-weight: 600; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.pz-v small { margin-left: .2em; color: var(--stone); font-size: .72em; font-weight: 500; letter-spacing: 0; }
+.pz-v.pz-quote { font-size: .875rem; font-weight: 500; letter-spacing: 0; color: var(--stone); }
+.pz-row svg { width: 16px; height: 16px; color: var(--stone); transition: transform .2s; }
+.pz-row:hover .pz-n { text-decoration: underline; text-underline-offset: 4px; text-decoration-color: var(--rule-strong); }
+.pz-row:hover svg { transform: translateX(3px); color: var(--cream); }
+.pz-tile:focus-visible, .pz-row:focus-visible { outline: 2px solid var(--bronze); outline-offset: 2px; }
+.swap .pz-price, .swap .pz-v { animation: priceIn .5s var(--ease) both; animation-delay: calc(var(--k) * 30ms); }
+@keyframes priceIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+.fine { display: flex; flex-wrap: wrap; gap: 8px 28px; margin-top: 30px; padding: 0; list-style: none; color: var(--stone); font-size: .875rem; }
+/* device tabs: iPhone, Samsung, iPad, Switch, PS5 */
+.dtabs { display: flex; gap: 8px; margin: 0 calc(-1 * var(--gutter)) clamp(22px, 3vw, 34px); padding: 2px var(--gutter) 4px; overflow-x: auto; scrollbar-width: none;
+  -webkit-mask: linear-gradient(90deg, transparent, #000 var(--gutter), #000 calc(100% - var(--gutter)), transparent); mask: linear-gradient(90deg, transparent, #000 var(--gutter), #000 calc(100% - var(--gutter)), transparent); }
+.dtabs::-webkit-scrollbar { display: none; }
+@media (min-width: 900px) { .dtabs { margin-inline: 0; padding-inline: 0; -webkit-mask: none; mask: none; } }
+.dtab { display: inline-flex; flex: none; align-items: center; gap: 8px; min-height: 48px; padding: 0 20px; border: 0; border-radius: 999px; background: var(--card); color: var(--sand);
+  font-size: 1rem; font-weight: 500; cursor: pointer; transition: background-color .3s, color .3s, transform .2s; }
+.dtab:hover { color: var(--cream); }
+.dtab:active { transform: scale(.97); }
+.dtab[aria-selected="true"] { background: var(--cream); color: var(--espresso); }
+.dtab:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+.dtab-soon { padding: 1px 8px; border-radius: 999px; background: rgba(226, 182, 98, .16); color: var(--gold); font-size: .6875rem; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; }
+.dtab[aria-selected="true"] .dtab-soon { background: rgba(27, 20, 13, .12); color: var(--espresso); }
+.pz-alt { display: grid; gap: 16px; max-width: 820px; }
+.pz-alt[hidden], .pz[hidden] { display: none; }
+.pz-alt.show, .pz.show { animation: panelIn .5s var(--ease) both; }
+@keyframes panelIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+.pz-alt-head h3 { font-size: clamp(1.5rem, 3vw, 2.25rem); letter-spacing: -0.035em; line-height: 1.1; }
+.pz-alt-head p, .pz-alt-note { margin-top: 6px; color: var(--sand); font-size: .9375rem; }
+.quote { display: grid; gap: 14px; justify-items: start; padding: clamp(24px, 3.4vw, 40px); border-radius: var(--radius); background: var(--card); }
+.quote h3 { font-size: clamp(1.5rem, 3vw, 2.25rem); letter-spacing: -0.035em; line-height: 1.1; }
+.quote p { max-width: 46ch; color: var(--sand); }
+.quote-row { display: flex; flex-wrap: wrap; gap: 10px; width: 100%; max-width: 560px; }
+.quote-row .input { flex: 1 1 220px; }
+.quote-row .pill { flex: none; }
+
+/* ---------- booking ---------- */
+.book { display: grid; gap: clamp(28px, 4vw, 48px); align-items: start; }
+@media (min-width: 900px) { .book { grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); } }
+.form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 14px; }
+@media (max-width: 520px) { .form { grid-template-columns: minmax(0, 1fr); } }
+.field { display: grid; gap: 8px; min-width: 0; }
+.field.full { grid-column: 1 / -1; }
+.field label { font-size: .875rem; font-weight: 500; }
+.field .opt { color: var(--stone); font-weight: 400; }
+.input {
+  display: block; width: 100%; min-width: 0; min-height: 52px; padding: 12px 16px;
+  border: 1px solid rgba(243, 235, 221, .2); border-radius: 14px; background: var(--card); color: var(--cream);
+  font-size: 1rem; line-height: 1.4; transition: border-color .2s, box-shadow .2s; -webkit-appearance: none; appearance: none;
+}
+.input::placeholder { color: #8A8073; }
+.input:hover { border-color: rgba(243, 235, 221, .38); }
+.input:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 4px rgba(226, 182, 98, .2); }
+textarea.input { min-height: 110px; resize: vertical; }
+select.input {
+  padding-right: 44px; background-repeat: no-repeat; background-position: right 16px center; background-size: 14px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14'%3E%3Cpath d='M2.5 5l4.5 4.5L11.5 5' fill='none' stroke='%23F3EBDD' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+input[type="date"].input { line-height: 26px; }
+.wa-card { display: grid; gap: 16px; min-width: 0; padding: clamp(18px, 2.6vw, 26px); border-radius: var(--radius); background: var(--wa-bg); color: var(--wa-ink); }
+@media (min-width: 900px) { .wa-card { position: sticky; top: calc(var(--nav-h) + 24px); } }
+.wa-head { display: flex; align-items: center; gap: 12px; padding-bottom: 14px; border-bottom: 1px solid rgba(233, 237, 239, .08); }
+.wa-avatar { display: grid; place-items: center; width: 42px; height: 42px; flex: none; border-radius: 50%; background: #000; box-shadow: inset 0 0 0 1px rgba(233, 237, 239, .12); }
+.wa-avatar img { width: 30px; height: auto; }
+.wa-name { font-weight: 600; font-size: .9375rem; line-height: 1.3; }
+.wa-sub { color: var(--wa-muted); font-size: .8125rem; }
+.bubble {
+  justify-self: end; max-width: 94%; padding: 11px 14px; border-radius: 16px 16px 4px 16px; background: var(--wa-bubble); color: var(--wa-ink);
+  box-shadow: 0 1px .5px rgba(0, 0, 0, .3); font-size: .9375rem; line-height: 1.5; white-space: pre-wrap; overflow-wrap: anywhere;
+}
+.bubble .ph { color: #9FC7BD; }
+.bubble.bump { animation: bump .35s var(--ease); }
+@keyframes bump { 0% { transform: scale(.985); } 100% { transform: none; } }
+.wa-card .pill { width: 100%; }
+.wa-alt { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; color: var(--wa-muted); font-size: .875rem; }
+.wa-alt .num { color: var(--wa-ink); font-weight: 500; user-select: all; }
+.copy {
+  min-height: 32px; padding: 4px 12px; border: 1px solid rgba(233, 237, 239, .22); border-radius: 999px; background: transparent;
+  color: var(--wa-ink); font-size: .8125rem; font-weight: 500; cursor: pointer; transition: background-color .2s;
+}
+.copy:hover { background: rgba(233, 237, 239, .08); }
+
+/* where the repair happens: asked before the message can go */
+.place { margin: 0; padding: 0; border: 0; min-width: 0; }
+.place legend { padding: 0; margin-bottom: 8px; font-size: .875rem; font-weight: 500; }
+.places { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+@media (max-width: 420px) { .places { grid-template-columns: minmax(0, 1fr); } }
+.place-opt { position: relative; display: flex; min-width: 0; }
+.place-opt input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; }
+.place-opt > span {
+  display: grid; grid-template-columns: 26px minmax(0, 1fr); grid-template-rows: auto 1fr; column-gap: 12px; row-gap: 3px; align-content: start; width: 100%;
+  padding: 14px 16px; border-radius: 14px; background: var(--card); box-shadow: inset 0 0 0 1px rgba(243, 235, 221, .2);
+  transition: background-color .3s, box-shadow .3s, color .3s;
+}
+.place-opt svg { grid-row: span 2; width: 26px; height: 26px; fill: none; stroke: var(--bronze); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; transition: stroke .3s; }
+.place-opt b { font-size: .9375rem; font-weight: 600; line-height: 1.3; }
+.place-opt small { color: var(--stone); font-size: .8125rem; line-height: 1.4; transition: color .3s; }
+.place-opt input:hover + span { box-shadow: inset 0 0 0 1px rgba(243, 235, 221, .45); }
+.place-opt input:checked + span { background: var(--cream); color: var(--espresso); box-shadow: inset 0 0 0 1px var(--cream); }
+.place-opt input:checked + span small { color: #6B5E4D; }
+.place-opt input:checked + span svg { stroke: var(--espresso); }
+.place-opt input:focus-visible + span { outline: 2px solid var(--gold); outline-offset: 2px; }
+.place.want .place-opt > span { box-shadow: inset 0 0 0 1px var(--gold); }
+.come { gap: 10px; padding: 18px; border-radius: 16px; background: rgba(243, 235, 221, .04); box-shadow: inset 0 0 0 1px rgba(243, 235, 221, .1); }
+.come[hidden], .meet[hidden], .wa-need[hidden] { display: none; }
+.come-title { font-size: 1.0625rem; font-weight: 600; letter-spacing: -.01em; }
+.come-fee { color: var(--sand); font-size: .9375rem; line-height: 1.45; }
+.come-fee b { color: var(--gold); font-weight: 600; }
+.come.want #f-town { border-color: var(--gold); }
+.come-zones { display: grid; gap: 7px; margin: 2px 0 0; padding: 0; list-style: none; color: var(--stone); font-size: .8125rem; line-height: 1.35; }
+.come-zones li { display: grid; grid-template-columns: 10px minmax(0, 1fr) auto; align-items: center; gap: 10px; transition: color .3s; }
+.come-zones .sw { width: 10px; height: 10px; border-radius: 3px; }
+.come-zones b { color: var(--sand); font-weight: 500; font-variant-numeric: tabular-nums; transition: color .3s; }
+.come-zones li.on { color: var(--cream); }
+.come-zones li.on b { color: var(--gold); }
+.come-map { justify-self: start; color: var(--bronze); font-size: .875rem; text-decoration: underline; text-underline-offset: 3px; }
+.meet { padding: 14px 16px; border-radius: 14px; background: rgba(243, 235, 221, .04); box-shadow: inset 0 0 0 1px rgba(243, 235, 221, .1); color: var(--sand); font-size: .9375rem; line-height: 1.45; }
+.wa-need { color: #E9D3A6; font-size: .875rem; line-height: 1.45; }
+.wa-card .pill.is-off { opacity: .42; }
+.wa-card .pill.is-off:hover { background: var(--gold); }
+
+/* footer */
+.foot { padding-block: clamp(56px, 8vw, 88px) clamp(28px, 4vw, 40px); }
+.foot-grid { display: grid; gap: 40px; }
+@media (min-width: 800px) { .foot-grid { grid-template-columns: minmax(0, 1.3fr) repeat(2, minmax(0, 1fr)); } }
+.foot-brand img { width: 150px; height: auto; }
+.foot-brand p { max-width: 28ch; margin-top: 18px; color: var(--sand); font-size: .9375rem; }
+.foot h3 { margin-bottom: 12px; color: var(--sand); font-size: .875rem; font-weight: 500; }
+.foot-links { display: grid; justify-items: start; gap: 9px; }
+.foot-links a { color: var(--cream); font-size: .9375rem; text-decoration: none; }
+.foot-links a:hover { text-decoration: underline; text-underline-offset: 4px; }
+.foot-num { font-size: 1.5rem; font-weight: 600; letter-spacing: -0.02em; line-height: 1.2; user-select: all; }
+.foot .copy { margin-block: 10px 6px; border-color: rgba(243, 235, 221, .25); color: var(--cream); }
+.foot .copy:hover { background: rgba(243, 235, 221, .08); }
+.foot { border-top: 1px solid var(--rule); }
+.foot-base { margin-top: 52px; padding-top: 22px; border-top: 1px solid rgba(243, 235, 221, .1); color: var(--sand); font-size: .8125rem; }
+@media (max-width: 899px) { .foot { padding-bottom: calc(108px + env(safe-area-inset-bottom, 0px)); } }
+
+/* phone dock */
+.dock {
+  position: fixed; z-index: 50; left: 0; right: 0; bottom: 0; display: flex; gap: 10px;
+  padding: 10px var(--gutter) calc(10px + env(safe-area-inset-bottom, 0px));
+  background: rgba(6, 5, 4, .86); border-top: 1px solid rgba(243, 235, 221, .08);
+  -webkit-backdrop-filter: saturate(160%) blur(18px); backdrop-filter: saturate(160%) blur(18px);
+  transform: translateY(110%); transition: transform .4s var(--ease);
+}
+.dock.show { transform: none; }
+.dock .pill { flex: 1 1 auto; }
+.dock-wa { display: grid; place-items: center; width: 50px; height: 50px; flex: none; border-radius: 50%; background: var(--card-2); color: var(--cream); }
+.dock-wa svg { width: 22px; height: 22px; }
+@media (min-width: 900px) { .dock { display: none; } }
+
+/* ---------- pages: home, prices, refurbished phones, buy-back ---------- */
+.nav-links a[aria-current="page"] { color: var(--cream); }
+.menu nav a[aria-current="page"] { color: var(--gold); }
+.foot-links a[aria-current="page"] { color: var(--gold); }
+.page-top { padding-top: clamp(18px, 3.4vw, 40px); }
+.crumbs { display: flex; flex-wrap: wrap; align-items: center; gap: 2px 3px; margin-bottom: clamp(28px, 4.4vw, 50px); color: var(--stone); font-size: .875rem; }
+.crumbs a { color: var(--sand); text-decoration: none; }
+.crumbs a:hover { color: var(--cream); text-decoration: underline; text-underline-offset: 4px; }
+.crumbs svg { width: 14px; height: 14px; flex: none; }
+.page-head h1 { font-size: clamp(2.4rem, 7.4vw, 4.375rem); line-height: 1.02; letter-spacing: -0.042em; }
+.page-head .lead { max-width: 40rem; }
+/* the repair asked for from the home page: a thin gold line around its price */
+.pz-tile.want { box-shadow: inset 0 0 0 1.5px rgba(226, 182, 98, .72); }
+.pz-tile.want:hover { box-shadow: inset 0 0 0 1.5px rgba(226, 182, 98, .9), 0 24px 34px -28px rgba(0, 0, 0, .9); }
+.pz-row.want { margin-inline: -10px; padding-inline: 10px; border-radius: 14px; border-bottom-color: transparent; box-shadow: inset 0 0 0 1.5px rgba(226, 182, 98, .72); }
+.pz-list li:has(+ li .pz-row.want) .pz-row { border-bottom-color: transparent; }
+@media (prefers-reduced-motion: no-preference) {
+  .pz-tile.want, .pz-row.want { animation: wantIn 1.4s var(--ease) .35s both; }
+  @keyframes wantIn { from { box-shadow: inset 0 0 0 1.5px rgba(226, 182, 98, 0); } }
+}
+.fine-link { color: var(--bronze); text-underline-offset: 3px; }
+.fine-link:hover { color: var(--gold); }
+</style>
+</head>
+<body>
+<header class="site-nav">
+  <div class="wrap nav-row">
+    <a class="brand" href="index.html" aria-label="Phone Island, accueil">
+      <img class="brand-mark" src="assets/mark-96.webp" srcset="assets/mark-96.webp 1x, assets/mark-192.webp 2x" alt="" width="96" height="98">
+      <img class="brand-name" src="assets/name-48.webp" srcset="assets/name-48.webp 1x, assets/name-96.webp 2x" alt="" width="107" height="48">
+    </a>
+    <nav class="nav-links" aria-label="Navigation principale">
+      <a href="index.html#reparations">Réparations</a>
+      <a href="tarifs.html" aria-current="page">Tarifs</a>
+      <a href="index.html#savoir-faire">Savoir-faire</a>
+      <a href="boutique.html">Boutique</a>
+      <a href="rachat.html">Rachat</a>
+      <a href="index.html#zone">Zone</a>
+    </nav>
+    <a class="pill pill-sm" href="#rendez-vous">Rendez-vous</a>
+    <button class="burger" id="burger" type="button" aria-expanded="false" aria-controls="menu" aria-label="Ouvrir le menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><line class="l1" x1="4" y1="8.5" x2="20" y2="8.5"/><line class="l2" x1="4" y1="15.5" x2="20" y2="15.5"/></svg>
+    </button>
+  </div>
+</header>
+<div class="menu" id="menu" hidden>
+  <div class="wrap">
+    <nav aria-label="Menu">
+      <a href="index.html" style="--i:0">Accueil</a>
+      <a href="index.html#reparations" style="--i:1">Réparations</a>
+      <a href="tarifs.html" aria-current="page" style="--i:2">Tarifs</a>
+      <a href="index.html#savoir-faire" style="--i:3">Savoir-faire</a>
+      <a href="boutique.html" style="--i:4">Boutique</a>
+      <a href="rachat.html" style="--i:5">Rachat</a>
+      <a href="index.html#zone" style="--i:6">Zone</a>
+    </nav>
+    <a class="pill" href="#rendez-vous">Prendre rendez-vous</a>
+    <p class="menu-contact">WhatsApp et téléphone&nbsp;: <span class="num">0696 17 47 32</span></p>
+  </div>
+</div>
+
+<main id="top">
+  <section class="band alt page-top" id="tarifs" aria-labelledby="tarifs-title">
+    <div class="wrap">
+      <nav class="crumbs" aria-label="Vous êtes ici"><a href="index.html">Accueil</a><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 6l6 6-6 6"/></svg><span aria-current="page">Tarifs</span></nav>
+      <header class="band-head page-head">
+        <h1 id="tarifs-title">Combien ça coûte&nbsp;?</h1>
+        <p class="lead">Choisissez votre appareil et votre modèle pour voir nos prix. Touchez une réparation pour la réserver.</p>
+      </header>
+      <div class="dtabs" role="tablist" aria-label="Type d’appareil" id="dtabs">
+        <button class="dtab" type="button" role="tab" id="tab-iphone" data-dev="iphone" aria-controls="panel-dev" aria-selected="true">iPhone</button>
+        <button class="dtab" type="button" role="tab" id="tab-samsung" data-dev="samsung" aria-controls="panel-dev" aria-selected="false" tabindex="-1">Samsung</button>
+        <button class="dtab" type="button" role="tab" id="tab-ipad" data-dev="ipad" aria-controls="panel-dev" aria-selected="false" tabindex="-1">iPad</button>
+        <button class="dtab" type="button" role="tab" id="tab-switch" data-dev="switch" aria-controls="panel-dev" aria-selected="false" tabindex="-1">Nintendo Switch</button>
+        <button class="dtab" type="button" role="tab" id="tab-ps5" data-dev="ps5" aria-controls="panel-ps5" aria-selected="false" tabindex="-1">PS5<span class="dtab-soon">bientôt</span></button>
+      </div>
+      <div class="pz" id="panel-dev" role="tabpanel" aria-labelledby="tab-iphone">
+        <div class="pz-pick" role="group" aria-label="Choix du modèle">
+          <p class="pz-label" id="gen-label">Génération</p>
+          <div class="rail" id="gens" role="radiogroup" aria-labelledby="gen-label"><label class="chip"><input type="radio" name="gen" value="0"><span>6, 7, 8, SE</span></label><label class="chip"><input type="radio" name="gen" value="1"><span>X, XS, XR</span></label><label class="chip"><input type="radio" name="gen" value="2"><span>11</span></label><label class="chip"><input type="radio" name="gen" value="3"><span>12</span></label><label class="chip"><input type="radio" name="gen" value="4"><span>13</span></label><label class="chip"><input type="radio" name="gen" value="5"><span>14</span></label><label class="chip"><input type="radio" name="gen" value="6" checked><span>15</span></label><label class="chip"><input type="radio" name="gen" value="7"><span>16</span></label><label class="chip"><input type="radio" name="gen" value="8"><span>17</span></label></div>
+          <p class="pz-label" id="model-label">Modèle</p>
+          <div class="seg" id="models" role="radiogroup" aria-labelledby="model-label"><span class="seg-thumb" id="seg-thumb" aria-hidden="true"></span><label class="seg-opt"><input type="radio" name="model" value="15" checked><span>15</span></label><label class="seg-opt"><input type="radio" name="model" value="15 Plus"><span>15 Plus</span></label><label class="seg-opt"><input type="radio" name="model" value="15 Pro"><span>15 Pro</span></label><label class="seg-opt"><input type="radio" name="model" value="15 Pro Max"><span>15 Pro Max</span></label></div>
+        </div>
+        <div class="pz-stage" id="pz-stage" data-shape="phone">
+          <div class="pz-device" id="pz-device" aria-hidden="true">
+            <div class="pz-phone pz-still" id="pz-phone"><span class="pz-screen" id="pz-screen"><span class="pz-time wall-time-sm" id="pz-time">9:41</span></span><span class="pz-notch" id="pz-notch"></span><span class="pz-home" id="pz-home"></span><span class="pz-jc pz-jl" id="pz-jl"></span><span class="pz-jc pz-jr" id="pz-jr"></span></div>
+          </div>
+          <div class="pz-id">
+            <p class="pz-model" id="pc-model" aria-live="polite">iPhone 15</p>
+            <ul class="pz-incl"><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9.2"/><path d="M8 12.3l2.7 2.7 5.5-5.5"/></svg>Pièce et main-d’œuvre</li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9.2"/><path d="M8 12.3l2.7 2.7 5.5-5.5"/></svg>Diagnostic gratuit</li></ul>
+            <details class="pz-help"><summary>Je ne connais pas mon <span class="nw">modèle<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 6l6 6-6 6"/></svg></span></summary><p id="pz-help-text">Ouvrez Réglages, puis Général, puis Informations&nbsp;: le nom du modèle est écrit en haut.</p></details>
+          </div>
+        </div>
+        <div class="pz-prices">
+          <h3 class="pz-group">Les plus demandées</h3>
+          <div class="pz-tiles" id="pc-main"><a class="pz-tile" style="--k:0" href="#rendez-vous" aria-label="Écran, 160 euros"><span class="pz-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="6.5" y="2.5" width="11" height="19" rx="2.6"/><path d="M10.6 6.4l1.9 3-1.7 2.5 2.7 3.2-.8 2.6"/></svg></span><span class="pz-go" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 6l6 6-6 6"/></svg></span><span class="pz-txt"><span class="pz-name">Écran</span></span><span class="pz-price">160<small>€</small></span></a><a class="pz-tile" style="--k:1" href="#rendez-vous" aria-label="Batterie, 80 euros"><span class="pz-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="7" width="16.5" height="10" rx="2.6"/><path d="M21.5 10.6v2.8M11.9 9l-2.4 3.3h3.1L10.2 15.6"/></svg></span><span class="pz-go" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 6l6 6-6 6"/></svg></span><span class="pz-txt"><span class="pz-name">Batterie</span></span><span class="pz-price">80<small>€</small></span></a><a class="pz-tile" style="--k:2" href="#rendez-vous" aria-label="Châssis, 150 euros"><span class="pz-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="6.5" y="2.5" width="11" height="19" rx="2.6"/><rect x="8.7" y="4.7" width="6.6" height="14.6" rx="1.2"/></svg></span><span class="pz-go" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 6l6 6-6 6"/></svg></span><span class="pz-txt"><span class="pz-name">Châssis</span></span><span class="pz-price">150<small>€</small></span></a><a class="pz-tile" style="--k:3" href="#rendez-vous" aria-label="Vitre arrière, 70 euros"><span class="pz-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="6.5" y="2.5" width="11" height="19" rx="2.6"/><rect x="8.5" y="4.5" width="4.8" height="4.8" rx="1.4"/><circle cx="12" cy="14.2" r="1.3"/></svg></span><span class="pz-go" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 6l6 6-6 6"/></svg></span><span class="pz-txt"><span class="pz-name">Vitre arrière</span></span><span class="pz-price">70<small>€</small></span></a></div>
+          <h3 class="pz-group" id="pc-small-title">Petites pièces</h3>
+          <ul class="pz-list" id="pc-small"><li><a class="pz-row" style="--k:4" href="#rendez-vous" aria-label="Caméra arrière, 120 euros"><span class="pz-n">Caméra arrière</span><span class="pz-v">120<small>€</small></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 6l6 6-6 6"/></svg></a></li><li><a class="pz-row" style="--k:5" href="#rendez-vous" aria-label="Caméra avant, 65 euros"><span class="pz-n">Caméra avant</span><span class="pz-v">65<small>€</small></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 6l6 6-6 6"/></svg></a></li><li><a class="pz-row" style="--k:6" href="#rendez-vous" aria-label="Haut-parleur du haut, 70 euros"><span class="pz-n">Haut-parleur du haut</span><span class="pz-v">70<small>€</small></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 6l6 6-6 6"/></svg></a></li><li><a class="pz-row" style="--k:7" href="#rendez-vous" aria-label="Haut-parleur du bas, 60 euros"><span class="pz-n">Haut-parleur du bas</span><span class="pz-v">60<small>€</small></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 6l6 6-6 6"/></svg></a></li><li><a class="pz-row" style="--k:8" href="#rendez-vous" aria-label="Connecteur de charge, 80 euros"><span class="pz-n">Connecteur de charge</span><span class="pz-v">80<small>€</small></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 6l6 6-6 6"/></svg></a></li><li><a class="pz-row" style="--k:9" href="#rendez-vous" aria-label="Bouton power, 65 euros"><span class="pz-n">Bouton power</span><span class="pz-v">65<small>€</small></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 6l6 6-6 6"/></svg></a></li><li><a class="pz-row" style="--k:10" href="#rendez-vous" aria-label="Boutons volume, 75 euros"><span class="pz-n">Boutons volume</span><span class="pz-v">75<small>€</small></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 6l6 6-6 6"/></svg></a></li></ul>
+        </div>
+      </div>
+      <div class="pz-alt" id="panel-ps5" role="tabpanel" aria-labelledby="tab-ps5" hidden>
+        <div class="quote">
+          <span class="badge">Bientôt disponible</span>
+          <h3>Réparation PS5</h3>
+          <p>La réparation de PlayStation&nbsp;5 arrive bientôt chez Phone Island. Écrivez-nous pour être prévenu dès l’ouverture.</p>
+          <a class="pill" id="ps5-go" href="https://wa.me/596696174732" target="_blank" rel="noopener">Être prévenu</a>
+        </div>
+      </div>
+      <ul class="fine">
+        <li>Diagnostic gratuit.</li>
+        <li>Délai selon disponibilité de la pièce.</li>
+        <li>«&nbsp;Sur devis&nbsp;»&nbsp;: pièce sur commande, contactez-nous.</li>
+        <li>Nintendo Switch&nbsp;: écrans sur commande.</li>
+        <li>Votre modèle n’est pas dans la liste&nbsp;? Devis gratuit sur WhatsApp.</li>
+        <li>Déplacement de 10 à 35&nbsp;€ selon votre commune&nbsp;: <a class="fine-link" href="index.html#zone">voir la carte</a>.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="band light" id="rendez-vous" aria-labelledby="book-title">
+    <div class="wrap">
+      <header class="band-head rv">
+        <h2 id="book-title">Prendre rendez-vous.</h2>
+        <p class="lead">Remplissez ces quelques champs. Votre message s’ouvre dans WhatsApp, prêt à être envoyé.</p>
+      </header>
+      <div class="book">
+        <form class="form rv" id="booking" novalidate>
+          <div class="field">
+            <label for="f-device">Appareil</label>
+            <select class="input" id="f-device">
+              <option value="">Choisir</option>
+              <option>iPhone</option><option>Samsung</option><option>iPad</option><option>Nintendo Switch</option><option>Autre</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="f-model">Modèle</label>
+            <input class="input" id="f-model" type="text" list="iphone-models" placeholder="ex. 13 Pro, Galaxy S23" autocomplete="off">
+            <datalist id="iphone-models"><option value="6 / 6s"></option><option value="7 / 7 Plus"></option><option value="8"></option><option value="8 Plus"></option><option value="SE 2022"></option><option value="X"></option><option value="XS"></option><option value="XS Max"></option><option value="XR"></option><option value="11"></option><option value="11 Pro"></option><option value="11 Pro Max"></option><option value="12 mini"></option><option value="12"></option><option value="12 Pro"></option><option value="12 Pro Max"></option><option value="13 mini"></option><option value="13"></option><option value="13 Pro"></option><option value="13 Pro Max"></option><option value="14"></option><option value="14 Plus"></option><option value="14 Pro"></option><option value="14 Pro Max"></option><option value="15"></option><option value="15 Plus"></option><option value="15 Pro"></option><option value="15 Pro Max"></option><option value="16e"></option><option value="16"></option><option value="16 Plus"></option><option value="16 Pro"></option><option value="16 Pro Max"></option><option value="17e"></option><option value="17"></option><option value="Air"></option><option value="17 Pro"></option><option value="17 Pro Max"></option></datalist>
+          </div>
+          <div class="field full">
+            <label for="f-repair">Réparation</label>
+            <select class="input" id="f-repair">
+              <option value="">Choisir</option>
+              <option>Écran</option><option>Batterie</option><option>Châssis</option><option>Vitre arrière</option><option>Fenêtre arrière</option>
+              <option>Vitre tactile</option><option>Écran LCD</option>
+              <option>Caméra arrière</option><option>Caméra avant</option>
+              <option>Haut-parleur du haut</option><option>Haut-parleur du bas</option>
+              <option>Connecteur de charge</option><option>Bouton power</option><option>Boutons volume</option>
+              <option>Autre panne</option><option>Autre / je ne sais pas</option>
+            </select>
+          </div>
+          <fieldset class="field full place" id="f-place">
+            <legend>Où se fait la réparation&nbsp;?</legend>
+            <div class="places">
+              <label class="place-opt"><input type="radio" name="place" value="home"><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 11 12 4l8.5 7"/><path d="M5.5 9.5V20h13V9.5"/><path d="M10 20v-5.5h4V20"/></svg><b>Chez moi</b><small>On vient jusqu’à vous&nbsp;: déplacement de 10 à 35&nbsp;€ selon la commune</small></span></label>
+              <label class="place-opt"><input type="radio" name="place" value="go"><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.4"/></svg><b>Je me déplace</b><small>Pas de déplacement à payer&nbsp;: on vous envoie notre localisation</small></span></label>
+            </div>
+          </fieldset>
+          <div class="field full come" id="come" hidden>
+            <p class="come-title">On vient jusqu’à vous.</p>
+            <label for="f-town">Votre commune</label>
+            <select class="input" id="f-town">
+              <option value="">Choisir</option>
+              <option>L&#x27;Ajoupa-Bouillon</option>
+              <option>Les Anses-d&#x27;Arlet</option>
+              <option>Basse-Pointe</option>
+              <option>Bellefontaine</option>
+              <option>Le Carbet</option>
+              <option>Case-Pilote</option>
+              <option>Le Diamant</option>
+              <option>Ducos</option>
+              <option>Fonds-Saint-Denis</option>
+              <option>Fort-de-France</option>
+              <option>Le François</option>
+              <option>Grand&#x27;Rivière</option>
+              <option>Gros-Morne</option>
+              <option>Le Lamentin</option>
+              <option>Le Lorrain</option>
+              <option>Macouba</option>
+              <option>Le Marigot</option>
+              <option>Le Marin</option>
+              <option>Le Morne-Rouge</option>
+              <option>Le Morne-Vert</option>
+              <option>Le Prêcheur</option>
+              <option>Rivière-Pilote</option>
+              <option>Rivière-Salée</option>
+              <option>Le Robert</option>
+              <option>Saint-Esprit</option>
+              <option>Saint-Joseph</option>
+              <option>Saint-Pierre</option>
+              <option>Sainte-Anne</option>
+              <option>Sainte-Luce</option>
+              <option>Sainte-Marie</option>
+              <option>Schœlcher</option>
+              <option>La Trinité</option>
+              <option>Les Trois-Îlets</option>
+              <option>Le Vauclin</option>
+            </select>
+            <p class="come-fee" id="come-fee" aria-live="polite">Choisissez votre commune pour voir le prix du déplacement.</p>
+            <ul class="come-zones" id="come-zones">
+              <li data-z="0"><span class="sw" style="background:var(--zone-0)"></span><span>Fort-de-France</span><b>10&nbsp;€</b></li>
+              <li data-z="1"><span class="sw" style="background:var(--zone-1)"></span><span>Proche de Fort-de-France</span><b>20&nbsp;€</b></li>
+              <li data-z="2"><span class="sw" style="background:var(--zone-2)"></span><span>Un peu plus loin</span><b>25&nbsp;€</b></li>
+              <li data-z="3"><span class="sw" style="background:var(--zone-3)"></span><span>Sud et Nord</span><b>35&nbsp;€</b></li>
+            </ul>
+            <a class="come-map" id="come-map" href="#zone">Voir la carte des communes</a>
+          </div>
+          <p class="field full meet" id="meet" hidden>Pas de déplacement à payer. Après votre message, Phone Island vous envoie sa localisation sur WhatsApp.</p>
+          <div class="field">
+            <label for="f-date">Jour souhaité</label>
+            <input class="input" id="f-date" type="date">
+          </div>
+          <div class="field">
+            <label for="f-slot">Moment</label>
+            <select class="input" id="f-slot">
+              <option value="">Choisir</option><option>Matin</option><option>Midi</option><option>Après-midi</option><option>Fin de journée</option>
+            </select>
+          </div>
+          <div class="field full">
+            <label for="f-name">Prénom <span class="opt">(facultatif)</span></label>
+            <input class="input" id="f-name" type="text" autocomplete="given-name">
+          </div>
+          <div class="field full">
+            <label for="f-notes">Précisions <span class="opt">(facultatif)</span></label>
+            <textarea class="input" id="f-notes" placeholder="ex. l’écran est fissuré en bas à droite, le tactile marche encore"></textarea>
+          </div>
+        </form>
+        <aside class="wa-card rv rv-2" aria-label="Aperçu du message WhatsApp">
+          <div class="wa-head">
+            <span class="wa-avatar"><img src="assets/mark-96.webp" alt="" width="96" height="98"></span>
+            <div><p class="wa-name">Phone Island</p><p class="wa-sub">Votre message, prêt à partir</p></div>
+          </div>
+          <div class="bubble" id="wa-preview" aria-live="polite"></div>
+          <p class="wa-need" id="wa-need" role="status">Dites-nous d’abord si l’on vient chez vous ou si vous vous déplacez.</p>
+          <a class="pill" id="wa-send" href="https://wa.me/596696174732" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.9c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3Z"/></svg>Envoyer sur WhatsApp</a>
+          <p class="wa-alt">Ou écrivez-nous au <span class="num" id="num-book">0696 17 47 32</span><button class="copy" type="button" data-copy="0696 17 47 32" data-target="num-book">Copier</button></p>
+        </aside>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot dark">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <img src="assets/logo-360.webp" srcset="assets/logo-360.webp 360w, assets/logo-720.webp 720w" sizes="150px" alt="Phone Island" width="360" height="439" loading="lazy">
+        <p>Réparation et vente de smartphones, à domicile partout en Martinique.</p>
+      </div>
+      <div>
+        <h3>WhatsApp et téléphone</h3>
+        <p class="foot-num num" id="num-foot">0696 17 47 32</p>
+        <button class="copy" type="button" data-copy="0696 17 47 32" data-target="num-foot">Copier le numéro</button>
+        <div class="foot-links">
+          <a id="foot-wa" href="https://wa.me/596696174732" target="_blank" rel="noopener">Écrire sur WhatsApp</a>
+          <a href="https://www.instagram.com/phone._island/" target="_blank" rel="noopener">Instagram @phone._island</a>
+        </div>
+      </div>
+      <div>
+        <h3>Services</h3>
+        <div class="foot-links">
+          <a href="index.html#reparations">Réparations</a>
+          <a href="tarifs.html" aria-current="page">Tarifs</a>
+          <a href="boutique.html">Boutique</a>
+          <a href="rachat.html">Rachat</a>
+          <a href="index.html#zone">Zone et déplacement</a>
+        </div>
+      </div>
+    </div>
+    <p class="foot-base">© <span id="year">2026</span> Phone Island, Fort-de-France, Martinique</p>
+  </div>
+</footer>
+
+<div class="dock" id="dock">
+  <a class="pill" href="#rendez-vous">Prendre rendez-vous</a>
+  <a class="dock-wa" id="dock-wa" href="https://wa.me/596696174732" target="_blank" rel="noopener" aria-label="Écrire sur WhatsApp"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.9c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3Z"/></svg></a>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  var WA = '596696174732';
+  var DATA = {"gens":[["6, 7, 8, SE",["6 / 6s","7 / 7 Plus","8","8 Plus","SE 2022"]],["X, XS, XR",["X","XS","XS Max","XR"]],["11",["11","11 Pro","11 Pro Max"]],["12",["12 mini","12","12 Pro","12 Pro Max"]],["13",["13 mini","13","13 Pro","13 Pro Max"]],["14",["14","14 Plus","14 Pro","14 Pro Max"]],["15",["15","15 Plus","15 Pro","15 Pro Max"]],["16",["16e","16","16 Plus","16 Pro","16 Pro Max"]],["17",["17e","17","Air","17 Pro","17 Pro Max"]]],"prices":{"6 / 6s":{"e":20,"b":30,"c":40,"v":null,"f":null,"s":[null,null,null,null,null,null,null]},"7 / 7 Plus":{"e":25,"b":40,"c":55,"v":null,"f":null,"s":[null,null,null,null,null,null,null]},"8":{"e":30,"b":40,"c":60,"v":null,"f":null,"s":[null,null,null,null,null,null,null]},"8 Plus":{"e":30,"b":40,"c":70,"v":null,"f":null,"s":[null,null,null,null,null,null,null]},"SE 2022":{"e":45,"b":45,"c":90,"v":null,"f":null,"s":[null,null,null,null,null,null,null]},"X":{"e":45,"b":60,"c":80,"v":null,"f":null,"s":[60,55,60,50,60,70,65]},"XS":{"e":50,"b":60,"c":90,"v":null,"f":null,"s":[70,60,60,50,65,70,65]},"XS Max":{"e":70,"b":65,"c":110,"v":null,"f":null,"s":[70,60,65,50,60,85,65]},"XR":{"e":60,"b":50,"c":100,"v":null,"f":null,"s":[65,55,65,50,60,75,75]},"11":{"e":65,"b":50,"c":110,"v":null,"f":null,"s":[65,55,65,50,65,65,75]},"11 Pro":{"e":70,"b":60,"c":120,"v":null,"f":null,"s":[90,65,70,50,80,75,75]},"11 Pro Max":{"e":85,"b":75,"c":130,"v":null,"f":null,"s":[90,60,65,55,80,75,null]},"12 mini":{"e":120,"b":50,"c":130,"v":null,"f":null,"s":[100,60,65,60,65,70,70]},"12":{"e":100,"b":50,"c":120,"v":null,"f":null,"s":[70,60,65,50,70,75,75]},"12 Pro":{"e":110,"b":50,"c":140,"v":null,"f":null,"s":[160,60,65,50,70,75,75]},"12 Pro Max":{"e":125,"b":70,"c":155,"v":null,"f":null,"s":[130,60,70,60,75,65,65]},"13 mini":{"e":145,"b":60,"c":115,"v":null,"f":null,"s":[65,65,70,55,70,null,null]},"13":{"e":130,"b":60,"c":120,"v":null,"f":null,"s":[65,60,65,55,70,75,null]},"13 Pro":{"e":140,"b":65,"c":150,"v":null,"f":null,"s":[140,65,65,55,75,null,null]},"13 Pro Max":{"e":155,"b":70,"c":165,"v":null,"f":null,"s":[140,60,65,65,75,null,null]},"14":{"e":140,"b":80,"c":140,"v":60,"f":null,"s":[90,70,65,55,65,70,65]},"14 Plus":{"e":175,"b":85,"c":170,"v":60,"f":null,"s":[100,75,65,55,70,70,70]},"14 Pro":{"e":170,"b":75,"c":200,"v":null,"f":null,"s":[130,65,60,60,80,70,70]},"14 Pro Max":{"e":190,"b":90,"c":240,"v":null,"f":null,"s":[120,65,60,60,75,null,70]},"15":{"e":160,"b":80,"c":150,"v":70,"f":null,"s":[120,65,70,60,80,65,75]},"15 Plus":{"e":180,"b":80,"c":180,"v":80,"f":null,"s":[100,70,65,55,80,65,75]},"15 Pro":{"e":200,"b":85,"c":250,"v":null,"f":null,"s":[120,75,65,60,80,65,65]},"15 Pro Max":{"e":220,"b":90,"c":275,"v":null,"f":null,"s":[120,75,70,60,80,70,70]},"16e":{"e":260,"b":130,"c":230,"v":null,"f":null,"s":[100,85,60,60,80,null,75]},"16":{"e":250,"b":90,"c":180,"v":90,"f":null,"s":[120,85,70,60,75,80,80]},"16 Plus":{"e":280,"b":100,"c":200,"v":110,"f":null,"s":[130,75,70,70,75,80,80]},"16 Pro":{"e":300,"b":130,"c":280,"v":null,"f":null,"s":[130,90,65,55,70,80,70]},"16 Pro Max":{"e":360,"b":150,"c":320,"v":null,"f":null,"s":[140,90,75,60,70,80,80]},"17e":{"e":null,"b":null,"c":null,"v":null,"f":null,"s":[100,null,60,60,80,null,70]},"17":{"e":280,"b":110,"c":200,"v":100,"f":null,"s":[130,105,75,60,80,85,85]},"Air":{"e":330,"b":130,"c":260,"v":null,"f":null,"s":[140,135,75,50,80,85,80]},"17 Pro":{"e":340,"b":150,"c":300,"v":null,"f":110,"s":[140,125,70,60,85,85,85]},"17 Pro Max":{"e":400,"b":170,"c":340,"v":null,"f":125,"s":[130,125,70,60,null,85,80]}}};
+  var GENS = DATA.gens, P = DATA.prices;
+  var PARTS = ['Caméra arrière', 'Caméra avant', 'Haut-parleur du haut', 'Haut-parleur du bas', 'Connecteur de charge', 'Bouton power', 'Boutons volume'];
+  var MAIN = [['e', 'Écran'], ['b', 'Batterie'], ['c', 'Châssis'], ['v', 'Vitre arrière'], ['f', 'Fenêtre arrière']];
+  var ZONE_OF = {"Fort-de-France":0,"Le Lamentin":1,"Schœlcher":1,"Saint-Joseph":1,"Case-Pilote":1,"Le Robert":1,"Le François":2,"Ducos":2,"La Trinité":2,"Gros-Morne":2,"Saint-Esprit":3,"Rivière-Salée":3,"Les Trois-Îlets":3,"Les Anses-d'Arlet":3,"Le Diamant":3,"Sainte-Luce":3,"Rivière-Pilote":3,"Le Marin":3,"Le Vauclin":3,"Sainte-Anne":3,"Le Prêcheur":3,"Grand'Rivière":3,"Macouba":3,"Basse-Pointe":3,"Saint-Pierre":3,"L'Ajoupa-Bouillon":3,"Le Lorrain":3,"Le Marigot":3,"Le Morne-Rouge":3,"Fonds-Saint-Denis":3,"Le Carbet":3,"Le Morne-Vert":3,"Bellefontaine":3,"Sainte-Marie":3};
+  var ZINFO = [{ fee: '10 €' }, { fee: '20 €' }, { fee: '25 €' }, { fee: '35 €' }];
+  var DEFAULT_GEN = 6, DEFAULT_MODEL = '15';
+  var CHEVRON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 6l6 6-6 6"/></svg>';
+  var $ = function (id) { return document.getElementById(id); };
+  var all = function (sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); };
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var waLink = function (t) { return 'https://wa.me/' + WA + '?text=' + encodeURIComponent(t); };
+  var euro = function (v) { return v + ' €'; };
+  var clamp = function (v, a, b) { return Math.max(a, Math.min(b, v)); };
+  function iphone(m) { return m === 'Air' ? 'iPhone Air' : m === 'SE 2022' ? 'iPhone SE (2022)' : 'iPhone ' + m; }
+
+  /* ---------- menu ---------- */
+  var burger = $('burger'), menu = $('menu');
+  function setMenu(open) {
+    menu.hidden = !open;
+    burger.setAttribute('aria-expanded', String(open));
+    burger.setAttribute('aria-label', open ? 'Fermer le menu' : 'Ouvrir le menu');
+    document.documentElement.classList.toggle('menu-open', open);
+  }
+  burger.addEventListener('click', function () { setMenu(menu.hidden); });
+  menu.addEventListener('click', function (e) { if (e.target.closest('a')) setMenu(false); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !menu.hidden) { setMenu(false); burger.focus(); } });
+  window.matchMedia('(min-width: 960px)').addEventListener('change', function (m) { if (m.matches) setMenu(false); });
+
+  /* ---------- the phones show the visitor's time ---------- */
+  function two(n) { return (n < 10 ? '0' : '') + n; }
+  function tick() {
+    var d = new Date(), t = two(d.getHours()) + ':' + two(d.getMinutes());
+    var ds = d.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });
+    all('.wall-time, .wall-time-sm').forEach(function (el) { el.textContent = t; });
+    all('.wall-date').forEach(function (el) { el.textContent = ds; });
+  }
+  tick(); setInterval(tick, 15000);
+
+  /* ---------- prices: one tool for every device (rail, model selector, drawn device, tiles) ---------- */
+  var gensBox = $('gens'), modelsBox = $('models'), thumb = $('seg-thumb'), mainBox = $('pc-main'), smallList = $('pc-small');
+  var DEVS = {"samsung":{"name":"Samsung","device":"Samsung","shape":"android","genLabel":"Série","gens":[["S10",["S10e","S10","S10+"]],["S20",["S20","S20+","S20 Ultra","S20 FE","S20 FE 5G"]],["S21",["S21","S21+","S21 Ultra","S21 FE"]],["S22",["S22","S22+","S22 Ultra"]],["S23",["S23","S23+","S23 Ultra","S23 FE"]],["S24",["S24","S24+","S24 Ultra","S24 FE"]],["S25",["S25","S25+","S25 Ultra","S25 Edge","S25 FE"]],["S26",["S26","S26+","S26 Ultra"]],["Note 20",["Note 20","Note 20 Ultra"]],["Z Flip",["Z Flip (2020)","Z Flip 3","Z Flip 4","Z Flip 5","Z Flip 6","Z Flip 7","Z Flip 8"]],["Z Fold",["Z Fold 2","Z Fold 3","Z Fold 4","Z Fold 5","Z Fold 6","Z Fold 7","Z Fold 8"]],["A02 à A07",["A02s","A03","A04s","A05s","A06","A07 5G"]],["A10 à A17",["A10","A11","A12","A13","A14 4G","A15","A16","A17 4G","A17 5G"]],["A20 à A27",["A20e","A21s","A22 5G","A23 5G","A24","A25","A26","A27"]],["A31 à A37",["A31","A32 4G","A32 5G","A33","A34","A35","A36","A37"]],["A40 à A42",["A40","A41","A42"]],["A50 à A57",["A50","A51","A52","A52s","A53","A54","A55","A56","A57"]],["A70 à A73",["A70","A71","A72","A73"]],["Série M",["M12","M13","M23","M33","M53","M55"]],["XCover",["XCover 5","XCover 6 Pro","XCover 7"]]],"prices":{"S10e":{"e":150,"b":null,"p":null,"v":50},"S10":{"e":200,"b":null,"p":null,"v":50},"S10+":{"e":230,"b":null,"p":null,"v":55},"S20":{"e":160,"b":null,"p":null,"v":50},"S20+":{"e":180,"b":null,"p":null,"v":55},"S20 Ultra":{"e":230,"b":null,"p":null,"v":65},"S20 FE":{"e":130,"b":null,"p":null,"v":50},"S20 FE 5G":{"e":null,"b":null,"p":null,"v":null},"S21":{"e":170,"b":null,"p":null,"v":55},"S21+":{"e":190,"b":null,"p":null,"v":60},"S21 Ultra":{"e":250,"b":null,"p":null,"v":70},"S21 FE":{"e":160,"b":null,"p":null,"v":55},"S22":{"e":240,"b":null,"p":null,"v":60},"S22+":{"e":250,"b":null,"p":null,"v":65},"S22 Ultra":{"e":290,"b":null,"p":null,"v":75},"S23":{"e":250,"b":null,"p":null,"v":65},"S23+":{"e":270,"b":null,"p":null,"v":70},"S23 Ultra":{"e":320,"b":null,"p":null,"v":80},"S23 FE":{"e":null,"b":null,"p":null,"v":null},"S24":{"e":null,"b":null,"p":null,"v":null},"S24+":{"e":null,"b":null,"p":null,"v":null},"S24 Ultra":{"e":null,"b":null,"p":null,"v":null},"S24 FE":{"e":null,"b":null,"p":null,"v":null},"S25":{"e":null,"b":null,"p":null,"v":null},"S25+":{"e":null,"b":null,"p":null,"v":null},"S25 Ultra":{"e":null,"b":null,"p":null,"v":null},"S25 Edge":{"e":null,"b":null,"p":null,"v":null},"S25 FE":{"e":null,"b":null,"p":null,"v":null},"S26":{"e":null,"b":null,"p":null,"v":null},"S26+":{"e":null,"b":null,"p":null,"v":null},"S26 Ultra":{"e":null,"b":null,"p":null,"v":null},"Note 20":{"e":null,"b":null,"p":null,"v":null},"Note 20 Ultra":{"e":null,"b":null,"p":null,"v":null},"Z Flip (2020)":{"e":null,"b":null,"p":null,"v":null},"Z Flip 3":{"e":null,"b":null,"p":null,"v":null},"Z Flip 4":{"e":null,"b":null,"p":null,"v":null},"Z Flip 5":{"e":null,"b":null,"p":null,"v":null},"Z Flip 6":{"e":null,"b":null,"p":null,"v":null},"Z Flip 7":{"e":null,"b":null,"p":null,"v":null},"Z Flip 8":{"e":null,"b":null,"p":null,"v":null},"Z Fold 2":{"e":null,"b":null,"p":null,"v":null},"Z Fold 3":{"e":null,"b":null,"p":null,"v":null},"Z Fold 4":{"e":null,"b":null,"p":null,"v":null},"Z Fold 5":{"e":null,"b":null,"p":null,"v":null},"Z Fold 6":{"e":null,"b":null,"p":null,"v":null},"Z Fold 7":{"e":null,"b":null,"p":null,"v":null},"Z Fold 8":{"e":null,"b":null,"p":null,"v":null},"A02s":{"e":70,"b":null,"p":null,"v":null},"A03":{"e":70,"b":null,"p":null,"v":null},"A04s":{"e":70,"b":null,"p":null,"v":null},"A05s":{"e":70,"b":null,"p":null,"v":null},"A06":{"e":70,"b":null,"p":null,"v":null},"A07 5G":{"e":80,"b":null,"p":null,"v":null},"A10":{"e":70,"b":null,"p":null,"v":null},"A11":{"e":null,"b":null,"p":null,"v":null},"A12":{"e":70,"b":null,"p":null,"v":null},"A13":{"e":70,"b":null,"p":null,"v":null},"A14 4G":{"e":70,"b":null,"p":null,"v":null},"A15":{"e":70,"b":null,"p":null,"v":null},"A16":{"e":80,"b":null,"p":null,"v":null},"A17 4G":{"e":70,"b":null,"p":null,"v":null},"A17 5G":{"e":80,"b":null,"p":null,"v":null},"A20e":{"e":80,"b":null,"p":null,"v":null},"A21s":{"e":70,"b":null,"p":null,"v":null},"A22 5G":{"e":70,"b":null,"p":null,"v":null},"A23 5G":{"e":70,"b":null,"p":null,"v":null},"A24":{"e":70,"b":null,"p":null,"v":null},"A25":{"e":70,"b":null,"p":null,"v":null},"A26":{"e":80,"b":null,"p":null,"v":null},"A27":{"e":null,"b":null,"p":null,"v":null},"A31":{"e":95,"b":null,"p":null,"v":null},"A32 4G":{"e":95,"b":null,"p":null,"v":null},"A32 5G":{"e":70,"b":null,"p":null,"v":null},"A33":{"e":80,"b":null,"p":null,"v":null},"A34":{"e":80,"b":null,"p":null,"v":null},"A35":{"e":80,"b":null,"p":null,"v":null},"A36":{"e":80,"b":null,"p":null,"v":null},"A37":{"e":null,"b":null,"p":null,"v":null},"A40":{"e":80,"b":null,"p":null,"v":null},"A41":{"e":80,"b":null,"p":null,"v":null},"A42":{"e":80,"b":null,"p":null,"v":null},"A50":{"e":70,"b":null,"p":null,"v":null},"A51":{"e":70,"b":null,"p":null,"v":null},"A52":{"e":80,"b":null,"p":null,"v":null},"A52s":{"e":null,"b":null,"p":null,"v":null},"A53":{"e":80,"b":null,"p":null,"v":null},"A54":{"e":80,"b":null,"p":null,"v":null},"A55":{"e":80,"b":null,"p":null,"v":null},"A56":{"e":80,"b":null,"p":null,"v":null},"A57":{"e":null,"b":null,"p":null,"v":null},"A70":{"e":70,"b":null,"p":null,"v":null},"A71":{"e":70,"b":null,"p":null,"v":null},"A72":{"e":null,"b":null,"p":null,"v":null},"A73":{"e":null,"b":null,"p":null,"v":null},"M12":{"e":null,"b":null,"p":null,"v":null},"M13":{"e":null,"b":null,"p":null,"v":null},"M23":{"e":null,"b":null,"p":null,"v":null},"M33":{"e":null,"b":null,"p":null,"v":null},"M53":{"e":null,"b":null,"p":null,"v":null},"M55":{"e":null,"b":null,"p":null,"v":null},"XCover 5":{"e":null,"b":null,"p":null,"v":null},"XCover 6 Pro":{"e":null,"b":null,"p":null,"v":null},"XCover 7":{"e":null,"b":null,"p":null,"v":null}},"subs":{"S10e":{"e":"écran d’origine"},"S10":{"e":"écran d’origine"},"S10+":{"e":"écran d’origine"},"S20":{"e":"écran d’origine"},"S20+":{"e":"écran d’origine"},"S20 Ultra":{"e":"écran d’origine"},"S20 FE":{"e":"écran d’origine"},"S21":{"e":"écran d’origine"},"S21+":{"e":"écran d’origine"},"S21 Ultra":{"e":"écran d’origine"},"S21 FE":{"e":"écran d’origine"},"S22":{"e":"écran d’origine"},"S22+":{"e":"écran d’origine"},"S22 Ultra":{"e":"écran d’origine"},"S23":{"e":"écran d’origine"},"S23+":{"e":"écran d’origine"},"S23 Ultra":{"e":"écran d’origine"},"A02s":{"e":"écran compatible"},"A03":{"e":"écran compatible"},"A04s":{"e":"écran compatible"},"A05s":{"e":"écran compatible"},"A06":{"e":"écran compatible"},"A07 5G":{"e":"écran compatible"},"A10":{"e":"écran compatible"},"A12":{"e":"écran compatible"},"A13":{"e":"écran compatible"},"A14 4G":{"e":"écran compatible"},"A15":{"e":"écran compatible"},"A16":{"e":"écran compatible"},"A17 4G":{"e":"écran compatible"},"A17 5G":{"e":"écran compatible"},"A20e":{"e":"écran compatible"},"A21s":{"e":"écran compatible"},"A22 5G":{"e":"écran compatible"},"A23 5G":{"e":"écran compatible"},"A24":{"e":"écran compatible"},"A25":{"e":"écran compatible"},"A26":{"e":"écran compatible"},"A31":{"e":"écran compatible"},"A32 4G":{"e":"écran compatible"},"A32 5G":{"e":"écran compatible"},"A33":{"e":"écran compatible"},"A34":{"e":"écran compatible"},"A35":{"e":"écran compatible"},"A36":{"e":"écran compatible"},"A40":{"e":"écran compatible"},"A41":{"e":"écran compatible"},"A42":{"e":"écran compatible"},"A50":{"e":"écran compatible"},"A51":{"e":"écran compatible"},"A52":{"e":"écran compatible"},"A53":{"e":"écran compatible"},"A54":{"e":"écran compatible"},"A55":{"e":"écran compatible"},"A56":{"e":"écran compatible"},"A70":{"e":"écran compatible"},"A71":{"e":"écran compatible"}},"main":[["e","Écran"],["v","Vitre arrière"],["b","Batterie"],["p","Connecteur de charge"]],"draw":{"S10e":[69.9,142.2,"hole-r",3,3.6],"S10":[70.4,149.9,"hole-r",2.6,3.2],"S10+":[74.1,157.6,"pill-r",2.6,3.2],"S20":[69.1,151.7,"hole",2.6,3],"S20+":[73.7,161.9,"hole",2.6,3],"S20 Ultra":[76,166.9,"hole",2.6,3],"S20 FE":[74.5,159.8,"hole",3.4,4.5],"S20 FE 5G":[74.5,159.8,"hole",3.4,4.5],"S21":[71.2,151.7,"hole",2.8,3.2],"S21+":[75.6,161.5,"hole",2.8,3.2],"S21 Ultra":[75.6,165.1,"hole",2.4,2.8],"S21 FE":[74.5,155.7,"hole",3,4],"S22":[70.6,146,"hole",2.6,3],"S22+":[75.8,157.4,"hole",2.6,3],"S22 Ultra":[77.9,163.3,"hole",2.2,2.6],"S23":[70.9,146.3,"hole",2.6,3],"S23+":[76.2,157.8,"hole",2.6,3],"S23 Ultra":[78.1,163.4,"hole",2.2,2.6],"S23 FE":[76.5,158,"hole",3.2,4.2],"S24":[70.6,147,"hole",2.4,2.8],"S24+":[75.9,158.5,"hole",2.4,2.8],"S24 Ultra":[79,162.3,"hole",2.2,2.4],"S24 FE":[77.3,162,"hole",3,4],"S25":[70.5,146.9,"hole",2.3,2.7],"S25+":[75.8,158.4,"hole",2.3,2.7],"S25 Ultra":[77.6,162.8,"hole",2,2.3],"S25 Edge":[75.6,158.2,"hole",2.2,2.5],"S25 FE":[76.6,161.3,"hole",2.8,3.6],"S26":[71.7,149.6,"hole",2.2,2.6],"S26+":[75.8,158.4,"hole",2.2,2.6],"S26 Ultra":[78.1,163.6,"hole",2,2.3],"Note 20":[75.2,161.6,"hole",2.8,3.6],"Note 20 Ultra":[77.2,164.8,"hole",2.2,2.6],"Z Flip (2020)":[73.6,167.3,"hole",3,3.5],"Z Flip 3":[72.2,166,"hole",3,3.5],"Z Flip 4":[71.9,165.2,"hole",3,3.5],"Z Flip 5":[71.9,165.1,"hole",3,3.5],"Z Flip 6":[71.9,165.1,"hole",2.8,3.2],"Z Flip 7":[75.2,166.7,"hole",2.6,3],"Z Flip 8":[75.2,166.7,"hole",2.6,3],"Z Fold 2":[68,159.2,"hole",3.5,4.5],"Z Fold 3":[67.1,158.2,"hole",3.5,4.5],"Z Fold 4":[67.1,155.1,"hole",3.4,4.2],"Z Fold 5":[67.1,154.9,"hole",3.4,4.2],"Z Fold 6":[68.1,153.5,"hole",3.2,4],"Z Fold 7":[72.8,158.4,"hole",3,3.6],"Z Fold 8":[72.8,158.4,"hole",3,3.6],"A02s":[75.9,164.2,"drop",3.8,8],"A03":[75.9,164.2,"drop",3.8,8],"A04s":[76.7,164.7,"drop",3.8,8],"A05s":[77.8,168,"drop",3.6,7],"A06":[77.3,167.3,"drop",3.6,7],"A07 5G":[77.3,167.4,"drop",3.6,7],"A10":[75.6,155.6,"drop",4,8],"A11":[76.3,161.4,"hole-l",3.8,7.5],"A12":[75.8,164,"drop",4,8.5],"A13":[76.5,165.1,"drop",3.8,8],"A14 4G":[78,167.7,"drop",3.8,8],"A15":[76.8,160.1,"drop",3.5,6],"A16":[77.9,164.4,"drop",3.5,6],"A17 4G":[77.9,164.4,"drop",3.5,6],"A17 5G":[77.9,164.4,"drop",3.5,6],"A20e":[69.7,147.4,"drop",3.5,7],"A21s":[75.3,163.6,"hole-l",3.8,8],"A22 5G":[76.4,167.2,"drop",3.8,8],"A23 5G":[77,165.4,"drop",3.6,7],"A24":[77.6,162.1,"drop",3.5,6],"A25":[77.5,161,"drop",3.5,6],"A26":[77.5,164,"drop",3.2,5],"A27":[77.5,164,"hole",3,4.5],"A31":[73.1,159.3,"drop",3.5,6.5],"A32 4G":[73.6,158.9,"drop",3.5,6.5],"A32 5G":[76.1,164.2,"drop",3.8,8],"A33":[74,159.7,"drop",3.5,6],"A34":[78.1,161.3,"drop",3.4,5.5],"A35":[78,161.7,"hole",3.2,5],"A36":[78.2,162.9,"hole",3,4.5],"A37":[78,163,"hole",3,4.3],"A40":[69.2,144.4,"drop",3.2,6],"A41":[69.8,149.9,"drop",3.2,6],"A42":[75.9,164.4,"drop",3.6,7],"A50":[74.7,158.5,"drop",3.2,6],"A51":[73.6,158.5,"hole",3.2,5.5],"A52":[75.1,159.9,"hole",3.2,5.5],"A52s":[75.1,159.9,"hole",3.2,5.5],"A53":[74.8,159.6,"hole",3.2,5.5],"A54":[76.7,158.2,"hole",3.2,5],"A55":[77.4,161.1,"hole",3,4.5],"A56":[77.5,162.2,"hole",3,4.2],"A57":[77.5,162.5,"hole",2.8,4],"A70":[76.7,164.3,"drop",3.2,6],"A71":[76,163.6,"hole",3.2,5],"A72":[77.4,165,"hole",3.2,5.5],"A73":[76.1,163.7,"hole",3,5],"M12":[76.3,164,"drop",4,8],"M13":[76.9,165.4,"drop",3.8,8],"M23":[77,165.5,"drop",3.6,7],"M33":[77,165.4,"drop",3.6,7],"M53":[77,164.7,"hole",3.2,5],"M55":[76.5,163.9,"hole",3,4.5],"XCover 5":[71.6,147.1,"drop",5,12],"XCover 6 Pro":[79.9,168.8,"hole",4.5,9],"XCover 7":[75.9,169,"drop",4.5,10]},"def":"S23","help":"Ouvrez Paramètres, puis À propos du téléphone : le nom du modèle est écrit en haut."},"ipad":{"name":"iPad","device":"iPad","shape":"tablet","genLabel":"Gamme","gens":[["iPad",["1","2","3 / 4","5","6","7 / 8","9","10 / 11"]],["iPad Air",["Air","Air 2","Air 3","Air 4","Air 5","Air M2","Air M3","Air M4"]],["iPad mini",["mini 1","mini 2 / 3","mini 4","mini 5","mini 6","mini 7"]],["iPad Pro",["Pro 9,7\"","Pro 10,5\"","Pro 11\"","Pro 11\" M4","Pro 11\" M5","Pro 12,9\"","Pro 13\" M4","Pro 13\" M5"]]],"prices":{"1":{"t":null,"l":null,"b":null,"p":null},"2":{"t":70,"l":95,"b":null,"p":null},"3 / 4":{"t":70,"l":100,"b":null,"p":null},"5":{"t":70,"l":null,"b":null,"p":null},"6":{"t":70,"l":null,"b":null,"p":null},"7 / 8":{"t":70,"l":null,"b":null,"p":null},"9":{"t":70,"l":null,"b":null,"p":null},"10 / 11":{"t":70,"l":null,"b":null,"p":null},"Air":{"t":70,"l":125,"b":null,"p":null},"Air 2":{"t":70,"l":135,"b":null,"p":null},"Air 3":{"t":null,"l":null,"b":null,"p":null},"Air 4":{"t":null,"l":null,"b":null,"p":null},"Air 5":{"t":null,"l":null,"b":null,"p":null},"Air M2":{"t":null,"l":null,"b":null,"p":null},"Air M3":{"t":null,"l":null,"b":null,"p":null},"Air M4":{"t":null,"l":null,"b":null,"p":null},"mini 1":{"t":70,"l":105,"b":null,"p":null},"mini 2 / 3":{"t":70,"l":120,"b":null,"p":null},"mini 4":{"t":null,"l":null,"b":null,"p":null},"mini 5":{"t":null,"l":null,"b":null,"p":null},"mini 6":{"t":null,"l":null,"b":null,"p":null},"mini 7":{"t":null,"l":null,"b":null,"p":null},"Pro 9,7\"":{"t":null,"l":null,"b":null,"p":null},"Pro 10,5\"":{"t":null,"l":null,"b":null,"p":null},"Pro 11\"":{"t":null,"l":null,"b":null,"p":null},"Pro 11\" M4":{"t":null,"l":null,"b":null,"p":null},"Pro 11\" M5":{"t":null,"l":null,"b":null,"p":null},"Pro 12,9\"":{"t":null,"l":null,"b":null,"p":null},"Pro 13\" M4":{"t":null,"l":null,"b":null,"p":null},"Pro 13\" M5":{"t":null,"l":null,"b":null,"p":null}},"subs":{"2":{"t":"si l’affichage marche encore"},"3 / 4":{"t":"si l’affichage marche encore"},"5":{"t":"si l’affichage marche encore"},"6":{"t":"si l’affichage marche encore"},"7 / 8":{"t":"si l’affichage marche encore"},"9":{"t":"si l’affichage marche encore"},"10 / 11":{"t":"si l’affichage marche encore"},"Air":{"t":"si l’affichage marche encore"},"Air 2":{"t":"si l’affichage marche encore","l":"bloc complet, vitre et écran"},"mini 1":{"t":"si l’affichage marche encore"},"mini 2 / 3":{"t":"si l’affichage marche encore"}},"main":[["t","Vitre tactile"],["l","Écran LCD"],["b","Batterie"],["p","Connecteur de charge"]],"draw":{"1":[189.7,242.8,1,20,22],"2":[185.7,241.2,1,20,21],"3 / 4":[185.7,241.2,1,20,21],"5":[169.5,240,1,16,21],"6":[169.5,240,1,16,21],"7 / 8":[174.1,250.6,1,15.5,21],"9":[174.1,250.6,1,15.5,21],"10 / 11":[179.5,248.6,0,10,10],"Air":[169.5,240,1,16,21],"Air 2":[169.5,240,1,16,21],"Air 3":[174.1,250.6,1,10.5,20],"Air 4":[178.5,247.6,0,8.5,8.5],"Air 5":[178.5,247.6,0,8.5,8.5],"Air M2":[178.5,247.6,0,8.5,8.5],"Air M3":[178.5,247.6,0,8.5,8.5],"Air M4":[178.5,247.6,0,8.5,8.5],"mini 1":[134.7,200,1,10.5,21],"mini 2 / 3":[134.7,200,1,10.5,21],"mini 4":[134.8,203.2,1,10.5,21],"mini 5":[134.8,203.2,1,10.5,21],"mini 6":[134.8,195.4,0,8,8],"mini 7":[134.8,195.4,0,8,8],"Pro 9,7\"":[169.5,240,1,16,21],"Pro 10,5\"":[174.1,250.6,1,10.5,20],"Pro 11\"":[178.5,247.6,0,8,8],"Pro 11\" M4":[177.5,249.7,0,7.5,7.5],"Pro 11\" M5":[177.5,249.7,0,7.5,7.5],"Pro 12,9\"":[214.9,280.6,0,8,8],"Pro 13\" M4":[215.5,281.6,0,7.5,7.5],"Pro 13\" M5":[215.5,281.6,0,7.5,7.5]},"def":"9","help":"Ouvrez Réglages, puis Général, puis Informations : le nom du modèle est écrit en haut."},"switch":{"name":"Nintendo Switch","device":"Nintendo Switch","shape":"console","genLabel":"","gens":[["Nintendo Switch",["Switch","Switch Lite","Switch OLED"]]],"prices":{"Switch":{"e":90,"o":null},"Switch Lite":{"e":120,"o":null},"Switch OLED":{"e":50,"o":null}},"main":[["e","Écran"],["o","Autre panne"]],"draw":{"Switch":[239,102,1,48,12],"Switch Lite":[208,91.1,0,44,11],"Switch OLED":[242,102,1,43,8]},"def":"Switch","help":"Regardez au dos de la console : HAC pour la Switch, HDH pour la Switch Lite, HEG pour la Switch OLED."}};
+  DEVS.iphone = { name: 'iPhone', device: 'iPhone', shape: 'phone', genLabel: 'Génération', gens: GENS, prices: P, main: MAIN, parts: PARTS, def: DEFAULT_MODEL,
+                  help: 'Ouvrez Réglages, puis Général, puis Informations : le nom du modèle est écrit en haut.' };
+  function fullName(dev, m) {
+    return dev === 'iphone' ? iphone(m) : dev === 'samsung' ? 'Galaxy ' + m : dev === 'ipad' ? 'iPad ' + m : 'Nintendo ' + m;
+  }
+  function formModel(dev, m) { return dev === 'samsung' ? 'Galaxy ' + m : dev === 'switch' ? m.replace(/^Switch ?/, '') : m; }
+  function genOf(dev, m) { var g = DEVS[dev].gens; for (var i = 0; i < g.length; i++) if (g[i][1].indexOf(m) > -1) return i; return 0; }
+  var cur = 'iphone', state = {};
+  Object.keys(DEVS).forEach(function (k) { state[k] = { gen: genOf(k, DEVS[k].def), model: DEVS[k].def }; });
+  var VAR = /^(\d+|XS|XR|X|Air|SE)/;
+  var ICON = {
+    e: '<rect x="6.5" y="2.5" width="11" height="19" rx="2.6"/><path d="M10.6 6.4l1.9 3-1.7 2.5 2.7 3.2-.8 2.6"/>',
+    b: '<rect x="2.5" y="7" width="16.5" height="10" rx="2.6"/><path d="M21.5 10.6v2.8M11.9 9l-2.4 3.3h3.1L10.2 15.6"/>',
+    c: '<rect x="6.5" y="2.5" width="11" height="19" rx="2.6"/><rect x="8.7" y="4.7" width="6.6" height="14.6" rx="1.2"/>',
+    v: '<rect x="6.5" y="2.5" width="11" height="19" rx="2.6"/><rect x="8.5" y="4.5" width="4.8" height="4.8" rx="1.4"/><circle cx="12" cy="14.2" r="1.3"/>',
+    f: '<rect x="6.5" y="2.5" width="11" height="19" rx="2.6"/><path d="M6.5 9.4h11"/><circle cx="9.4" cy="6" r=".9"/><circle cx="12.2" cy="6" r=".9"/>',
+    p: '<path d="M9 2.5v4M15 2.5v4"/><path d="M6.5 6.5h11v3.5a5.5 5.5 0 0 1-11 0z"/><path d="M12 15.5v6"/>',
+    t: '<rect x="4" y="2.5" width="16" height="19" rx="2.2"/><path d="M10 6.5l2 2.8-1.5 2.2 2.6 3.1-.7 2.4"/>',
+    l: '<rect x="4" y="2.5" width="16" height="19" rx="2.2"/><rect x="6.4" y="4.9" width="11.2" height="14.2" rx=".8"/>',
+    o: '<path d="M14.6 3.3a4.6 4.6 0 0 0-5.5 6L3.4 15a2 2 0 0 0 2.8 2.8l5.7-5.7a4.6 4.6 0 0 0 6-5.5l-2.6 2.6-2.4-.4-.4-2.4z"/>',
+    sv: '<rect x="6.5" y="2.5" width="11" height="19" rx="2.6"/><circle cx="9.6" cy="5.8" r="1"/><circle cx="9.6" cy="8.8" r="1"/><circle cx="9.6" cy="11.8" r="1"/>',
+    cons: '<rect x="1.5" y="6.5" width="21" height="11" rx="3"/><path d="M6.5 6.5v11M17.5 6.5v11"/><circle cx="4" cy="10" r=".9"/><circle cx="20" cy="14" r=".9"/>'
+  };
+  function icon(dev, k) {
+    var key = dev === 'switch' && k === 'e' ? 'cons' : dev === 'samsung' && k === 'v' ? 'sv' : k;
+    return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">' + ICON[key] + '</svg>';
+  }
+  function variantIn(from, models) {
+    if (models.indexOf(from) > -1) return from;
+    if (cur !== 'iphone') {
+      var tail = function (m) { return m.split(' ').slice(1).join(' '); }, t = tail(from);
+      return (t && models.filter(function (m) { return tail(m) === t; })[0]) || models[0];
+    }
+    var suf = from.replace(VAR, '').replace(/^ \/ .*/, '');
+    var hit = models.filter(function (m) { return m.replace(VAR, '') === suf; });
+    return hit[0] || models[models.length > 3 ? 1 : 0];
+  }
+  function radio(cls, name, value, label, checked, onChange) {
+    var l = document.createElement('label'); l.className = cls;
+    var i = document.createElement('input'); i.type = 'radio'; i.name = name; i.value = value; i.checked = checked;
+    i.addEventListener('change', onChange);
+    var s = document.createElement('span'); s.textContent = label;
+    l.appendChild(i); l.appendChild(s);
+    return l;
+  }
+  function centerIn(box, el, smooth) {          // keep the chosen pill in view when the row scrolls sideways
+    if (!el || box.scrollWidth <= box.clientWidth + 1) return;
+    var left = el.offsetLeft - (box.clientWidth - el.offsetWidth) / 2;
+    if (smooth && box.scrollTo) box.scrollTo({ left: left, behavior: reduce.matches ? 'auto' : 'smooth' }); else box.scrollLeft = left;
+  }
+  function moveThumb(animate) {
+    var inp = modelsBox.querySelector('input:checked'); if (!inp) return;
+    var l = inp.parentNode;
+    if (!animate) thumb.style.transition = 'none';
+    thumb.style.width = l.offsetWidth + 'px';
+    thumb.style.transform = 'translateX(' + l.offsetLeft + 'px)';
+    if (!animate) { void thumb.offsetWidth; thumb.style.transition = ''; }
+    centerIn(modelsBox, l, animate);
+  }
+  function checkedGen() { var i = gensBox.querySelector('input:checked'); return i && i.parentNode; }
+  function onGen(k) {
+    var st = state[cur];
+    st.gen = k; st.model = variantIn(st.model, DEVS[cur].gens[k][1]); remember();
+    renderModels(true); renderPrices(true);
+    centerIn(gensBox, checkedGen(), true);
+  }
+  function renderGens() {
+    var d = DEVS[cur], st = state[cur], one = d.gens.length < 2;
+    gensBox.textContent = '';
+    d.gens.forEach(function (g, i) { gensBox.appendChild(radio('chip', 'gen', String(i), g[0], i === st.gen, function () { onGen(i); })); });
+    gensBox.hidden = one; $('gen-label').hidden = one; $('gen-label').textContent = d.genLabel;
+  }
+  function renderModels(animate) {
+    var st = state[cur];
+    all('.seg-opt', modelsBox).forEach(function (l) { l.parentNode.removeChild(l); });
+    DEVS[cur].gens[st.gen][1].forEach(function (m) {
+      modelsBox.appendChild(radio('seg-opt', 'model', m, cur === 'iphone' && m === 'Air' ? 'iPhone Air' : m, m === st.model,
+        function () { st.model = m; renderPrices(true); moveThumb(true); remember(); }));
+    });
+    moveThumb(animate);
+    if (animate && !reduce.matches) { modelsBox.classList.remove('seg-in'); void modelsBox.offsetWidth; modelsBox.classList.add('seg-in'); }
+  }
+  function money(v, cls) { return '<span class="' + cls + '">' + v + '<small>€</small></span>'; }
+  function link(a, key, label, v, m) {
+    var dev = cur, nm = fullName(dev, m);
+    if (v == null) {
+      a.href = waLink(key === 'o' ? 'Bonjour Phone Island, j’ai une panne sur ma ' + nm + '.\nProblème : '
+                                  : 'Bonjour Phone Island, quel est le prix pour : ' + label + ', sur ' + nm + ' ?');
+      a.target = '_blank'; a.rel = 'noopener';
+      a.setAttribute('aria-label', label + ', ' + nm + ', sur devis. Demander le prix sur WhatsApp');
+    } else {
+      a.href = '#rendez-vous';
+      a.setAttribute('aria-label', label + ', ' + nm + ', ' + v + ' euros. Réserver cette réparation');
+      a.addEventListener('click', function () { prefill({ device: DEVS[dev].device, model: formModel(dev, m), repair: label }); });
+    }
+  }
+  function tile(key, label, sub, v, m, k, wide) {
+    var a = document.createElement('a'); a.className = 'pz-tile' + (wide ? ' wide' : ''); a.style.setProperty('--k', k);
+    a.setAttribute('data-k', key);
+    a.innerHTML = '<span class="pz-ico" aria-hidden="true">' + icon(cur, key) + '</span><span class="pz-go" aria-hidden="true">' + CHEVRON + '</span>' +
+      '<span class="pz-txt"><span class="pz-name">' + label + '</span>' + (sub ? '<span class="pz-sub">' + sub + '</span>' : '') + '</span>' +
+      (v == null ? '<span class="pz-price pz-quote">Sur devis</span>' : money(v, 'pz-price'));
+    link(a, key, label, v, m);
+    return a;
+  }
+  function row(label, v, m, k) {
+    var li = document.createElement('li'), a = document.createElement('a');
+    a.className = 'pz-row'; a.style.setProperty('--k', k); a.setAttribute('data-k', label);
+    a.innerHTML = '<span class="pz-n">' + label + '</span>' + (v == null ? '<span class="pz-v pz-quote">Sur devis</span>' : money(v, 'pz-v')) + CHEVRON;
+    link(a, 's', label, v, m);
+    li.appendChild(a);
+    return li;
+  }
+  // the drawn iPhone: width, height (mm), front (home button, notch, island), border (mm), notch width (mm)
+  var DEV = {
+    '6 / 6s': [67, 138.1, 'home'], '7 / 7 Plus': [67.1, 138.3, 'home'], '8': [67.3, 138.4, 'home'], '8 Plus': [78.1, 158.4, 'home'], 'SE 2022': [67.3, 138.4, 'home'],
+    'X': [70.9, 143.6, 'notch', 3.4, 34.8], 'XS': [70.9, 143.6, 'notch', 3.4, 34.8], 'XS Max': [77.4, 157.5, 'notch', 3.4, 34.8], 'XR': [75.7, 150.9, 'notch', 4.6, 34.8],
+    '11': [75.7, 150.9, 'notch', 4.6, 34.8], '11 Pro': [71.4, 144, 'notch', 3.4, 34.8], '11 Pro Max': [77.8, 158, 'notch', 3.4, 34.8],
+    '12 mini': [64.2, 131.5, 'notch', 3, 34.8], '12': [71.5, 146.7, 'notch', 3, 34.8], '12 Pro': [71.5, 146.7, 'notch', 3, 34.8], '12 Pro Max': [78.1, 160.8, 'notch', 3, 34.8],
+    '13 mini': [64.2, 131.5, 'notch', 3, 26.8], '13': [71.5, 146.7, 'notch', 3, 26.8], '13 Pro': [71.5, 146.7, 'notch', 3, 26.8], '13 Pro Max': [78.1, 160.8, 'notch', 3, 26.8],
+    '14': [71.5, 146.7, 'notch', 3, 26.8], '14 Plus': [78.1, 160.8, 'notch', 3, 26.8], '14 Pro': [71.5, 147.5, 'island', 2.3], '14 Pro Max': [77.6, 160.7, 'island', 2.3],
+    '15': [71.6, 147.6, 'island', 2.4], '15 Plus': [77.8, 160.9, 'island', 2.4], '15 Pro': [70.6, 146.6, 'island', 2], '15 Pro Max': [76.7, 159.9, 'island', 2],
+    '16e': [71.5, 146.7, 'notch', 3, 26.8], '16': [71.6, 147.6, 'island', 2.4], '16 Plus': [77.8, 160.9, 'island', 2.4], '16 Pro': [71.5, 149.6, 'island', 1.8], '16 Pro Max': [77.6, 163, 'island', 1.8],
+    '17e': [71.6, 146.8, 'notch', 3, 26.8], '17': [71.5, 149.6, 'island', 1.8], 'Air': [74.7, 156.2, 'island', 1.9], '17 Pro': [71.9, 150, 'island', 1.8], '17 Pro Max': [78, 163.4, 'island', 1.8]
+  };
+  var dbox = $('pz-device'), stage = $('pz-stage'), phone = $('pz-phone'), scr = $('pz-screen'), notch = $('pz-notch'), homeB = $('pz-home'), ptime = $('pz-time'), jl = $('pz-jl'), jr = $('pz-jr');
+  function setPx(el, o) { for (var p in o) el.style[p] = typeof o[p] === 'number' ? o[p].toFixed(2) + 'px' : o[p]; }
+  function drawPhone(m) {
+    var d = DEV[m] || DEV['15'], k = Math.min(dbox.clientWidth / 80, dbox.clientHeight / 168) * .96, home = d[2] === 'home';
+    var w = d[0] * k, h = d[1] * k, r = (home ? .13 : .17) * d[0] * k;
+    var side = (home ? 4.4 : d[3]) * k, top = home ? (d[1] > 150 ? 18.8 : 17.6) * k : side;
+    setPx(phone, { width: w, height: h, borderRadius: r, aspectRatio: 'auto' });
+    setPx(scr, { top: top, bottom: top, left: side, right: side, borderRadius: home ? 1.4 * k : Math.max(2, r - side) });
+    if (home) setPx(notch, { width: 10.5 * k, height: 1.5 * k, top: top / 2 - .75 * k, left: '50%', borderRadius: 9 * k, background: '#2b241e', opacity: '1' });
+    else if (d[2] === 'notch') setPx(notch, { width: d[4] * k, height: 5.7 * k, top: top - .5, left: '50%', borderRadius: '0 0 ' + (3.4 * k).toFixed(2) + 'px ' + (3.4 * k).toFixed(2) + 'px', background: '#070504', opacity: '1' });
+    else setPx(notch, { width: 19.5 * k, height: 5.8 * k, top: top + 2.1 * k, left: '50%', borderRadius: 3 * k, background: '#070504', opacity: '1' });
+    setPx(homeB, { width: 11 * k, height: 11 * k, bottom: (top - 11 * k) / 2, opacity: home ? '1' : '0' });
+    setPx(ptime, { fontSize: (home ? 9.5 : 11) * k, top: home ? '9%' : '15%', opacity: '1' });
+  }
+  function drawDevice(dev, m) {
+    var shape = DEVS[dev].shape, bw = 0, bh = 0;
+    stage.setAttribute('data-shape', shape); phone.setAttribute('data-shape', shape);
+    bw = dbox.clientWidth; bh = dbox.clientHeight;
+    if (shape !== 'console') { setPx(jl, { width: 0, opacity: '0' }); setPx(jr, { width: 0, opacity: '0' }); phone.removeAttribute('data-lite'); }
+    if (shape === 'phone') return drawPhone(m);
+    var d = DEVS[dev].draw[m], k, w, h, r;
+    if (shape === 'android') {
+      k = Math.min(bw / 80, bh / 168) * .96; w = d[0] * k; h = d[1] * k; r = .115 * d[0] * k;
+      var side = d[3] * k, cam = d[2];
+      setPx(phone, { width: w, height: h, borderRadius: r, aspectRatio: 'auto' });
+      setPx(scr, { top: side, bottom: d[4] * k, left: side, right: side, borderRadius: Math.max(2, r - side) });
+      if (cam === 'drop') setPx(notch, { width: 7.4 * k, height: 4.4 * k, top: side - .5, left: '50%', borderRadius: '0 0 ' + (3.7 * k).toFixed(2) + 'px ' + (3.7 * k).toFixed(2) + 'px', background: '#070504', opacity: '1' });
+      else setPx(notch, { width: (cam === 'pill-r' ? 7.8 : 3.3) * k, height: 3.3 * k, top: side + 2.4 * k,
+                          left: cam === 'hole-r' || cam === 'pill-r' ? w - side - 7 * k : cam === 'hole-l' ? side + 7 * k : '50%', borderRadius: 9 * k, background: '#070504', opacity: '1' });
+      setPx(homeB, { width: 0, height: 0, opacity: '0' });
+      setPx(ptime, { fontSize: 11 * k, top: '15%', opacity: '1' });
+    } else if (shape === 'tablet') {
+      // sized against the 13-inch iPad Pro, so every iPad keeps its scale
+      k = Math.min(bw / 216, bh / 282) * .96; w = d[0] * k; h = d[1] * k; r = (d[2] ? 11 : 9) * k;
+      setPx(phone, { width: w, height: h, borderRadius: r, aspectRatio: 'auto' });
+      setPx(scr, { top: d[4] * k, bottom: d[4] * k, left: d[3] * k, right: d[3] * k, borderRadius: d[2] ? 1.2 * k : Math.max(2, r - d[3] * k) });
+      setPx(notch, { width: 2.4 * k, height: 2.4 * k, top: (d[4] - 2.4) * k / 2, left: '50%', borderRadius: '50%', background: '#2b241e', opacity: '1' });
+      setPx(homeB, { width: 11 * k, height: 11 * k, bottom: (d[4] - 11) * k / 2, opacity: d[2] ? '1' : '0' });
+      setPx(ptime, { fontSize: 15 * k, top: '12%', opacity: '1' });
+    } else {
+      k = Math.min(bw / 244, bh / 104) * .96; w = d[0] * k; h = d[1] * k; r = 15 * k;
+      setPx(phone, { width: w, height: h, borderRadius: r, aspectRatio: 'auto' });
+      setPx(scr, { top: d[4] * k, bottom: d[4] * k, left: d[3] * k, right: d[3] * k, borderRadius: 1.4 * k });
+      setPx(notch, { width: 0, height: 0, opacity: '0' });
+      setPx(homeB, { width: 0, height: 0, opacity: '0' });
+      setPx(ptime, { opacity: '0' });
+      var jw = d[2] ? 36 * k : (d[3] - 3) * k;
+      if (d[2]) phone.removeAttribute('data-lite'); else phone.setAttribute('data-lite', '');
+      setPx(jl, { width: jw, opacity: '1', borderRadius: r + 'px 0 0 ' + r + 'px' });
+      setPx(jr, { width: jw, opacity: '1', borderRadius: '0 ' + r + 'px ' + r + 'px 0' });
+    }
+  }
+  function renderPrices(animate) {
+    var d = DEVS[cur], m = state[cur].model, pr = d.prices[m] || {}, name = $('pc-model');
+    name.textContent = fullName(cur, m);
+    drawDevice(cur, m);
+    $('pz-help-text').textContent = d.help;
+    mainBox.textContent = ''; smallList.textContent = '';
+    var tiles = d.main.filter(function (e) { return !(cur === 'iphone' && (e[0] === 'v' || e[0] === 'f') && pr[e[0]] == null); });
+    tiles.forEach(function (e, k) {
+      var sub = cur === 'iphone' && e[0] === 'c' && pr.v == null && pr.f == null ? 'vitre arrière incluse' : ((d.subs || {})[m] || {})[e[0]] || '';
+      mainBox.appendChild(tile(e[0], e[1], sub, pr[e[0]], m, k, tiles.length % 2 === 1 && k === tiles.length - 1));
+    });
+    var parts = d.parts || [];
+    parts.forEach(function (part, i) { smallList.appendChild(row(part, pr.s ? pr.s[i] : null, m, tiles.length + i)); });
+    smallList.hidden = !parts.length; $('pc-small-title').hidden = !parts.length;
+    markWanted();
+    if (animate && !reduce.matches) {
+      [mainBox, smallList].forEach(function (l) { l.classList.remove('swap'); void l.offsetWidth; l.classList.add('swap'); });
+      name.classList.remove('flip'); void name.offsetWidth; name.classList.add('flip');
+    }
+  }
+  /* the device and model chosen are kept for the visit; the page can also open on a device (tarifs.html#samsung)
+     or on a repair asked for from the home page (tarifs.html#ecran), whose prices get a thin gold line */
+  var WANTS = { ecran: ['e', 't', 'l'], batterie: ['b'], cameras: ['Caméra arrière', 'Caméra avant'], chassis: ['c', 'v', 'f'],
+                port: ['p', 'Connecteur de charge'], son: ['Haut-parleur du haut', 'Haut-parleur du bas', 'Bouton power', 'Boutons volume'] };
+  var wanted = [], shownTab = 'iphone';
+  function own(o, k) { return Object.prototype.hasOwnProperty.call(o, k); }
+  function remember() { try { sessionStorage.setItem('pi-tool', JSON.stringify({ tab: shownTab, cur: cur, state: state })); } catch (e) {} }
+  function markWanted() {
+    all('.pz-tile, .pz-row', devPanel || document).forEach(function (a) { a.classList.toggle('want', wanted.indexOf(a.getAttribute('data-k')) > -1); });
+  }
+  function offers(dev, keys) {                     // does this device list a price for one of these repairs?
+    var d = DEVS[dev];
+    return keys.some(function (k) { return d.main.some(function (e) { return e[0] === k; }) || (d.parts || []).indexOf(k) > -1; });
+  }
+  (function () {
+    var go = '', mem = null;
+    try { go = sessionStorage.getItem('pi-go') || ''; sessionStorage.removeItem('pi-go'); mem = JSON.parse(sessionStorage.getItem('pi-tool') || 'null'); } catch (e) {}
+    if (location.hash.length > 1) { go = location.hash.slice(1); try { go = decodeURIComponent(go); } catch (e) {} }
+    if (mem && mem.state) Object.keys(state).forEach(function (k) {
+      var s = mem.state[k], g = s && DEVS[k].gens[s.gen];
+      if (g && g[1].indexOf(s.model) > -1) state[k] = { gen: s.gen, model: s.model };
+    });
+    if (mem && own(DEVS, mem.cur)) cur = mem.cur;
+    if (mem && (mem.tab === 'ps5' || own(DEVS, mem.tab))) shownTab = mem.tab;
+    if (go === 'consoles' || go === 'switch') { shownTab = cur = 'switch'; }
+    else if (go === 'ps5') { shownTab = 'ps5'; }
+    else if (own(DEVS, go)) { shownTab = cur = go; }
+    else if (own(WANTS, go)) {
+      wanted = WANTS[go];
+      if (cur === 'switch' || !offers(cur, wanted)) cur = 'iphone';
+      shownTab = cur;
+    }
+  })();
+  renderGens(); renderModels(false); renderPrices(false);
+  centerIn(gensBox, checkedGen(), false);
+
+  /* device tabs: iPhone, Samsung, iPad and Switch share the tool; PS5 is announced */
+  var tabs = all('.dtab', $('dtabs')), devPanel = $('panel-dev'), ps5Panel = $('panel-ps5');
+  function showTab(tab, focus) {
+    var dev = tab.getAttribute('data-dev'), isDev = dev !== 'ps5';
+    tabs.forEach(function (t) { var on = t === tab; t.setAttribute('aria-selected', String(on)); t.tabIndex = on ? 0 : -1; });
+    devPanel.hidden = !isDev; ps5Panel.hidden = isDev;
+    if (isDev) {
+      devPanel.setAttribute('aria-labelledby', tab.id);
+      if (dev !== cur) { cur = dev; renderGens(); renderModels(false); renderPrices(true); } else { renderPrices(false); moveThumb(false); }
+      centerIn(gensBox, checkedGen(), false);
+      if (!reduce.matches) { devPanel.classList.remove('show'); void devPanel.offsetWidth; devPanel.classList.add('show'); }
+    } else if (!reduce.matches) { ps5Panel.classList.remove('show'); void ps5Panel.offsetWidth; ps5Panel.classList.add('show'); }
+    if (focus) tab.focus();
+    centerIn($('dtabs'), tab, true);
+    shownTab = dev; remember();
+  }
+  tabs.forEach(function (t, i) {
+    t.addEventListener('click', function () { showTab(t, false); });
+    t.addEventListener('keydown', function (e) {
+      var k = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+      if (k) { e.preventDefault(); showTab(tabs[(i + k + tabs.length) % tabs.length], true); }
+    });
+  });
+  // open on the tab kept from before (or asked for), without the entrance animations
+  if (shownTab !== 'iphone') {
+    tabs.forEach(function (t) { var on = t.getAttribute('data-dev') === shownTab; t.setAttribute('aria-selected', String(on)); t.tabIndex = on ? 0 : -1; });
+    devPanel.hidden = shownTab === 'ps5'; ps5Panel.hidden = shownTab !== 'ps5';
+    if (shownTab !== 'ps5') devPanel.setAttribute('aria-labelledby', 'tab-' + shownTab);
+    requestAnimationFrame(function () { centerIn($('dtabs'), $('tab-' + shownTab), false); });
+  }
+  // the address can also change while on the page (tarifs.html#ipad, then #consoles…)
+  window.addEventListener('hashchange', function () {
+    var go = location.hash.slice(1), dev = '';
+    try { go = decodeURIComponent(go); } catch (e) {}
+    if (go === 'consoles' || go === 'switch') dev = 'switch';
+    else if (go === 'ps5' || own(DEVS, go)) dev = go;
+    else if (own(WANTS, go)) {
+      wanted = WANTS[go];
+      dev = cur === 'switch' || !offers(cur, wanted) ? 'iphone' : cur;
+    } else return;
+    if (dev !== shownTab) showTab($('tab-' + dev), false); else markWanted();
+  });
+  $('ps5-go').href = waLink('Bonjour Phone Island, prévenez-moi quand la réparation de PS5 sera disponible.');
+  requestAnimationFrame(function () { phone.classList.remove('pz-still'); });
+  if ('ResizeObserver' in window) new ResizeObserver(function () { phone.classList.add('pz-still'); drawDevice(cur, state[cur].model); moveThumb(false); requestAnimationFrame(function () { phone.classList.remove('pz-still'); }); }).observe(dbox);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { moveThumb(false); });
+
+  /* ---------- booking message ---------- */
+  var today = new Date(); today.setHours(0, 0, 0, 0);
+  var iso = function (d) { return d.getFullYear() + '-' + two(d.getMonth() + 1) + '-' + two(d.getDate()); };
+  $('f-date').min = iso(today);
+  function frDate(v) {
+    if (!v) return '';
+    var p = v.split('-'), d = new Date(+p[0], +p[1] - 1, +p[2]);
+    return d.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });
+  }
+  var ALIAS = {};
+  Object.keys(P).forEach(function (m) { ALIAS[m.toLowerCase().replace(/[\s\/()]+/g, '')] = m; });
+  [['6', '6 / 6s'], ['6s', '6 / 6s'], ['7', '7 / 7 Plus'], ['7plus', '7 / 7 Plus'], ['se', 'SE 2022'], ['se3', 'SE 2022'], ['17air', 'Air']]
+    .forEach(function (a) { ALIAS[a[0]] = a[1]; });
+  function modelKey(txt) { return ALIAS[txt.toLowerCase().replace(/iphone/g, '').replace(/[\s\/()]+/g, '')] || null; }
+  var LOOK = {};
+  Object.keys(DEVS).forEach(function (k) {
+    if (k === 'iphone') return;
+    DEVS[k].gens.forEach(function (g) { g[1].forEach(function (m) { LOOK[(DEVS[k].device + '|' + formModel(k, m)).toLowerCase()] = [k, m]; }); });
+  });
+  function shownPrice(device, model, repair) {
+    if (device !== 'iPhone') {
+      var hit = LOOK[(device + '|' + model).toLowerCase().replace(/\s+/g, ' ')], dd, i;
+      if (!hit) return null;
+      dd = DEVS[hit[0]];
+      for (i = 0; i < dd.main.length; i++) if (dd.main[i][1] === repair) return dd.prices[hit[1]][dd.main[i][0]];
+      return null;
+    }
+    var m = modelKey(model); if (!m) return null;
+    var d = P[m];
+    for (var i = 0; i < MAIN.length; i++) if (MAIN[i][1] === repair) return d[MAIN[i][0]];
+    var k = PARTS.indexOf(repair);
+    return k > -1 ? d.s[k] : null;
+  }
+  // where the repair happens: « Chez moi » opens the trip part, « Je me déplace » says the location will come
+  function chezB(n) { return /^Le /.test(n) ? 'au ' + n.slice(3) : /^Les /.test(n) ? 'aux ' + n.slice(4) : 'à ' + n; }
+  function showPlace(place, town) {
+    $('come').hidden = place !== 'home'; $('meet').hidden = place !== 'go';
+    var zi = town ? ZONE_OF[town] : null, z = zi != null ? ZINFO[zi] : null;
+    var fee = $('come-fee');
+    fee.textContent = '';
+    if (z) { fee.appendChild(document.createTextNode('Déplacement ' + chezB(town) + '\u00a0: ')); var b = document.createElement('b'); b.textContent = z.fee; fee.appendChild(b); }
+    else fee.textContent = 'Choisissez votre commune pour voir le prix du déplacement.';
+    all('#come-zones li').forEach(function (li) { li.classList.toggle('on', z != null && +li.getAttribute('data-z') === zi); });
+  }
+  $('come-map').href = $('zone') ? '#zone' : 'index.html#zone';
+  var lastMsg = '';
+  function build() {
+    var device = $('f-device').value, model = $('f-model').value.trim(), repair = $('f-repair').value,
+        town = $('f-town').value, date = frDate($('f-date').value), slot = $('f-slot').value,
+        name = $('f-name').value.trim(), notes = $('f-notes').value.trim();
+    var placeEl = document.querySelector('input[name="place"]:checked'), place = placeEl ? placeEl.value : '';
+    showPlace(place, town);
+    var phone = [device === 'Autre' ? '' : device, model].filter(Boolean).join(' ');
+    var what = device === 'iPad' ? 'Tablette : ' : device === 'Nintendo Switch' ? 'Console : ' : device === 'Autre' ? 'Appareil : ' : 'Téléphone : ';
+    var when = [date, slot ? slot.toLowerCase() : ''].filter(Boolean).join(', ');
+    var lines = [
+      ['Bonjour Phone Island, je souhaite prendre rendez-vous.', null],
+      [what, phone || '[votre modèle]'],
+      ['Réparation : ', repair || '[la panne]'],
+      ['Lieu : ', place === 'home' ? 'chez moi, vous venez jusqu’à moi' : place === 'go' ? 'je me déplace, merci de m’envoyer votre localisation' : '[chez vous ou vous vous déplacez]']
+    ];
+    if (place === 'home') lines.push(['Commune : ', town || '[votre commune]']);
+    lines.push(['Créneau souhaité : ', when || '[jour et moment]']);
+    var price = shownPrice(device, model, repair);
+    if (price != null) lines.splice(3, 0, ['Prix indiqué sur le site : ', euro(price)]);
+    var z = town ? ZINFO[ZONE_OF[town]] : null;
+    if (z && place === 'home') lines.splice(lines.length - 1, 0, ['Déplacement : ', z.fee]);
+    if (name) lines.push(['Prénom : ', name]);
+    if (notes) lines.push(['Précisions : ', notes]);
+    var prev = $('wa-preview'), plain = [];
+    prev.textContent = '';
+    lines.forEach(function (l, i) {
+      if (i) prev.appendChild(document.createTextNode('\n'));
+      prev.appendChild(document.createTextNode(l[0]));
+      if (l[1] === null) { plain.push(l[0]); return; }
+      var ph = l[1].charAt(0) === '[';
+      var s = document.createElement('span'); s.textContent = l[1]; if (ph) s.className = 'ph';
+      prev.appendChild(s);
+      plain.push(l[0] + (ph ? '' : l[1]));
+    });
+    var msg = plain.join('\n');
+    $('wa-send').href = waLink(msg);
+    var need = !place ? 'Dites-nous d’abord si l’on vient chez vous ou si vous vous déplacez.'
+      : place === 'home' && !town ? 'Choisissez votre commune pour le prix du déplacement.' : '';
+    var send = $('wa-send');
+    send.classList.toggle('is-off', !!need); send.setAttribute('aria-disabled', need ? 'true' : 'false');
+    $('wa-need').textContent = need; $('wa-need').hidden = !need;
+    if (!need) { $('f-place').classList.remove('want'); $('come').classList.remove('want'); }
+    if (lastMsg && msg !== lastMsg && !reduce.matches) { prev.classList.remove('bump'); void prev.offsetWidth; prev.classList.add('bump'); }
+    lastMsg = msg;
+  }
+  function setSelect(id, value) {
+    var sel = $(id), ok = Array.prototype.some.call(sel.options, function (o) { return o.value === value || o.text === value; });
+    if (ok) sel.value = value;
+  }
+  function prefill(o) {
+    if (o.device) setSelect('f-device', o.device);
+    if (o.model != null) $('f-model').value = o.model;
+    if (o.repair) setSelect('f-repair', o.repair);
+    build();
+  }
+  ['f-device', 'f-model', 'f-repair', 'f-town', 'f-date', 'f-slot', 'f-name', 'f-notes'].forEach(function (id) {
+    $(id).addEventListener('input', build); $(id).addEventListener('change', build);
+  });
+  if (typeof selectTown === 'function') $('f-town').addEventListener('change', function () { if ($('f-town').value !== selected) selectTown($('f-town').value); });
+  all('input[name="place"]').forEach(function (r) { r.addEventListener('change', build); });
+  // the message cannot go before the visitor has said where the repair happens (and the commune, if we come)
+  $('wa-send').addEventListener('click', function (e) {
+    if (!$('wa-send').classList.contains('is-off')) return;
+    e.preventDefault();
+    var placed = document.querySelector('input[name="place"]:checked');
+    var spot = placed ? $('come') : $('f-place');
+    spot.classList.add('want');
+    spot.scrollIntoView({ behavior: reduce.matches ? 'auto' : 'smooth', block: 'center' });
+    setTimeout(function () { (placed ? $('f-town') : document.querySelector('input[name="place"]')).focus({ preventScroll: true }); }, reduce.matches ? 0 : 450);
+  });
+  $('booking').addEventListener('submit', function (e) { e.preventDefault(); });
+  build();
+
+  /* ---------- prefilled WhatsApp links ---------- */
+  var hello = 'Bonjour Phone Island, ';
+  $('foot-wa').href = $('dock-wa').href = waLink(hello);
+  $('year').textContent = new Date().getFullYear();
+
+  /* ---------- copy number ---------- */
+  all('.copy').forEach(function (b) {
+    var label = b.textContent;
+    b.addEventListener('click', function () {
+      var done = function () { b.textContent = 'Copié'; setTimeout(function () { b.textContent = label; }, 1800); };
+      var fallback = function () {
+        var t = $(b.getAttribute('data-target')); if (!t) return;
+        var r = document.createRange(); r.selectNodeContents(t);
+        var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+        b.textContent = 'Numéro sélectionné'; setTimeout(function () { b.textContent = label; }, 2200);
+      };
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(b.getAttribute('data-copy')).then(done, fallback);
+        else fallback();
+      } catch (err) { fallback(); }
+    });
+  });
+
+  /* ---------- phone dock: once the title is out of view, hidden over the form ---------- */
+  var dock = $('dock');
+  if ('IntersectionObserver' in window) {
+    var heroGone = false, bookingIn = false;
+    var upd = function () { dock.classList.toggle('show', heroGone && !bookingIn); };
+    new IntersectionObserver(function (en) { heroGone = !en[0].isIntersecting; upd(); }, { threshold: 0 }).observe(document.querySelector('.page-head'));
+    new IntersectionObserver(function (en) { bookingIn = en[0].isIntersecting; upd(); }, { threshold: 0 }).observe($('rendez-vous'));
+  }
+  /* ---------- the welcome screen of the home page plays on a first visit only, not after this page ---------- */
+  try { sessionStorage.setItem('pi-intro', '1'); } catch (e) {}
+
+})();
+</script>
+</body>
+</html>

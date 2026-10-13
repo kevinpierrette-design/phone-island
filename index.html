@@ -1,0 +1,1622 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Phone Island</title>
+<meta name="description" content="Réparation de smartphones à domicile dans les 34 communes de Martinique. Écran, batterie, châssis, caméras : prix en ligne et rendez-vous sur WhatsApp.">
+<link rel="icon" type="image/png" href="assets/favicon-64.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap">
+<style>
+:root { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+[hidden] { display: none !important; }
+/* Layout: Apple-style bands, all black (near-black with a breath of the brand's brown). Each band carries one idea:
+   a short headline, one line of text, then one large thing (a phone drawn in code, a price tool, an
+   exploded view, a map, a form). Text is left-aligned on a 1120px column.
+   One typeface, Poppins, for text and every number; the Phone Island name is the logo artwork itself.
+   The hero phone, the price tool and the buy-back screen are drawn in CSS/SVG; repairs, the bench and the
+   shop use real photographs (the owner's own, and Unsplash pictures, free for commercial use). */
+:root {
+  --espresso: #1B140D;     /* brand brown: dark fills, text on gold and cream */
+  --ink: #060504;          /* the page: black with a breath of warmth */
+  --ink-2: #0B0907;        /* alternate bands */
+  --card: #15110D;         /* tiles and cards */
+  --card-2: #211A14;       /* raised: inputs, small buttons on cards */
+  --roast: #271D14;
+  --roast-2: #3A2D20;
+  --cream: #F3EBDD;        /* text */
+  --sand: #B9AE9C;         /* secondary text */
+  --stone: #A99F91;        /* tertiary text */
+  --gold: #E2B662;         /* brand gold: primary buttons, accents */
+  --gold-hi: #ECC47A;
+  --bronze: #D9AE5F;       /* links, icons, marks */
+  --white: #FFFFFF;
+  --rule: rgba(243, 235, 221, .1);
+  --rule-strong: rgba(243, 235, 221, .17);
+  --wa-bg: #0B141A;        /* WhatsApp, dark mode */
+  --wa-bubble: #005C4B;
+  --wa-ink: #E9EDEF;
+  --wa-muted: #8696A0;
+  --zone-0: #E2B662;       /* Fort-de-France: 10 € */
+  --zone-1: #A17A45;       /* proche: 20 € */
+  --zone-2: #735634;       /* un peu plus loin: 25 € */
+  --zone-3: #50402C;       /* sud et nord: 35 € */
+  --sans: "Poppins", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --serif: "Playfair Display", Georgia, "Times New Roman", serif;
+  --gutter: clamp(20px, 5vw, 44px);
+  --radius: clamp(22px, 2.6vw, 30px);
+  --nav-h: 56px;
+  --ease: cubic-bezier(.2, .75, .2, 1);
+  color-scheme: dark;
+}
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+}
+body {
+  margin: 0; background: var(--ink); color: var(--cream);
+  font: 400 1.0625rem/1.55 var(--sans);
+  -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility;
+}
+img, video, svg, picture { display: block; max-width: 100%; }
+img { height: auto; }
+a { color: inherit; }
+button, input, select, textarea { font: inherit; color: inherit; }
+h1, h2, h3, p, ol, ul, figure, fieldset { margin: 0; }
+h1, h2, h3 { font-weight: 600; text-wrap: balance; }
+p { text-wrap: pretty; }
+.wrap { width: 100%; max-width: calc(1120px + 2 * var(--gutter)); margin-inline: auto; padding-inline: var(--gutter); }
+.visually-hidden { position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+.light :focus-visible, .alt :focus-visible { outline-color: var(--gold); }
+main section[id], .promo[id] { scroll-margin-top: calc(var(--nav-h) + 8px); }
+.num { font-variant-numeric: lining-nums tabular-nums; }
+
+/* bands */
+.band { padding-block: clamp(76px, 11vw, 140px); }
+.light { background: var(--ink); color: var(--cream); }
+.alt { background: var(--ink-2); color: var(--cream); }
+.dark { background: var(--ink); color: var(--cream); }
+.band-head { max-width: 46rem; margin-bottom: clamp(36px, 5.5vw, 64px); }
+.band-head h2 { font-size: clamp(2.1rem, 6.2vw, 3.75rem); line-height: 1.04; letter-spacing: -0.035em; }
+.lead { margin-top: 18px; max-width: 38rem; font-size: clamp(1.0625rem, 1.9vw, 1.375rem); line-height: 1.45; color: var(--stone); }
+.dark .lead { color: var(--sand); }
+
+/* scroll-linked entrances: elements rise into place as they enter; they stay readable at rest */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .rv { animation: rv linear both; animation-timeline: view(); animation-range: entry 0% cover 26%; }
+    .rv-2 { animation-range: entry 8% cover 32%; }
+    .rv-3 { animation-range: entry 16% cover 38%; }
+    @keyframes rv { from { opacity: .22; transform: translateY(64px) scale(.965); } to { opacity: 1; transform: none; } }
+  }
+}
+
+/* buttons and links */
+.pill {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  min-height: 50px; padding: 12px 26px; border: 0; border-radius: 999px;
+  background: var(--gold); color: var(--espresso); font-size: 1rem; font-weight: 500; line-height: 1.2;
+  text-align: center; text-decoration: none; cursor: pointer; -webkit-tap-highlight-color: transparent;
+  transition: background-color .2s ease, transform .15s ease;
+}
+.pill:hover { background: var(--gold-hi); }
+.pill:active { transform: scale(.97); }
+.pill svg { width: 20px; height: 20px; flex: none; }
+.pill-ink { background: var(--cream); color: var(--espresso); }
+.pill-ink:hover { background: #FFF7EA; }
+.pill-sm { min-height: 36px; padding: 6px 16px; font-size: .875rem; }
+.link { display: inline-flex; align-items: center; gap: 2px; color: var(--bronze); font-weight: 500; text-decoration: none; }
+.link svg { width: 18px; height: 18px; transition: transform .2s ease; }
+.link:hover { text-decoration: underline; text-underline-offset: 4px; }
+.link:hover svg { transform: translateX(3px); }
+.dark .link { color: var(--gold); }
+.cta-row { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 28px; }
+
+/* navigation */
+.site-nav {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 60;
+  background: rgba(6, 5, 4, .8); color: var(--cream);
+  -webkit-backdrop-filter: saturate(160%) blur(18px); backdrop-filter: saturate(160%) blur(18px);
+  border-bottom: 1px solid rgba(243, 235, 221, .08);
+}
+.nav-row { display: flex; align-items: center; gap: 18px; height: var(--nav-h); }
+.brand { display: inline-flex; align-items: center; gap: 8px; margin-right: auto; text-decoration: none; }
+.brand-mark { width: auto; height: 38px; }
+.brand-name { width: auto; height: 24px; margin-top: 2px; }
+.nav-links { display: none; align-items: center; gap: clamp(18px, 2.2vw, 30px); }
+.nav-links a { color: var(--sand); text-decoration: none; font-size: .875rem; transition: color .2s; }
+.nav-links a:hover { color: var(--cream); }
+.burger { display: inline-grid; place-items: center; width: 44px; height: 44px; margin-right: -10px; padding: 0; border: 0; background: none; color: var(--cream); cursor: pointer; }
+.burger svg { width: 22px; height: 22px; overflow: visible; }
+.burger line { transition: transform .3s ease; transform-origin: 12px 12px; }
+.burger[aria-expanded="true"] .l1 { transform: translateY(3.5px) rotate(45deg); }
+.burger[aria-expanded="true"] .l2 { transform: translateY(-3.5px) rotate(-45deg); }
+@media (min-width: 960px) { .nav-links { display: flex; } .burger { display: none; } }
+@media (max-width: 379px) { .nav-row .pill-sm { display: none; } }
+.menu {
+  position: fixed; z-index: 55; left: 0; right: 0; bottom: 0; top: calc(var(--nav-h) + env(safe-area-inset-top, 0px));
+  overflow-y: auto; background: var(--ink); color: var(--cream);
+  padding-block: 8px calc(32px + env(safe-area-inset-bottom, 0px));
+}
+.menu nav { display: grid; }
+.menu nav a {
+  padding-block: 14px; border-bottom: 1px solid rgba(243, 235, 221, .1);
+  font-size: 1.75rem; font-weight: 600; letter-spacing: -0.02em; text-decoration: none;
+  animation: menu-in .42s var(--ease) both; animation-delay: calc(var(--i) * 35ms);
+}
+@keyframes menu-in { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: none; } }
+.menu .pill { width: 100%; margin-top: 28px; }
+.menu-contact { margin-top: 18px; color: var(--sand); font-size: .9375rem; }
+html.menu-open { overflow: hidden; }
+
+.badge { display: inline-flex; align-items: center; min-height: 24px; padding: 2px 10px; border-radius: 999px; background: rgba(226, 182, 98, .14); color: var(--gold); font-size: .75rem; font-weight: 600; letter-spacing: .02em; }
+/* ---------- the hero phone: Makenson's restored iPhone 13 Pro, its screen drawn under the real front (1em = 1% of its width) ---------- */
+.ph { --w: 260px; position: relative; flex: none; width: var(--w); height: calc(var(--w) * 2.06591); font-size: calc(var(--w) / 100); transform-style: preserve-3d; }
+.ph-side {
+  position: absolute; inset: 0; border-radius: 15.929em; transform: translateZ(calc(var(--d) * -.95em));
+  background: hsl(220 3% calc(30% - var(--d) * 1.5%)); box-shadow: inset 0 0 0 .5em hsl(220 3% calc(44% - var(--d) * 2%));
+}
+.ph-side:first-child { background: #2e2f32; box-shadow: 0 6em 12em -5em rgba(0, 0, 0, .8); }
+.ph-screen {
+  position: absolute; left: 3.917em; top: 3.917em; width: 92.165em; height: 198.756em;
+  overflow: hidden; border-radius: 12.011em; background: #0b0c0e; isolation: isolate;
+}
+.ph-front { position: absolute; left: -0.2091em; top: -0.2091em; width: 100.4531em; height: 207.0408em; max-width: none; pointer-events: none; -webkit-user-drag: none; user-select: none; }
+.ph-sheen {
+  position: absolute; inset: 0; border-radius: 15.929em; pointer-events: none;
+  background: linear-gradient(104deg, rgba(255, 255, 255, 0) 40%, rgba(255, 255, 255, .055) 47%, rgba(255, 255, 255, .02) 53%, rgba(255, 255, 255, 0) 60%) var(--gx, 30%) 0 / 280% 100% no-repeat;
+}
+.ph-lock { position: absolute; inset: .3em; }
+.ph-avant {
+  position: absolute; inset: 0; width: 100%; height: 100%; max-width: none; object-fit: cover; opacity: 0;
+  -webkit-mask-image: linear-gradient(180deg, transparent 0 43%, #000 57% 100%); mask-image: linear-gradient(180deg, transparent 0 43%, #000 57% 100%);
+  -webkit-mask-size: 100% 270%; mask-size: 100% 270%; -webkit-mask-position: 0 100%; mask-position: 0 100%; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+}
+.ph-bar { position: absolute; left: 50%; bottom: 1.1%; width: 36%; height: 1.15em; margin-left: -18%; border-radius: 1em; background: rgba(243, 235, 221, .9); }
+.ph-stat { position: absolute; top: 2.05%; right: 6.6%; width: 14.5em; height: 5.1em; fill: rgba(243, 235, 221, .92); stroke: rgba(243, 235, 221, .92); }
+.ph-lockic { position: absolute; top: 7.4%; left: 50%; width: 3.3em; height: 4.1em; margin-left: -1.65em; fill: rgba(243, 235, 221, .9); stroke: rgba(243, 235, 221, .9); }
+/* lock screen */
+.wall { position: absolute; inset: -.3em; background: #000; }
+.wall-logo { position: absolute; left: 50%; bottom: 8%; width: 58%; transform: translateX(-50%); }
+.wall-date { position: absolute; top: 11.6%; left: 0; right: 0; text-align: center; color: rgba(243, 235, 221, .82); font-size: 4.6em; font-weight: 500; }
+.wall-time { position: absolute; top: 14.6%; left: 0; right: 0; text-align: center; color: var(--cream); font-size: 21em; font-weight: 600; line-height: 1; letter-spacing: -.035em; font-variant-numeric: tabular-nums; }
+.notif {
+  position: absolute; z-index: 3; left: 5%; right: 5%; top: 36%; display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 0 3.2em;
+  padding: 3.4em 3.8em; border-radius: 6.4em; background: rgba(243, 235, 221, .16); color: var(--cream);
+  -webkit-backdrop-filter: blur(2em) saturate(140%); backdrop-filter: blur(2em) saturate(140%);
+}
+.notif-ico { display: grid; place-items: center; width: 10.5em; height: 10.5em; border-radius: 2.8em; background: #000; box-shadow: inset 0 0 0 .2em rgba(243, 235, 221, .14); }
+.notif-ico img { width: 7.8em; }
+.notif-t { font-size: 4.1em; font-weight: 600; line-height: 1.25; }
+.notif-b { font-size: 3.7em; line-height: 1.3; opacity: .92; }
+/* the repair: the damaged glass is shown, gives way from the top to clean black glass, then the screen wakes */
+.ph[data-state="broken"] .ph-avant { opacity: 1; }
+.ph[data-state="broken"] .ph-lock { opacity: 0; }
+.ph[data-state="broken"] .notif { opacity: 0; transform: translateY(-3em) scale(.96); }
+.ph[data-state="repair"] .ph-avant { opacity: 1; animation: glass 2.2s cubic-bezier(.42, .02, .3, 1) .15s both; }
+.ph[data-state="repair"] .ph-lock { animation: wake 1.3s cubic-bezier(.25, .1, .2, 1) 2.95s both; }
+.ph[data-state="repair"] .notif { animation: notif .8s var(--ease) 4.25s both; }
+@keyframes glass { from { -webkit-mask-position: 0 100%; mask-position: 0 100%; } to { -webkit-mask-position: 0 0; mask-position: 0 0; } }
+@keyframes wake { from { opacity: 0; transform: scale(1.04); } to { opacity: 1; transform: none; } }
+@keyframes notif { from { opacity: 0; transform: translateY(-3em) scale(.96); } to { opacity: 1; transform: none; } }
+
+/* the 3D phone: its canvas fills this box; the photo phone above stays until the 3D is ready, or for good if it cannot run */
+.ph3d { display: none; position: relative; width: 100%; max-width: 440px; aspect-ratio: 440 / 690; }
+.ph3d canvas { display: block; width: 100%; height: 100%; opacity: 0; cursor: grab; touch-action: pan-y; -webkit-tap-highlight-color: transparent; }
+.ph3d canvas:active { cursor: grabbing; }
+.hero-stage.is-3d .ph3d { display: block; }
+.hero-stage.is-3d .ph-still { display: none; }
+.hero-stage .replay { transition: opacity .6s var(--ease); }
+.hero-stage.is-3d.playing .replay { opacity: 0; pointer-events: none; }
+@media (max-width: 899px) { .ph3d { max-width: 380px; } }
+@media (prefers-reduced-motion: reduce) { .hero-stage .replay { display: none; } }
+
+/* hero */
+.hero { padding-block: clamp(36px, 7vw, 96px) clamp(64px, 9vw, 120px); overflow-x: hidden; overflow-x: clip; }
+.hero-grid { display: grid; gap: clamp(40px, 6vw, 80px); align-items: center; grid-template-areas: "copy" "stage" "facts"; }
+.hero-copy { grid-area: copy; min-width: 0; container-type: inline-size; }
+.hero-stage { grid-area: stage; }
+.facts { grid-area: facts; }
+@media (min-width: 900px) {
+  .hero-grid { grid-template-columns: minmax(0, 1.12fr) minmax(0, .88fr); grid-template-areas: "copy stage" "facts stage"; row-gap: 0; align-content: center; }
+  .hero-copy { align-self: end; }
+  .facts { align-self: start; }
+}
+.hero-title { font-size: clamp(2.6rem, 7vw, 5.25rem); font-size: clamp(2.6rem, 15cqi, 5.6rem); line-height: .98; letter-spacing: -0.045em; }
+.ln { display: block; overflow: hidden; padding-bottom: .08em; margin-bottom: -.08em; }
+.ln > span { display: inline-block; }
+.hero-sub { margin-top: 22px; max-width: 24ch; font-size: clamp(1.1875rem, 2.3vw, 1.5rem); line-height: 1.35; color: var(--sand); }
+.hero .cta-row { margin-top: 34px; }
+.facts { display: grid; gap: 12px; margin: 0; padding: 0; list-style: none; }
+@media (min-width: 900px) { .facts { margin-top: 48px; } }
+.facts li { display: flex; align-items: center; gap: 12px; color: var(--sand); font-size: .9375rem; }
+.facts svg { width: 20px; height: 20px; flex: none; color: var(--gold); }
+.hero-stage { position: relative; display: grid; justify-items: center; gap: 24px; perspective: 1500px; }
+.dev-tilt { transform: rotateY(-10deg) rotateX(5deg); transform-style: preserve-3d; transition: transform .5s var(--ease); will-change: transform; }
+.hero-dev { --w: clamp(220px, 60vw, 290px); }
+@media (min-width: 900px) { .hero-dev { --w: clamp(250px, 24vw, 300px); } }
+.replay {
+  display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 6px 14px 6px 10px;
+  border: 1px solid rgba(243, 235, 221, .18); border-radius: 999px; background: transparent; color: var(--sand); font-size: .8125rem; cursor: pointer;
+  transition: color .2s, border-color .2s;
+}
+.replay:hover { color: var(--cream); border-color: rgba(243, 235, 221, .4); }
+.replay svg { width: 18px; height: 18px; }
+@media (prefers-reduced-motion: no-preference) {
+  .hero-title .ln > span { animation: up 1s var(--ease) both; }
+  .hero-title .ln:nth-child(2) > span { animation-delay: .12s; }
+  .hero-sub { animation: fadeup .9s var(--ease) .3s both; }
+  .hero .cta-row { animation: fadeup .9s var(--ease) .42s both; }
+  .facts { animation: fadeup .9s var(--ease) .54s both; }
+  .dev-in { animation: devin 1.4s var(--ease) .1s both; }
+}
+@keyframes up { from { transform: translateY(105%); } to { transform: none; } }
+@keyframes fadeup { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+@keyframes devin { from { opacity: 0; transform: translateY(70px) rotateX(26deg) scale(.94); } to { opacity: 1; transform: none; } }
+
+/* ---------- repairs ---------- */
+.bento { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.tile { position: relative; display: flex; flex-direction: column; min-width: 0; overflow: hidden; grid-column: span 2; border-radius: var(--radius); background: var(--card); }
+.tile-copy { position: relative; z-index: 2; padding: clamp(24px, 3vw, 36px) clamp(22px, 3vw, 36px) 0; }
+.tile h3 { font-size: clamp(1.375rem, 2.3vw, 1.875rem); line-height: 1.1; letter-spacing: -0.025em; }
+.tile p { max-width: 30ch; margin-top: 8px; color: var(--stone); font-size: 1rem; line-height: 1.5; }
+.tile-dark { background: var(--espresso); color: var(--cream); }
+.tile-dark p { color: var(--sand); }
+.tile-art { position: relative; height: 270px; margin-top: 10px; overflow: hidden; }
+.tile-small { grid-column: span 1; padding-bottom: clamp(22px, 3vw, 34px); }
+.tile-small .tile-art { order: -1; height: 128px; margin: 0; }
+.tile-small .tile-copy { padding-top: 0; }
+.tile-cta { background: var(--espresso); color: var(--cream); padding-bottom: clamp(24px, 3vw, 36px); }
+.tile-cta p { color: var(--sand); }
+.tile-cta .link { margin-top: 18px; color: var(--gold); }
+.tile-cta :focus-visible { outline-color: var(--gold); }
+@media (max-width: 699px) {
+  .tile-small .tile-copy { padding-inline: 18px; }
+  .tile-small h3 { font-size: 1.1875rem; }
+  .tile-small p { font-size: .9375rem; }
+}
+@media (min-width: 700px) {
+  .tile-big { grid-column: span 1; }
+  .tile-art { height: 300px; }
+}
+@media (min-width: 1000px) {
+  .bento { grid-template-columns: repeat(3, minmax(0, 1fr)); grid-template-rows: 480px 480px auto; }
+  .tile-big .tile-art { flex: 1 1 auto; height: auto; min-height: 0; }
+  .tile-wide { grid-column: span 2; flex-direction: row; }
+  .tile-wide .tile-copy { flex: 0 0 40%; padding-bottom: 36px; }
+  .tile-wide .tile-art { margin-top: 0; }
+  .tile-flip { flex-direction: row-reverse; }
+  .tile-cta { grid-column: 1 / -1; display: grid; }
+  .tile-cta .tile-copy { display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "t l" "p l" "d l"; align-items: center; column-gap: 40px; padding-bottom: 0; }
+  .tile-cta h3 { grid-area: t; } .tile-cta .tile-copy > p:first-of-type { grid-area: p; max-width: 46ch; } .tile-cta .typing { grid-area: d; justify-self: start; }
+  .tile-cta .tile-copy > p:last-child { grid-area: l; }
+}
+.tile.tile-cons { grid-column: span 2; }
+@media (min-width: 700px) { .tile.tile-cons { grid-column: span 1; } }
+@media (min-width: 700px) and (max-width: 999px) { .tile-cta { grid-column: span 1; } }
+/* photo tiles: the picture settles in, then breathes slowly while on screen */
+.tile-art.ph { margin-top: 22px; background: var(--card-2); }
+.tile-dark .tile-art.ph { background: var(--roast); }
+.tile-art.ph picture { height: 100%; }
+.tile-art.ph img { width: 100%; height: 100%; object-fit: cover; }
+.tile.in .tile-art.ph img { animation: settle 1.6s var(--ease) both, drift 12s ease-in-out 1.6s infinite alternate; }
+@keyframes settle { from { transform: scale(1.12); } to { transform: none; } }
+@keyframes drift { from { transform: none; } to { transform: scale(1.05); } }
+@media (min-width: 1000px) { .tile-art.ph { margin-top: 0; } .tile-big:not(.tile-wide) .tile-art.ph { margin-top: 22px; } }
+.soon { display: flex; align-items: center; gap: 8px; margin-top: 12px !important; color: var(--cream) !important; font-weight: 500; }
+/* small tiles: a photo strip on top, the text below */
+.tile-small .tile-art.ph { height: clamp(140px, 15vw, 200px); margin: 0; }
+.tile-small .tile-art.ph + .tile-copy { padding-top: clamp(18px, 2.4vw, 26px); }
+/* repair tiles open the prices: on a mouse the tile lifts, its photo leans in and a pill says where it goes */
+.tile-l { transition: translate .6s var(--ease), box-shadow .6s var(--ease); }
+.tile-link { color: inherit; }
+.tile-link::after { content: ""; position: absolute; inset: 0; z-index: 3; border-radius: inherit; }
+.tile-go { position: absolute; top: 14px; right: 14px; z-index: 4; display: inline-flex; align-items: center; height: 36px; padding: 0 9px; border-radius: 999px;
+  background: rgba(11, 9, 7, .55); color: var(--cream); box-shadow: inset 0 0 0 1px rgba(243, 235, 221, .16); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+  pointer-events: none; transition: background-color .45s var(--ease), color .45s var(--ease), box-shadow .45s var(--ease); }
+.tile-go svg { width: 18px; height: 18px; flex: none; transition: translate .45s var(--ease); }
+.tile-go-t { max-width: 0; overflow: hidden; white-space: nowrap; font-size: .875rem; font-weight: 500; opacity: 0; transition: max-width .55s var(--ease), margin .55s var(--ease), opacity .3s; }
+.tile-art.ph picture { display: block; transition: scale 1.4s var(--ease); }
+@media (hover: hover) and (pointer: fine) {
+  .tile-l:hover { translate: 0 -6px; box-shadow: 0 34px 60px -34px rgba(0, 0, 0, .95), 0 0 0 1px rgba(243, 235, 221, .1); }
+  .tile-l:hover .tile-art.ph picture { scale: 1.06; }
+  .tile-l:hover .tile-go { background: var(--cream); color: var(--espresso); box-shadow: none; }
+  .tile-l:hover .tile-go-t { max-width: 120px; margin: 0 6px 0 7px; opacity: 1; }
+  .tile-l:hover .tile-go svg { translate: 2px 0; }
+}
+.tile-link:focus-visible { outline: none; }
+.tile-l:has(.tile-link:focus-visible) { box-shadow: 0 0 0 2px var(--bronze); }
+@media (prefers-reduced-motion: reduce) {
+  .tile-l, .tile-art.ph picture, .tile-go, .tile-go-t, .tile-go svg { transition: none; }
+  .tile-l:hover { translate: none; } .tile-l:hover .tile-art.ph picture { scale: none; }
+}
+/* art: typing bubble */
+.typing { display: inline-flex; gap: 6px; margin-top: 20px; padding: 12px 16px; border-radius: 18px 18px 18px 4px; background: rgba(243, 235, 221, .1); }
+.typing i { width: 8px; height: 8px; border-radius: 50%; background: var(--sand); }
+.tile.in .typing i { animation: dot 1.2s ease-in-out infinite; }
+.typing i:nth-child(2) { animation-delay: .15s !important; } .typing i:nth-child(3) { animation-delay: .3s !important; }
+@keyframes dot { 0%, 60%, 100% { transform: none; opacity: .5; } 30% { transform: translateY(-5px); opacity: 1; } }
+
+/* ---------- the bench: a real iPhone lies down and comes apart, layer by layer, as you scroll ----------
+   Four layers in CSS 3D: the back housing (with the logic board and the earpiece), the front cameras, the battery,
+   the screen. The parts are photographs cut out of one bench photo; the screen is a lock screen behind glass. Each
+   layer casts a soft shadow on the housing. Sizes are in em of the phone's width (100em), so the whole phone scales
+   from one variable. The side list names the part being shown. */
+.xp { padding-top: clamp(76px, 11vw, 140px); padding-bottom: clamp(40px, 6vw, 80px); }
+.xp .band-head { margin-bottom: 0; }
+.xp-scroll { position: relative; height: 460vh; }
+.xp-sticky { position: sticky; top: calc(var(--nav-h) + env(safe-area-inset-top, 0px)); height: calc(100vh - var(--nav-h)); height: calc(100svh - var(--nav-h)); display: grid; align-items: center; overflow: hidden; }
+.xp-grid { display: grid; gap: 14px; align-items: center; height: 100%; grid-template-rows: minmax(0, 1fr) auto; padding-top: 12px; }
+@media (min-width: 900px) { .xp-grid { grid-template-columns: minmax(0, .7fr) minmax(0, 1.3fr); grid-template-rows: none; gap: 56px; padding-block: 28px; } }
+.xp-stage { position: relative; display: grid; place-items: center; height: 100%; min-height: 0; perspective: 1700px; }
+/* on phones the list sits under the phone: while the view is close on the cameras, the picture stops above it and fades out */
+@media (max-width: 899px) {
+  .xp-stage { overflow-y: clip; }
+  .xp-stage::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 24%; background: linear-gradient(rgba(6, 5, 4, 0), var(--ink)); opacity: var(--fade, 0); pointer-events: none; }
+}
+@media (min-width: 900px) { .xp-stage { order: 2; } }
+.xv { --w: 200px; position: relative; width: var(--w); height: calc(var(--w) * 1.9594); font-size: calc(var(--w) / 100); transform-style: preserve-3d; will-change: transform; }
+.xv-l { position: absolute; inset: 0; transform-style: preserve-3d; transform: translateZ(var(--z, 0px)); }
+.xv-b { position: absolute; transform-style: preserve-3d; }
+.xv-e, .xv-f { position: absolute; inset: 0; border-radius: inherit; }
+.xv-e { background: var(--edge); transform: translateZ(calc(var(--d) * -1px)); opacity: var(--op, 1); }
+.xv-f { overflow: hidden; opacity: var(--op, 1); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .1), 0 0 0 calc(var(--hl, 0) * 1.5px) var(--gold); }
+.xv-f i, .xv-f b, .xv-f span, .xv-f div { position: absolute; }
+.xv-sh { inset: 0; background: #050403; opacity: var(--dim, 0); }
+/* real parts: photographs cut out of the bench photo; dimming goes through the picture, not over it */
+.xv-ph > .xv-f { box-shadow: 0 0 0 calc(var(--hl, 0) * 1.5px) var(--gold); }
+.xv-ph.xv-free > .xv-f { overflow: visible; box-shadow: none; }
+.xv-img { position: absolute; inset: 0; width: 100%; height: 100%; max-width: none; filter: brightness(calc(1 - var(--dim, 0))); -webkit-user-drag: none; user-select: none; }
+/* a part with an irregular outline is outlined along its own edge */
+.xv-ol { filter: drop-shadow(1.2px 0 0 var(--gold)) drop-shadow(-1.2px 0 0 var(--gold)) drop-shadow(0 1.2px 0 var(--gold)) drop-shadow(0 -1.2px 0 var(--gold)); opacity: var(--hl, 0); }
+/* shadows: each layer casts its own on the housing (the script lays it there) */
+.xv-shd { position: absolute; background: #000; filter: blur(calc(var(--w) * .03)); opacity: var(--so, 0);
+  transform: translate3d(var(--sx, 0px), var(--sy, 0px), var(--sz, 0px)) scale(var(--ss, 1)); pointer-events: none; }
+/* screen: black glass over a lock screen; the reflection slides as the phone turns */
+.xv-glass > .xv-f { background: #050504; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .2), inset 0 0 0 .7em #0b0a09, 0 0 0 calc(var(--hl, 0) * 1.5px) var(--gold); }
+.xv-disp { inset: 5.6em; border-radius: 9.4em / 10.2em; overflow: hidden; background: #120c07; }
+.xv-wall { inset: 0; background:
+    radial-gradient(70% 38% at 18% 88%, rgba(226, 182, 98, .55), rgba(226, 182, 98, 0) 72%),
+    radial-gradient(80% 46% at 92% 70%, rgba(185, 110, 52, .5), rgba(185, 110, 52, 0) 70%),
+    radial-gradient(90% 40% at 40% 30%, rgba(98, 64, 34, .55), rgba(98, 64, 34, 0) 75%),
+    linear-gradient(180deg, #1a110a 0%, #2a1b0f 46%, #4a2f17 100%); }
+.xv-notch11 { left: 21.4em; top: 0; width: 46em; height: 7.4em; border-radius: 0 0 4.4em 4.4em; background: #000; box-shadow: inset 0 -.3em .5em rgba(255, 255, 255, .03); }
+.xv-stat { top: 2.6em; right: 4.6em; width: 13em; height: 4.6em; }
+.xv-stat svg { width: 100%; height: 100%; fill: rgba(243, 235, 221, .92); stroke: rgba(243, 235, 221, .92); }
+.xv-disp .xv-date { left: 0; right: 0; top: 12.5%; font-size: 4.3em; font-weight: 500; line-height: 1.2; text-align: center; color: rgba(243, 235, 221, .86); }
+.xv-disp .xv-time { left: 0; right: 0; top: 15.6%; font-size: 18.5em; font-weight: 600; line-height: 1; letter-spacing: -.035em; text-align: center; color: rgba(243, 235, 221, .95); font-variant-numeric: tabular-nums; }
+.xv-btn { bottom: 5.4%; display: grid; place-items: center; width: 10.6em; height: 10.6em; border-radius: 50%; background: rgba(20, 14, 9, .5); box-shadow: inset 0 0 0 .25em rgba(243, 235, 221, .06); }
+.xv-btn-l { left: 7em; } .xv-btn-r { right: 7em; }
+.xv-btn svg { width: 5.2em; height: 5.2em; fill: none; stroke: rgba(243, 235, 221, .9); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.xv-home { left: 50%; bottom: 1.6%; width: 30em; height: 1.1em; margin-left: -15em; border-radius: 1em; background: rgba(243, 235, 221, .85); }
+.xv-glare { inset: 0 -70%; background: linear-gradient(112deg, rgba(255, 255, 255, 0) 34%, rgba(255, 255, 255, .11) 44%, rgba(255, 255, 255, .035) 50%, rgba(255, 255, 255, 0) 60%);
+  transform: translateX(var(--gx, 0%)); }
+/* names: flat over the stage; a thin line runs from the point each layer reaches on screen to its name */
+.xv-tags { position: absolute; inset: 0; z-index: 3; pointer-events: none; opacity: 0; }
+.xv-lines { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.xv-lines path { fill: none; stroke: rgba(243, 235, 221, .42); stroke-width: 1; }
+.xv-lines circle { fill: var(--cream); }
+.xv-tg { position: absolute; left: 0; top: 0; color: var(--cream); font-size: .875rem; font-weight: 500; line-height: 1.2; white-space: nowrap; text-shadow: 0 0 6px var(--ink), 0 0 2px var(--ink); }
+@media (max-width: 599px) { .xv-tags { display: none; } }
+.xp-list { display: grid; gap: 2px; padding: 0; list-style: none; }
+@media (max-width: 899px) {
+  .xp-grid { padding-bottom: calc(78px + env(safe-area-inset-bottom, 0px)); }
+  .xp-list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 18px; padding-bottom: 18px; }
+}
+.xp-list li { display: grid; gap: 2px; padding: 10px 0 10px 18px; border-left: 2px solid rgba(243, 235, 221, .14); transition: border-color .3s, opacity .3s; opacity: .55; }
+.xp-list li strong { font-size: 1.0625rem; font-weight: 600; }
+.xp-list li span { color: var(--sand); font-size: .875rem; }
+@media (min-width: 900px) { .xp-list li { padding-block: 14px; } .xp-list li strong { font-size: 1.375rem; letter-spacing: -.02em; } .xp-list li span { font-size: .9375rem; } }
+.xp-list li.on, .xp-list.all li { opacity: 1; border-color: var(--gold); }
+@media (prefers-reduced-motion: reduce) {
+  .xp-scroll { height: auto; }
+  .xp-sticky { position: static; height: auto; padding-block: 32px; }
+  .xp-grid { height: auto; }
+  .xp-stage { height: min(78vh, 620px); }
+}
+
+/* the camera step: a real close-up of the front cameras */
+.xp-zoom { position: absolute; z-index: 2; right: 3%; bottom: 7%; width: min(44%, 270px); margin: 0; opacity: 0; transform: translateY(12px) scale(.98);
+  transition: opacity .55s var(--ease), transform .7s var(--ease); pointer-events: none; }
+.xp-zoom img { display: block; width: 100%; height: auto; border-radius: 14px; box-shadow: 0 0 0 1px rgba(243, 235, 221, .14), 0 18px 40px -14px rgba(0, 0, 0, .85); }
+.xp-zoom figcaption { margin-top: 8px; color: var(--sand); font-size: .8125rem; line-height: 1.3; }
+.xp-stage.cam-on .xp-zoom { opacity: 1; transform: none; }
+@media (max-width: 599px) { .xp-zoom { width: 54%; right: 2%; bottom: 3%; } }
+@media (prefers-reduced-motion: reduce) { .xp-zoom { transition: none; } }
+
+/* ---------- shop and buy-back ---------- */
+.duo { display: grid; gap: 16px; }
+@media (min-width: 900px) { .duo { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.promo { position: relative; display: flex; flex-direction: column; min-width: 0; overflow: hidden; border-radius: var(--radius); text-align: center; }
+.promo-copy { position: relative; z-index: 2; display: grid; justify-items: center; gap: 14px; padding: clamp(40px, 5vw, 60px) clamp(24px, 4vw, 48px) 0; }
+.promo h2 { font-size: clamp(2.1rem, 5vw, 3.125rem); line-height: 1.04; letter-spacing: -0.035em; }
+.promo p { max-width: 30ch; color: var(--stone); }
+.promo .pill { margin-top: 10px; }
+.promo-dark { background: var(--card); color: var(--cream); }
+.promo-dark p { color: var(--sand); }
+.promo-dark :focus-visible { outline-color: var(--gold); }
+.promo-light { background: var(--card); }
+.promo-art { position: relative; height: 300px; margin-top: 18px; overflow: hidden; }
+/* a framed photo, inset like a print in the card */
+.promo-photo { --m: clamp(12px, 1.6vw, 18px); flex: 1 0 auto; height: auto; min-height: 300px; margin: 28px var(--m) var(--m); border-radius: calc(var(--radius) - var(--m)); background: var(--card-2); }
+@media (min-width: 900px) { .promo-photo { min-height: 380px; } }
+.promo-photo picture { position: absolute; inset: 0; }
+.promo-photo img { width: 100%; height: 100%; object-fit: cover; }
+.promo.in .promo-photo img { animation: settle 1.6s var(--ease) both, drift 12s ease-in-out 1.6s infinite alternate; }
+/* the buy-back card stretches to the shop card's height on wide screens: keep its phone anchored */
+@media (min-width: 900px) { .promo > .promo-art:not(.promo-photo) { flex: 1 0 300px; height: auto; } }
+
+/* ---------- how it works ---------- */
+.steps { display: grid; padding: 0; list-style: none; }
+@media (min-width: 800px) { .steps { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(24px, 4vw, 56px); } }
+.steps li { display: grid; align-content: start; gap: 8px; padding-block: 26px; border-top: 1px solid var(--rule-strong); }
+.step-top { display: flex; align-items: center; justify-content: space-between; }
+.step-n { font-size: clamp(2.125rem, 4.2vw, 3rem); font-weight: 600; line-height: 1; letter-spacing: -0.045em; color: var(--bronze); font-variant-numeric: tabular-nums; }
+.step-ico { width: 52px; height: 52px; color: var(--cream); }
+.step-ico .draw { stroke-dasharray: 160; stroke-dashoffset: 0; }
+.steps li.in .step-ico .draw { animation: draw 1.4s var(--ease) .2s both; }
+.steps li.in .step-ico .dot { animation: dot 1.2s ease-in-out infinite; }
+.step-ico .dot:nth-of-type(2) { animation-delay: .15s !important; } .step-ico .dot:nth-of-type(3) { animation-delay: .3s !important; }
+@keyframes draw { from { stroke-dashoffset: 160; } to { stroke-dashoffset: 0; } }
+.steps h3 { margin-top: 10px; font-size: 1.375rem; letter-spacing: -0.02em; }
+.steps p { max-width: 32ch; color: var(--stone); }
+.steps-note { margin-top: 26px; color: var(--stone); font-size: .9375rem; }
+
+/* ---------- zone ---------- */
+.zone-grid { display: grid; gap: clamp(40px, 6vw, 72px); align-items: center; }
+@media (min-width: 900px) { .zone-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } .zone-grid .band-head { margin-bottom: 0; } }
+.legend { display: grid; gap: 0; margin-top: 30px; padding: 0; list-style: none; max-width: 420px; }
+.legend li { display: grid; grid-template-columns: 14px minmax(0, 1fr) auto; align-items: baseline; gap: 12px; padding-block: 11px; border-bottom: 1px solid rgba(243, 235, 221, .1); }
+.legend .sw { width: 12px; height: 12px; border-radius: 3px; transform: translateY(1px); }
+.legend b { font-weight: 500; }
+.legend .fee { font-size: 1.0625rem; font-weight: 600; letter-spacing: -0.01em; font-variant-numeric: tabular-nums; text-align: right; }
+.legend small { display: block; color: var(--sand); font-size: .8125rem; }
+.zone-note { margin-top: 14px; max-width: 420px; color: var(--sand); font-size: .8125rem; }
+.zone-field { display: grid; gap: 8px; max-width: 360px; margin-top: 28px; }
+.zone-field label { color: var(--sand); font-size: .875rem; font-weight: 500; }
+.zone-copy .pill { margin-top: 18px; }
+.map-wrap { position: relative; justify-self: center; width: 100%; max-width: 500px; }
+.map { width: 100%; height: auto; overflow: visible; }
+.map path { stroke: var(--ink); stroke-width: 1.6; stroke-linejoin: round; vector-effect: non-scaling-stroke; cursor: pointer; transition: fill .5s ease, opacity .5s ease, filter .2s; }
+.map .z0 { fill: var(--zone-0); } .map .z1 { fill: var(--zone-1); } .map .z2 { fill: var(--zone-2); } .map .z3 { fill: var(--zone-3); }
+.map path:hover { filter: brightness(1.18); }
+.map path.on { fill: var(--cream); }
+.map-wrap.pre path { fill: var(--roast-2); }
+.map-wrap.in .z0 { transition-delay: .1s; } .map-wrap.in .z1 { transition-delay: .35s; } .map-wrap.in .z2 { transition-delay: .6s; } .map-wrap.in .z3 { transition-delay: .85s; }
+.mark { position: absolute; width: 0; height: 0; pointer-events: none; }
+.mark-dot { position: absolute; left: -5px; top: -5px; width: 10px; height: 10px; border-radius: 50%; background: var(--ink); box-shadow: 0 0 0 2px var(--cream); }
+.mark-dot::after { content: ""; position: absolute; inset: -2px; border-radius: 50%; border: 2px solid var(--cream); opacity: 0; }
+.map-wrap.in .mark-dot::after { animation: pulse 2.4s ease-out infinite; }
+@keyframes pulse { 0% { opacity: .9; transform: scale(1); } 100% { opacity: 0; transform: scale(3.2); } }
+.mark-label { position: absolute; top: 0; padding: 6px 11px; border-radius: 999px; white-space: nowrap; background: rgba(27, 20, 13, .9); color: var(--cream); font-size: .8125rem; font-weight: 500; line-height: 1.25; }
+.mark-base .mark-label { right: 14px; transform: translateY(-50%); }
+.mark-pick .mark-label { left: 0; bottom: 10px; top: auto; display: grid; justify-items: center; transform: translateX(calc(-50% + var(--dx, 0px))); background: var(--cream); color: var(--espresso); text-align: center; }
+.mark-pick .mark-label small { color: var(--stone); font-size: .75rem; font-weight: 500; }
+.mark-pick.below .mark-label { bottom: auto; top: 12px; }
+.mark[hidden] { display: none; }
+
+/* ---------- booking ---------- */
+.book { display: grid; gap: clamp(28px, 4vw, 48px); align-items: start; }
+@media (min-width: 900px) { .book { grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); } }
+.form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 14px; }
+@media (max-width: 520px) { .form { grid-template-columns: minmax(0, 1fr); } }
+.field { display: grid; gap: 8px; min-width: 0; }
+.field.full { grid-column: 1 / -1; }
+.field label { font-size: .875rem; font-weight: 500; }
+.field .opt { color: var(--stone); font-weight: 400; }
+.input {
+  display: block; width: 100%; min-width: 0; min-height: 52px; padding: 12px 16px;
+  border: 1px solid rgba(243, 235, 221, .2); border-radius: 14px; background: var(--card); color: var(--cream);
+  font-size: 1rem; line-height: 1.4; transition: border-color .2s, box-shadow .2s; -webkit-appearance: none; appearance: none;
+}
+.input::placeholder { color: #8A8073; }
+.input:hover { border-color: rgba(243, 235, 221, .38); }
+.input:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 4px rgba(226, 182, 98, .2); }
+textarea.input { min-height: 110px; resize: vertical; }
+select.input {
+  padding-right: 44px; background-repeat: no-repeat; background-position: right 16px center; background-size: 14px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14'%3E%3Cpath d='M2.5 5l4.5 4.5L11.5 5' fill='none' stroke='%23F3EBDD' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+input[type="date"].input { line-height: 26px; }
+.wa-card { display: grid; gap: 16px; min-width: 0; padding: clamp(18px, 2.6vw, 26px); border-radius: var(--radius); background: var(--wa-bg); color: var(--wa-ink); }
+@media (min-width: 900px) { .wa-card { position: sticky; top: calc(var(--nav-h) + 24px); } }
+.wa-head { display: flex; align-items: center; gap: 12px; padding-bottom: 14px; border-bottom: 1px solid rgba(233, 237, 239, .08); }
+.wa-avatar { display: grid; place-items: center; width: 42px; height: 42px; flex: none; border-radius: 50%; background: #000; box-shadow: inset 0 0 0 1px rgba(233, 237, 239, .12); }
+.wa-avatar img { width: 30px; height: auto; }
+.wa-name { font-weight: 600; font-size: .9375rem; line-height: 1.3; }
+.wa-sub { color: var(--wa-muted); font-size: .8125rem; }
+.bubble {
+  justify-self: end; max-width: 94%; padding: 11px 14px; border-radius: 16px 16px 4px 16px; background: var(--wa-bubble); color: var(--wa-ink);
+  box-shadow: 0 1px .5px rgba(0, 0, 0, .3); font-size: .9375rem; line-height: 1.5; white-space: pre-wrap; overflow-wrap: anywhere;
+}
+.bubble .ph { color: #9FC7BD; }
+.bubble.bump { animation: bump .35s var(--ease); }
+@keyframes bump { 0% { transform: scale(.985); } 100% { transform: none; } }
+.wa-card .pill { width: 100%; }
+.wa-alt { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; color: var(--wa-muted); font-size: .875rem; }
+.wa-alt .num { color: var(--wa-ink); font-weight: 500; user-select: all; }
+.copy {
+  min-height: 32px; padding: 4px 12px; border: 1px solid rgba(233, 237, 239, .22); border-radius: 999px; background: transparent;
+  color: var(--wa-ink); font-size: .8125rem; font-weight: 500; cursor: pointer; transition: background-color .2s;
+}
+.copy:hover { background: rgba(233, 237, 239, .08); }
+
+/* where the repair happens: asked before the message can go */
+.place { margin: 0; padding: 0; border: 0; min-width: 0; }
+.place legend { padding: 0; margin-bottom: 8px; font-size: .875rem; font-weight: 500; }
+.places { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+@media (max-width: 420px) { .places { grid-template-columns: minmax(0, 1fr); } }
+.place-opt { position: relative; display: flex; min-width: 0; }
+.place-opt input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; }
+.place-opt > span {
+  display: grid; grid-template-columns: 26px minmax(0, 1fr); grid-template-rows: auto 1fr; column-gap: 12px; row-gap: 3px; align-content: start; width: 100%;
+  padding: 14px 16px; border-radius: 14px; background: var(--card); box-shadow: inset 0 0 0 1px rgba(243, 235, 221, .2);
+  transition: background-color .3s, box-shadow .3s, color .3s;
+}
+.place-opt svg { grid-row: span 2; width: 26px; height: 26px; fill: none; stroke: var(--bronze); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; transition: stroke .3s; }
+.place-opt b { font-size: .9375rem; font-weight: 600; line-height: 1.3; }
+.place-opt small { color: var(--stone); font-size: .8125rem; line-height: 1.4; transition: color .3s; }
+.place-opt input:hover + span { box-shadow: inset 0 0 0 1px rgba(243, 235, 221, .45); }
+.place-opt input:checked + span { background: var(--cream); color: var(--espresso); box-shadow: inset 0 0 0 1px var(--cream); }
+.place-opt input:checked + span small { color: #6B5E4D; }
+.place-opt input:checked + span svg { stroke: var(--espresso); }
+.place-opt input:focus-visible + span { outline: 2px solid var(--gold); outline-offset: 2px; }
+.place.want .place-opt > span { box-shadow: inset 0 0 0 1px var(--gold); }
+.come { gap: 10px; padding: 18px; border-radius: 16px; background: rgba(243, 235, 221, .04); box-shadow: inset 0 0 0 1px rgba(243, 235, 221, .1); }
+.come[hidden], .meet[hidden], .wa-need[hidden] { display: none; }
+.come-title { font-size: 1.0625rem; font-weight: 600; letter-spacing: -.01em; }
+.come-fee { color: var(--sand); font-size: .9375rem; line-height: 1.45; }
+.come-fee b { color: var(--gold); font-weight: 600; }
+.come.want #f-town { border-color: var(--gold); }
+.come-zones { display: grid; gap: 7px; margin: 2px 0 0; padding: 0; list-style: none; color: var(--stone); font-size: .8125rem; line-height: 1.35; }
+.come-zones li { display: grid; grid-template-columns: 10px minmax(0, 1fr) auto; align-items: center; gap: 10px; transition: color .3s; }
+.come-zones .sw { width: 10px; height: 10px; border-radius: 3px; }
+.come-zones b { color: var(--sand); font-weight: 500; font-variant-numeric: tabular-nums; transition: color .3s; }
+.come-zones li.on { color: var(--cream); }
+.come-zones li.on b { color: var(--gold); }
+.come-map { justify-self: start; color: var(--bronze); font-size: .875rem; text-decoration: underline; text-underline-offset: 3px; }
+.meet { padding: 14px 16px; border-radius: 14px; background: rgba(243, 235, 221, .04); box-shadow: inset 0 0 0 1px rgba(243, 235, 221, .1); color: var(--sand); font-size: .9375rem; line-height: 1.45; }
+.wa-need { color: #E9D3A6; font-size: .875rem; line-height: 1.45; }
+.wa-card .pill.is-off { opacity: .42; }
+.wa-card .pill.is-off:hover { background: var(--gold); }
+
+/* footer */
+.foot { padding-block: clamp(56px, 8vw, 88px) clamp(28px, 4vw, 40px); }
+.foot-grid { display: grid; gap: 40px; }
+@media (min-width: 800px) { .foot-grid { grid-template-columns: minmax(0, 1.3fr) repeat(2, minmax(0, 1fr)); } }
+.foot-brand img { width: 150px; height: auto; }
+.foot-brand p { max-width: 28ch; margin-top: 18px; color: var(--sand); font-size: .9375rem; }
+.foot h3 { margin-bottom: 12px; color: var(--sand); font-size: .875rem; font-weight: 500; }
+.foot-links { display: grid; justify-items: start; gap: 9px; }
+.foot-links a { color: var(--cream); font-size: .9375rem; text-decoration: none; }
+.foot-links a:hover { text-decoration: underline; text-underline-offset: 4px; }
+.foot-num { font-size: 1.5rem; font-weight: 600; letter-spacing: -0.02em; line-height: 1.2; user-select: all; }
+.foot .copy { margin-block: 10px 6px; border-color: rgba(243, 235, 221, .25); color: var(--cream); }
+.foot .copy:hover { background: rgba(243, 235, 221, .08); }
+.foot { border-top: 1px solid var(--rule); }
+.foot-base { margin-top: 52px; padding-top: 22px; border-top: 1px solid rgba(243, 235, 221, .1); color: var(--sand); font-size: .8125rem; }
+@media (max-width: 899px) { .foot { padding-bottom: calc(108px + env(safe-area-inset-bottom, 0px)); } }
+
+/* ---------- welcome: the logo assembles itself (sea, sun, palms, name), then opens onto the site ---------- */
+html.intro-on { overflow: hidden; }
+html.intro-on .hero *, html.intro-on .hero { animation-play-state: paused !important; }
+.intro { position: fixed; inset: 0; z-index: 200; display: grid; place-content: center; justify-items: center; gap: clamp(22px, 4vh, 36px); padding: 24px; background: #000; color: var(--cream);
+  transition: opacity 1s var(--ease), visibility 0s linear 1s; }
+.intro[hidden] { display: none; }
+.intro.out { opacity: 0; visibility: hidden; pointer-events: none; }
+.intro-logo { position: relative; width: min(70vw, 46vh, 380px); aspect-ratio: 1000 / 1220.47; }
+.intro-logo .il { position: absolute; display: block; max-width: none; height: auto; }
+.intro-logo .il-clip { position: absolute; overflow: hidden; }
+.intro-logo .il-clip .il { position: static; width: 100%; }
+.intro-tag { max-width: 30ch; color: var(--sand); font-size: clamp(.875rem, 1.7vw, 1rem); letter-spacing: .01em; text-align: center; }
+.intro-skip { position: absolute; top: calc(14px + env(safe-area-inset-top, 0px)); right: max(16px, env(safe-area-inset-right, 0px)); min-height: 40px; padding: 8px 18px;
+  border: 1px solid rgba(243, 235, 221, .2); border-radius: 999px; background: transparent; color: var(--sand); font-size: .8125rem; cursor: pointer; transition: color .2s, border-color .2s; }
+.intro-skip:hover { color: var(--cream); border-color: rgba(243, 235, 221, .45); }
+.intro .il, .intro-tag { opacity: 0; }
+.intro.play .il-horizon { animation: iLine 1.3s var(--ease) .15s both; }
+.intro.play .il-w1 { animation: iLine 1.3s var(--ease) .4s both; }
+.intro.play .il-w2 { animation: iLine 1.3s var(--ease) .6s both; }
+.intro.play .il-w3 { animation: iLine 1.3s var(--ease) .8s both; }
+.intro.play .il-sun { animation: iSun 1.8s var(--ease) .75s both; }
+.intro.play .il-palmL { animation: iPalm 1.9s var(--ease) 1.3s both; transform-origin: 18% 100%; }
+.intro.play .il-palmR { animation: iPalm 1.9s var(--ease) 1.6s both; transform-origin: 62% 100%; }
+.intro.play .il-phone { animation: iWord 1.1s var(--ease) 2.7s both; }
+.intro.play .il-island { animation: iWord 1.1s var(--ease) 3s both; }
+.intro.play .intro-tag { animation: fadeup 1.1s var(--ease) 3.6s both; }
+@keyframes iLine { from { opacity: 0; transform: scaleX(.15); } to { opacity: 1; transform: none; } }
+@keyframes iSun { from { opacity: 1; transform: translateY(102%); } to { opacity: 1; transform: none; } }
+@keyframes iPalm { from { opacity: 0; clip-path: inset(100% 0 0 0); transform: rotate(-2.5deg); } 35% { opacity: 1; } to { opacity: 1; clip-path: inset(0 0 0 0); transform: none; } }
+@keyframes iWord { from { opacity: 0; transform: translateY(35%); } to { opacity: 1; transform: none; } }
+
+/* phone dock */
+.dock {
+  position: fixed; z-index: 50; left: 0; right: 0; bottom: 0; display: flex; gap: 10px;
+  padding: 10px var(--gutter) calc(10px + env(safe-area-inset-bottom, 0px));
+  background: rgba(6, 5, 4, .86); border-top: 1px solid rgba(243, 235, 221, .08);
+  -webkit-backdrop-filter: saturate(160%) blur(18px); backdrop-filter: saturate(160%) blur(18px);
+  transform: translateY(110%); transition: transform .4s var(--ease);
+}
+.dock.show { transform: none; }
+.dock .pill { flex: 1 1 auto; }
+.dock-wa { display: grid; place-items: center; width: 50px; height: 50px; flex: none; border-radius: 50%; background: var(--card-2); color: var(--cream); }
+.dock-wa svg { width: 22px; height: 22px; }
+@media (min-width: 900px) { .dock { display: none; } }
+
+/* ---------- pages: home, prices, refurbished phones, buy-back ---------- */
+.nav-links a[aria-current="page"] { color: var(--cream); }
+.menu nav a[aria-current="page"] { color: var(--gold); }
+.foot-links a[aria-current="page"] { color: var(--gold); }
+.page-top { padding-top: clamp(18px, 3.4vw, 40px); }
+.crumbs { display: flex; flex-wrap: wrap; align-items: center; gap: 2px 3px; margin-bottom: clamp(28px, 4.4vw, 50px); color: var(--stone); font-size: .875rem; }
+.crumbs a { color: var(--sand); text-decoration: none; }
+.crumbs a:hover { color: var(--cream); text-decoration: underline; text-underline-offset: 4px; }
+.crumbs svg { width: 14px; height: 14px; flex: none; }
+.page-head h1 { font-size: clamp(2.4rem, 7.4vw, 4.375rem); line-height: 1.02; letter-spacing: -0.042em; }
+.page-head .lead { max-width: 40rem; }
+/* on touch screens (no hover) the big repair tiles say where they go */
+@media (hover: none) {
+  .tile-big .tile-go-t, .tile-cons .tile-go-t { max-width: 120px; margin: 0 6px 0 7px; opacity: 1; }
+}
+</style>
+</head>
+<body>
+
+<div class="intro" id="intro" hidden>
+  <div class="intro-logo" role="img" aria-label="Phone Island"><img class="il il-palmL" src="assets/intro-palmL.webp" alt="" decoding="async" style="left:0.000%;top:0.000%;width:48.673%"><img class="il il-palmR" src="assets/intro-palmR.webp" alt="" decoding="async" style="left:67.064%;top:26.797%;width:32.936%"><img class="il il-horizon" src="assets/intro-horizon.webp" alt="" decoding="async" style="left:13.544%;top:54.382%;width:67.988%"><img class="il il-w1" src="assets/intro-w1.webp" alt="" decoding="async" style="left:11.389%;top:61.129%;width:68.449%"><img class="il il-w2" src="assets/intro-w2.webp" alt="" decoding="async" style="left:14.621%;top:67.749%;width:63.755%"><img class="il il-w3" src="assets/intro-w3.webp" alt="" decoding="async" style="left:25.510%;top:72.510%;width:51.520%"><img class="il il-phone" src="assets/intro-phone.webp" alt="" decoding="async" style="left:24.933%;top:82.156%;width:28.242%"><img class="il il-island" src="assets/intro-island.webp" alt="" decoding="async" style="left:36.899%;top:93.758%;width:36.591%"><span class="il-clip" style="left:33.898%;top:45.996%;width:30.858%;height:8.386%"><img class="il il-sun" src="assets/intro-sun.webp" alt="" decoding="async"></span></div>
+  <p class="intro-tag">Réparation de smartphones à domicile, partout en Martinique</p>
+  <button class="intro-skip" type="button" id="intro-skip">Passer</button>
+</div>
+<script>
+/* show the welcome screen once per visit (it never blocks the page without scripts or with reduced motion) */
+(function () {
+  if (location.hash === '#tarifs') { location.replace('tarifs.html'); return; }
+  var seen = location.hash.length > 1;
+  try { seen = seen || sessionStorage.getItem('pi-intro') === '1'; } catch (e) {}
+  if (seen || (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches)) return;
+  document.getElementById('intro').hidden = false;
+  document.documentElement.classList.add('intro-on');
+  try { sessionStorage.setItem('pi-intro', '1'); } catch (e) {}
+})();
+</script>
+<header class="site-nav">
+  <div class="wrap nav-row">
+    <a class="brand" href="#top" aria-label="Phone Island, retour en haut de la page">
+      <img class="brand-mark" src="assets/mark-96.webp" srcset="assets/mark-96.webp 1x, assets/mark-192.webp 2x" alt="" width="96" height="98">
+      <img class="brand-name" src="assets/name-48.webp" srcset="assets/name-48.webp 1x, assets/name-96.webp 2x" alt="" width="107" height="48">
+    </a>
+    <nav class="nav-links" aria-label="Navigation principale">
+      <a href="#reparations">Réparations</a>
+      <a href="tarifs.html">Tarifs</a>
+      <a href="#savoir-faire">Savoir-faire</a>
+      <a href="boutique.html">Boutique</a>
+      <a href="rachat.html">Rachat</a>
+      <a href="#zone">Zone</a>
+    </nav>
+    <a class="pill pill-sm" href="#rendez-vous">Rendez-vous</a>
+    <button class="burger" id="burger" type="button" aria-expanded="false" aria-controls="menu" aria-label="Ouvrir le menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><line class="l1" x1="4" y1="8.5" x2="20" y2="8.5"/><line class="l2" x1="4" y1="15.5" x2="20" y2="15.5"/></svg>
+    </button>
+  </div>
+</header>
+<div class="menu" id="menu" hidden>
+  <div class="wrap">
+    <nav aria-label="Menu">
+      <a href="#reparations" style="--i:0">Réparations</a>
+      <a href="tarifs.html" style="--i:1">Tarifs</a>
+      <a href="#savoir-faire" style="--i:2">Savoir-faire</a>
+      <a href="boutique.html" style="--i:3">Boutique</a>
+      <a href="rachat.html" style="--i:4">Rachat</a>
+      <a href="#zone" style="--i:5">Zone</a>
+    </nav>
+    <a class="pill" href="#rendez-vous">Prendre rendez-vous</a>
+    <p class="menu-contact">WhatsApp et téléphone&nbsp;: <span class="num">0696 17 47 32</span></p>
+  </div>
+</div>
+
+<main id="top">
+  <section class="hero dark" aria-labelledby="hero-title">
+    <div class="wrap hero-grid">
+      <div class="hero-copy">
+        <h1 class="hero-title" id="hero-title"><span class="ln"><span>Votre iPhone,</span></span><span class="ln"><span>comme neuf.</span></span></h1>
+        <p class="hero-sub">Réparation de smartphones à domicile, partout en Martinique.</p>
+        <div class="cta-row">
+          <a class="pill" href="#rendez-vous">Prendre rendez-vous</a>
+          <a class="link" href="tarifs.html">Voir les tarifs<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 6l6 6-6 6"/></svg></a>
+        </div>
+      </div>
+      <ul class="facts">
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9.2"/><path d="M8 12.3l2.7 2.7 5.5-5.5"/></svg>Diagnostic gratuit</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9.2"/><path d="M8 12.3l2.7 2.7 5.5-5.5"/></svg>Main-d’œuvre incluse dans tous les prix</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9.2"/><path d="M8 12.3l2.7 2.7 5.5-5.5"/></svg>Déplacement dès 10&nbsp;€ à Fort-de-France</li>
+      </ul>
+      <div class="hero-stage" id="hero-stage">
+        <div class="ph3d" id="ph3d"></div>
+        <div class="dev-in ph-still">
+          <div class="dev-tilt" id="dev-tilt">
+            <div class="ph hero-dev" id="hero-dev" role="img" aria-label="Un vrai iPhone 13 Pro réparé par Phone Island : l’écran rayé et fissuré laisse place à une vitre neuve, puis le téléphone se rallume">
+              <i class="ph-side" style="--d:10"></i><i class="ph-side" style="--d:9"></i><i class="ph-side" style="--d:8"></i><i class="ph-side" style="--d:7"></i><i class="ph-side" style="--d:6"></i><i class="ph-side" style="--d:5"></i><i class="ph-side" style="--d:4"></i><i class="ph-side" style="--d:3"></i><i class="ph-side" style="--d:2"></i><i class="ph-side" style="--d:1"></i>
+              <div class="ph-screen">
+                <div class="ph-lock">
+                  <div class="wall"></div>
+                  <svg class="ph-stat" viewBox="0 0 34 12" aria-hidden="true"><path d="M1 9.5h2v2H1zM5 7.5h2v4H5zM9 5.5h2v6H9zM13 3.5h2v8h-2z"/><path d="M24.2 4.4a6.4 6.4 0 0 0-8.4 0M22.6 6.3a3.9 3.9 0 0 0-5.2 0" fill="none" stroke-width="1.3" stroke-linecap="round"/><circle cx="20" cy="8.6" r="1"/><rect x="26.5" y="3.6" width="6.4" height="6.4" rx="1.5" fill="none" stroke-width="1"/></svg><svg class="ph-lockic" viewBox="0 0 16 20" aria-hidden="true"><rect x="1.5" y="8.5" width="13" height="10" rx="2.4"/><path d="M4.6 8.5V6a3.4 3.4 0 0 1 6.8 0v2.5" fill="none" stroke-width="1.7"/></svg>
+                  <p class="wall-date" aria-hidden="true">lundi 12 octobre</p>
+                  <p class="wall-time" aria-hidden="true">9:41</p>
+                  <div class="notif" aria-hidden="true">
+                    <span class="notif-ico"><img src="assets/mark-96.webp" alt="" width="96" height="98"></span>
+                    <div><p class="notif-t">Phone Island</p><p class="notif-b">Réparation terminée. Votre téléphone est comme neuf.</p></div>
+                  </div>
+                  <img class="wall-logo" src="assets/logo-360.webp" srcset="assets/logo-360.webp 360w, assets/logo-720.webp 720w" sizes="170px" alt="" width="360" height="439">
+                  <i class="ph-bar"></i>
+                </div>
+                <img class="ph-avant" src="assets/hero-avant-560.webp" srcset="assets/hero-avant-560.webp 560w, assets/hero-avant-900.webp 900w" sizes="(min-width: 900px) 280px, 56vw" alt="" loading="lazy" width="560" height="1212" decoding="async">
+              </div>
+              <img class="ph-front" src="assets/hero-phone-600.webp" srcset="assets/hero-phone-600.webp 600w, assets/hero-phone-1000.webp 1000w" sizes="(min-width: 900px) 300px, 62vw" alt="" loading="lazy" width="600" height="1237" decoding="async">
+              <i class="ph-sheen"></i>
+            </div>
+          </div>
+        </div>
+        <button class="replay" id="replay" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.6-5.9M4 4v4.5h4.5"/></svg>Revoir la réparation</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="band light" id="reparations" aria-labelledby="rep-title">
+    <div class="wrap">
+      <header class="band-head rv">
+        <h2 id="rep-title">Tout ce qu’on répare.</h2>
+        <p class="lead">Sur iPhone, Samsung, iPad et Nintendo Switch. Bientôt les PS5.</p>
+      </header>
+      <div class="bento">
+        <article class="tile tile-l tile-big tile-wide rv" data-anim>
+          <div class="tile-copy">
+            <h3>Écran</h3>
+            <p>Vitre fissurée, tactile qui ne répond plus, taches ou lignes à l’affichage.</p>
+          </div>
+          <div class="tile-art ph"><picture><source type="image/avif" srcset="assets/photo-ecran-480.avif 480w, assets/photo-ecran-687.avif 687w" sizes="(min-width: 1000px) 450px, (min-width: 700px) 46vw, 92vw"><img src="assets/photo-ecran-687.jpg" srcset="assets/photo-ecran-480.jpg 480w, assets/photo-ecran-687.jpg 687w" sizes="(min-width: 1000px) 450px, (min-width: 700px) 46vw, 92vw" width="687" height="1030" alt="Un iPhone récent posé sur un support, l’écran d’accueil allumé" loading="lazy" decoding="async" style="object-position:50% 47%"></picture></div>
+          <a class="tile-link" href="tarifs.html#ecran" data-go="ecran"><span class="tile-go" aria-hidden="true"><span class="tile-go-t">Voir les prix</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 6l6 6-6 6"/></svg></span><span class="visually-hidden">Écran&nbsp;: voir les prix</span></a>
+        </article>
+        <article class="tile tile-l tile-big rv rv-2" data-anim>
+          <div class="tile-copy">
+            <h3>Batterie</h3>
+            <p>Autonomie en chute, téléphone qui s’éteint tout seul ou batterie qui gonfle.</p>
+          </div>
+          <div class="tile-art ph"><picture><source type="image/avif" srcset="assets/photo-batterie-ouverte-640.avif 640w, assets/photo-batterie-ouverte-1095.avif 1095w" sizes="(min-width: 1000px) 440px, (min-width: 700px) 46vw, 92vw"><img src="assets/photo-batterie-ouverte-1095.jpg" srcset="assets/photo-batterie-ouverte-640.jpg 640w, assets/photo-batterie-ouverte-1095.jpg 1095w" sizes="(min-width: 1000px) 440px, (min-width: 700px) 46vw, 92vw" width="1095" height="800" alt="Un iPhone ouvert : sa batterie et ses composants" loading="lazy" decoding="async" style="object-position:52% 52%"></picture></div>
+          <a class="tile-link" href="tarifs.html#batterie" data-go="batterie"><span class="tile-go" aria-hidden="true"><span class="tile-go-t">Voir les prix</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 6l6 6-6 6"/></svg></span><span class="visually-hidden">Batterie&nbsp;: voir les prix</span></a>
+        </article>
+        <article class="tile tile-l tile-big rv" data-anim>
+          <div class="tile-copy">
+            <h3>Caméras</h3>
+            <p>Photos floues, objectif fissuré, caméra avant ou arrière qui ne s’ouvre plus.</p>
+          </div>
+          <div class="tile-art ph"><picture><source type="image/avif" srcset="assets/photo-cameras-640.avif 640w, assets/photo-cameras-1080.avif 1080w, assets/photo-cameras-1470.avif 1470w" sizes="(min-width: 700px) 470px, 410px"><img src="assets/photo-cameras-1470.jpg" srcset="assets/photo-cameras-640.jpg 640w, assets/photo-cameras-1080.jpg 1080w, assets/photo-cameras-1470.jpg 1470w" sizes="(min-width: 700px) 470px, 410px" width="1470" height="980" alt="Le bloc photo d’un iPhone et ses trois objectifs" loading="lazy" decoding="async" style="object-position:20% 50%"></picture></div>
+          <a class="tile-link" href="tarifs.html#cameras" data-go="cameras"><span class="tile-go" aria-hidden="true"><span class="tile-go-t">Voir les prix</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 6l6 6-6 6"/></svg></span><span class="visually-hidden">Caméras&nbsp;: voir les prix</span></a>
+        </article>
+        <article class="tile tile-l tile-big tile-wide tile-flip tile-dark rv rv-2" data-anim>
+          <div class="tile-copy">
+            <h3>Vitre arrière et châssis</h3>
+            <p>Dos cassé, cadre rayé ou tordu. Le boîtier est remplacé et votre téléphone retrouve son allure d’origine.</p>
+          </div>
+          <div class="tile-art ph"><picture><source type="image/avif" srcset="assets/photo-dos-640.avif 640w, assets/photo-dos-1080.avif 1080w, assets/photo-dos-1470.avif 1470w" sizes="(min-width: 1000px) 730px, (min-width: 700px) 460px, 410px"><img src="assets/photo-dos-1470.jpg" srcset="assets/photo-dos-640.jpg 640w, assets/photo-dos-1080.jpg 1080w, assets/photo-dos-1470.jpg 1470w" sizes="(min-width: 1000px) 730px, (min-width: 700px) 460px, 410px" width="1470" height="980" alt="Le dos d’un iPhone : le cadre, le bloc photo et la vitre arrière" loading="lazy" decoding="async" style="object-position:50% 50%"></picture></div>
+          <a class="tile-link" href="tarifs.html#chassis" data-go="chassis"><span class="tile-go" aria-hidden="true"><span class="tile-go-t">Voir les prix</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 6l6 6-6 6"/></svg></span><span class="visually-hidden">Vitre arrière et châssis&nbsp;: voir les prix</span></a>
+        </article>
+        <article class="tile tile-l tile-small rv" data-anim>
+          <div class="tile-art ph"><picture><source type="image/avif" srcset="assets/photo-port-480.avif 480w, assets/photo-port-860.avif 860w" sizes="(min-width: 1000px) 410px, (min-width: 700px) 46vw, 290px"><img src="assets/photo-port-860.jpg" srcset="assets/photo-port-480.jpg 480w, assets/photo-port-860.jpg 860w" sizes="(min-width: 1000px) 410px, (min-width: 700px) 46vw, 290px" width="860" height="420" alt="Le port de charge USB-C d’un téléphone, vu de près" loading="lazy" decoding="async" style="object-position:50% 50%"></picture></div>
+          <div class="tile-copy">
+            <h3>Port de charge</h3>
+            <p>Le câble tient mal, la charge se coupe ou ne démarre pas.</p>
+          </div>
+          <a class="tile-link" href="tarifs.html#port" data-go="port"><span class="tile-go" aria-hidden="true"><span class="tile-go-t">Voir les prix</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 6l6 6-6 6"/></svg></span><span class="visually-hidden">Port de charge&nbsp;: voir les prix</span></a>
+        </article>
+        <article class="tile tile-l tile-small rv rv-2" data-anim>
+          <div class="tile-art ph"><picture><source type="image/avif" srcset="assets/photo-boutons-480.avif 480w, assets/photo-boutons-937.avif 937w" sizes="(min-width: 1000px) 410px, (min-width: 700px) 46vw, 290px"><img src="assets/photo-boutons-937.jpg" srcset="assets/photo-boutons-480.jpg 480w, assets/photo-boutons-937.jpg 937w" sizes="(min-width: 1000px) 410px, (min-width: 700px) 46vw, 290px" width="937" height="470" alt="La tranche d’un iPhone et ses boutons" loading="lazy" decoding="async" style="object-position:42% 50%"></picture></div>
+          <div class="tile-copy">
+            <h3>Son et boutons</h3>
+            <p>Haut-parleurs, micro, boutons volume et power.</p>
+          </div>
+          <a class="tile-link" href="tarifs.html#son" data-go="son"><span class="tile-go" aria-hidden="true"><span class="tile-go-t">Voir les prix</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 6l6 6-6 6"/></svg></span><span class="visually-hidden">Son et boutons&nbsp;: voir les prix</span></a>
+        </article>
+        <article class="tile tile-l tile-small tile-cons rv rv-3" data-anim>
+          <div class="tile-art ph"><picture><source type="image/avif" srcset="assets/photo-consoles-640.avif 640w, assets/photo-consoles-1170.avif 1170w" sizes="(min-width: 1000px) 410px, (min-width: 700px) 46vw, 92vw"><img src="assets/photo-consoles-1170.jpg" srcset="assets/photo-consoles-640.jpg 640w, assets/photo-consoles-1170.jpg 1170w" sizes="(min-width: 1000px) 410px, (min-width: 700px) 46vw, 92vw" width="1170" height="780" alt="La manette droite d’une Nintendo Switch, vue de près" loading="lazy" decoding="async" style="object-position:50% 46%"></picture></div>
+          <div class="tile-copy">
+            <h3>Consoles</h3>
+            <p>Écran de Nintendo Switch, Switch Lite et OLED.</p>
+            <p class="soon"><span class="badge">Bientôt</span>Réparation PS5</p>
+          </div>
+          <a class="tile-link" href="tarifs.html#consoles" data-go="consoles"><span class="tile-go" aria-hidden="true"><span class="tile-go-t">Voir les prix</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 6l6 6-6 6"/></svg></span><span class="visually-hidden">Consoles&nbsp;: voir les prix</span></a>
+        </article>
+        <article class="tile tile-cta rv" data-anim>
+          <div class="tile-copy">
+            <h3>Une autre panne&nbsp;?</h3>
+            <p>Envoyez-nous le modèle et le problème, on vous répond avec un devis gratuit.</p>
+            <span class="typing" aria-hidden="true"><i></i><i></i><i></i></span>
+            <p><a class="link" id="quote-link" href="https://wa.me/596696174732" target="_blank" rel="noopener">Demander un devis<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 6l6 6-6 6"/></svg></a></p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="xp dark" id="savoir-faire" aria-labelledby="xp-title">
+    <div class="wrap">
+      <header class="band-head">
+        <h2 id="xp-title">Chaque pièce à sa place.</h2>
+        <p class="lead">On démonte, on remplace ce qui est abîmé, on remonte, puis on teste avant de vous rendre votre téléphone.</p>
+      </header>
+    </div>
+    <div class="xp-scroll" id="xp-scroll">
+      <div class="xp-sticky">
+        <div class="wrap xp-grid">
+          <div class="xp-stage" id="xp-stage" role="img" aria-label="Un iPhone démonté couche par couche, en vraies pièces : l’écran, la batterie, les caméras avant, et le châssis avec la carte mère">
+              <div class="xv" id="xv"><div class="xv-l xv-housing" data-part="chassis"><div class="xv-b xv-ph" style="inset:0;border-radius:14.5em / 15.5em;--edge:#1b1a19"><i class="xv-e" style="--d:1.4"></i><i class="xv-e" style="--d:2.8"></i><i class="xv-e" style="--d:4.2"></i><i class="xv-e" style="--d:5.6"></i><i class="xv-e" style="--d:7"></i><i class="xv-e" style="--d:8.4"></i><i class="xv-e" style="--d:9.8"></i><i class="xv-e" style="--d:11.2"></i><i class="xv-e" style="--d:12.6"></i><i class="xv-e" style="--d:14"></i><div class="xv-f"><img class="xv-img" src="assets/xp2-housing.webp" alt="" decoding="async" draggable="false"></div></div><div class="xv-b xv-ph xv-free" style="left:21.82em;top:4.20em;width:56.36em;height:23.14em;border-radius:1.6em;transform:translateZ(2px);--edge:#141414"><i class="xv-e" style="--d:1"></i><i class="xv-e" style="--d:2"></i><div class="xv-f"><img class="xv-img" src="assets/xp2-earpiece.webp" alt="" decoding="async" draggable="false"></div></div><div class="xv-b xv-ph xv-free" style="left:68.50em;top:66.00em;width:25.97em;height:87.99em;border-radius:1.6em;transform:translateZ(2px);--edge:#0b0d0c"><i class="xv-e" style="--d:1"></i><i class="xv-e" style="--d:2"></i><div class="xv-f"><img class="xv-img" src="assets/xp2-board.webp" alt="" decoding="async" draggable="false"></div></div></div><div class="xv-l xv-cams" data-part="cameras"><i class="xv-shd" style="left:25.53em;top:7.40em;width:48.94em;height:15.21em;border-radius:2em"></i><div class="xv-b xv-ph xv-free" style="left:25.53em;top:7.40em;width:48.94em;height:15.21em;border-radius:1.6em;--edge:#101010"><i class="xv-e" style="--d:1"></i><i class="xv-e" style="--d:2"></i><i class="xv-e" style="--d:3"></i><div class="xv-f"><img class="xv-img xv-ol" src="assets/xp2-camera.webp" alt="" decoding="async" draggable="false"><img class="xv-img" src="assets/xp2-camera.webp" alt="" decoding="async" draggable="false"></div></div></div><div class="xv-l xv-batt" data-part="batterie"><i class="xv-shd" style="left:6.00em;top:54.00em;width:58.30em;height:130.74em;border-radius:2.6em"></i><div class="xv-b xv-ph" style="left:6.00em;top:54.00em;width:58.30em;height:130.74em;border-radius:2.6em;--edge:#0c0c0d"><i class="xv-e" style="--d:1"></i><i class="xv-e" style="--d:2"></i><i class="xv-e" style="--d:3"></i><i class="xv-e" style="--d:4"></i><div class="xv-f"><img class="xv-img" src="assets/xp2-battery.webp" alt="" decoding="async" draggable="false"></div></div></div><div class="xv-l xv-screen" data-part="ecran"><i class="xv-shd" style="left:0.00em;top:0.00em;width:100.00em;height:195.94em;border-radius:14.5em / 15.5em"></i><div class="xv-b xv-glass" style="inset:0;border-radius:14.5em / 15.5em;--edge:#0a0908"><i class="xv-e" style="--d:0.9"></i><i class="xv-e" style="--d:1.8"></i><div class="xv-f"><div class="xv-disp"><i class="xv-wall"></i><i class="xv-notch11"></i><span class="xv-stat" aria-hidden="true"><svg viewBox="0 0 34 12"><path d="M1 9.5h2v2H1zM5 7.5h2v4H5zM9 5.5h2v6H9zM13 3.5h2v8h-2z"/><path d="M24.2 4.4a6.4 6.4 0 0 0-8.4 0M22.6 6.3a3.9 3.9 0 0 0-5.2 0" fill="none" stroke-width="1.3" stroke-linecap="round"/><circle cx="20" cy="8.6" r="1"/><rect x="26.5" y="3.6" width="6.4" height="6.4" rx="1.5" fill="none" stroke-width="1"/></svg></span><span class="xv-date wall-date">lundi 12 octobre</span><span class="xv-time wall-time-sm">9:41</span><span class="xv-btn xv-btn-l"><svg viewBox="0 0 24 24"><path d="M7.5 2.5h9v3.2l-2.2 3V20a1.5 1.5 0 0 1-1.5 1.5h-1.6A1.5 1.5 0 0 1 9.7 20V8.7l-2.2-3z"/><path d="M7.5 5.7h9M12 12v2.6"/></svg></span><span class="xv-btn xv-btn-r"><svg viewBox="0 0 24 24"><path d="M4 8.5h3.2L9 6h6l1.8 2.5H20a1 1 0 0 1 1 1V18a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5a1 1 0 0 1 1-1z"/><circle cx="12" cy="13.3" r="3.3"/></svg></span><i class="xv-home"></i></div><i class="xv-glare"></i><i class=xv-sh></i></div></div></div></div><div class="xv-tags" id="xv-tags" aria-hidden="true"><svg class="xv-lines"><path/><circle r="2.6"/><path/><circle r="2.6"/><path/><circle r="2.6"/><path/><circle r="2.6"/></svg><span class="xv-tg">Châssis</span><span class="xv-tg">Caméras</span><span class="xv-tg">Batterie</span><span class="xv-tg">Écran</span></div><figure class="xp-zoom" aria-hidden="true"><img src="assets/cam-zoom-520.webp" alt="" width="520" height="250" loading="lazy" decoding="async"><figcaption>Les caméras avant, de près</figcaption></figure>
+            </div>
+          <ul class="xp-list all" id="xp-list">
+            <li data-part="ecran"><strong>Écran</strong><span>Vitre, tactile et affichage.</span></li>
+            <li data-part="batterie"><strong>Batterie</strong><span>Autonomie, coupures, gonflement.</span></li>
+            <li data-part="cameras"><strong>Caméras</strong><span>Objectifs avant et arrière.</span></li>
+            <li data-part="chassis"><strong>Châssis</strong><span>Cadre et vitre arrière.</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band light" id="boutique" aria-label="Boutique et rachat">
+    <div class="wrap duo">
+      <article class="promo promo-dark rv" data-anim>
+        <div class="promo-copy">
+          <h2>Boutique.</h2>
+          <p>iPhone reconditionnés, AirPods et accessoires&nbsp;: chargeurs, vitres de protection, batteries externes.</p>
+          <a class="pill" id="shop-link" href="boutique.html">Voir la boutique</a>
+        </div>
+        <div class="promo-art promo-photo"><picture><source type="image/avif" srcset="assets/photo-boutique-480.avif 480w, assets/photo-boutique-687.avif 687w" sizes="(min-width: 900px) 520px, 92vw"><img src="assets/photo-boutique-687.jpg" srcset="assets/photo-boutique-480.jpg 480w, assets/photo-boutique-687.jpg 687w" sizes="(min-width: 900px) 520px, 92vw" width="687" height="1031" alt="Quatre iPhone alignés sur une table" loading="lazy" decoding="async" style="object-position:50% 40%"></picture></div>
+      </article>
+      <article class="promo promo-light rv rv-2" id="rachat" data-anim>
+        <div class="promo-copy">
+          <h2>Rachat.</h2>
+          <p>Votre ancien iPhone a encore de la valeur. Répondez à quelques questions sur son état, on vous fait une offre.</p>
+          <a class="pill pill-ink" id="buy-link" href="rachat.html">Faire estimer mon iPhone</a>
+        </div>
+        <div class="promo-art promo-photo"><picture><source type="image/avif" srcset="assets/photo-rachat-480.avif 480w, assets/photo-rachat-736.avif 736w" sizes="(min-width: 900px) 520px, 92vw"><img src="assets/photo-rachat-736.jpg" srcset="assets/photo-rachat-480.jpg 480w, assets/photo-rachat-736.jpg 736w" sizes="(min-width: 900px) 520px, 92vw" width="736" height="980" alt="Un iPhone posé sur sa boîte, sur une table en marbre" loading="lazy" decoding="async" style="object-position:50% 56%"></picture></div>
+      </article>
+    </div>
+  </section>
+
+  <section class="band alt" id="deroulement" aria-labelledby="steps-title">
+    <div class="wrap">
+      <header class="band-head rv">
+        <h2 id="steps-title">Comment ça se passe.</h2>
+      </header>
+      <ol class="steps">
+        <li class="rv" data-anim>
+          <div class="step-top"><span class="step-n" aria-hidden="true">1</span>
+            <svg class="step-ico" viewBox="0 0 52 52" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path class="draw" d="M9 13h34a5 5 0 0 1 5 5v15a5 5 0 0 1-5 5H22l-9 7v-7H9a5 5 0 0 1-5-5V18a5 5 0 0 1 5-5z"/><circle class="dot" cx="17" cy="25.5" r="2.2" fill="currentColor" stroke="none"/><circle class="dot" cx="26" cy="25.5" r="2.2" fill="currentColor" stroke="none"/><circle class="dot" cx="35" cy="25.5" r="2.2" fill="currentColor" stroke="none"/></svg>
+          </div>
+          <h3>Vous nous écrivez</h3><p>Sur WhatsApp, avec le modèle de votre téléphone et la panne. On vous répond avec le prix.</p>
+        </li>
+        <li class="rv rv-2" data-anim>
+          <div class="step-top"><span class="step-n" aria-hidden="true">2</span>
+            <svg class="step-ico" viewBox="0 0 52 52" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="10" width="38" height="35" rx="6"/><path d="M7 20h38M17 6v8M35 6v8"/><path class="draw" d="M26 26.5a6.5 6.5 0 1 1-.1 0z" stroke="#8A5C18" stroke-width="2.2"/></svg>
+          </div>
+          <h3>On fixe un créneau</h3><p>On vient chez vous ou sur votre lieu de travail, partout en Martinique.</p>
+        </li>
+        <li class="rv rv-3" data-anim>
+          <div class="step-top"><span class="step-n" aria-hidden="true">3</span>
+            <svg class="step-ico" viewBox="0 0 52 52" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="26" cy="26" r="19"/><path class="draw" d="M17 26.5l6 6 12-12" stroke="#8A5C18" stroke-width="2.4"/></svg>
+          </div>
+          <h3>C’est réparé</h3><p>Votre téléphone est testé avant de vous être rendu.</p>
+        </li>
+      </ol>
+      <p class="steps-note">Délai selon disponibilité de la pièce.</p>
+    </div>
+  </section>
+
+  <section class="band dark" id="zone" aria-labelledby="zone-title">
+    <div class="wrap zone-grid">
+      <div class="zone-copy">
+        <header class="band-head rv">
+          <h2 id="zone-title">On vient jusqu’à vous.</h2>
+          <p class="lead">Dans les 34&nbsp;communes de Martinique. Touchez votre commune pour voir le prix du déplacement.</p>
+          <ul class="legend">
+            <li><span class="sw" style="background:var(--zone-0)"></span><span><b>Fort-de-France</b></span><span class="fee">10&nbsp;€</span></li>
+            <li><span class="sw" style="background:var(--zone-1)"></span><span><b>Proche de Fort-de-France</b><small>Le Lamentin, Schœlcher, Saint-Joseph, Case-Pilote, Le Robert</small></span><span class="fee">20&nbsp;€</span></li>
+            <li><span class="sw" style="background:var(--zone-2)"></span><span><b>Un peu plus loin</b><small>Le François, Ducos, La Trinité, Gros-Morne</small></span><span class="fee">25&nbsp;€</span></li>
+            <li><span class="sw" style="background:var(--zone-3)"></span><span><b>Sud et Nord</b><small>toutes les autres communes</small></span><span class="fee">35&nbsp;€</span></li>
+          </ul>
+          <div class="zone-field">
+            <label for="zone-select">Votre commune</label>
+            <select class="input" id="zone-select">
+              <option value="">Choisir une commune</option>
+              <option>L&#x27;Ajoupa-Bouillon</option>
+              <option>Les Anses-d&#x27;Arlet</option>
+              <option>Basse-Pointe</option>
+              <option>Bellefontaine</option>
+              <option>Le Carbet</option>
+              <option>Case-Pilote</option>
+              <option>Le Diamant</option>
+              <option>Ducos</option>
+              <option>Fonds-Saint-Denis</option>
+              <option>Fort-de-France</option>
+              <option>Le François</option>
+              <option>Grand&#x27;Rivière</option>
+              <option>Gros-Morne</option>
+              <option>Le Lamentin</option>
+              <option>Le Lorrain</option>
+              <option>Macouba</option>
+              <option>Le Marigot</option>
+              <option>Le Marin</option>
+              <option>Le Morne-Rouge</option>
+              <option>Le Morne-Vert</option>
+              <option>Le Prêcheur</option>
+              <option>Rivière-Pilote</option>
+              <option>Rivière-Salée</option>
+              <option>Le Robert</option>
+              <option>Saint-Esprit</option>
+              <option>Saint-Joseph</option>
+              <option>Saint-Pierre</option>
+              <option>Sainte-Anne</option>
+              <option>Sainte-Luce</option>
+              <option>Sainte-Marie</option>
+              <option>Schœlcher</option>
+              <option>La Trinité</option>
+              <option>Les Trois-Îlets</option>
+              <option>Le Vauclin</option>
+            </select>
+          </div>
+          <a class="pill" id="zone-cta" href="#rendez-vous">Prendre rendez-vous</a>
+        </header>
+      </div>
+      <div class="map-wrap" id="map-wrap" data-anim>
+        <svg class="map" id="map" viewBox="0 0 1016 1190" aria-hidden="true"><path class="z3" d="M199.7 185.5 209.4 196.1 226.5 201 244.7 199 252.9 202.2 265.5 199.2 284.8 188.6 295.5 180.2 316.3 161.4 313.8 136.3 319.2 123.3 306.1 118.8 286.4 129.4 275 128.4 254.8 137.8 237 150.3 218.5 166.4 211.3 179 187 170.5 167.8 168.2 164.3 163 163.3 169.9 167.2 176.9 180.2 184.6Z" data-name="L&#x27;Ajoupa-Bouillon" data-x="265.3" data-y="166.1"/><path class="z3" d="M432.6 1036.4 430.6 1026.1 422.6 1019.8 433.8 1003.2 432.4 985.6 426.3 980.5 425.9 970.2 433 953.8 442.1 948.7 448.4 939.2 437.3 933.3 427.9 916.2 420.6 912.3 408.3 890.2 407.2 884.2 387.8 851.5 382.4 829.4 375.5 826.4 365.1 839.4 349.3 846.3 350.5 860.7 343.8 867.3 335.6 867.4 326.7 884.3 328.3 893.9 319.7 912.1 329 913.9 340.6 910.5 355.4 916.4 357.4 933.5 344.9 935.4 342.9 947.4 354.9 951.6 362 948.8 368.8 955.1 369.8 982.4 362.4 986.8 364.3 1001.3 376.7 1008.3 387.7 1004.3 398.3 1013 399.3 1025.5 404.3 1032 420 1040.5Z" data-name="Les Anses-d&#x27;Arlet" data-x="391.5" data-y="929.6"/><path class="z3" d="M163.2 161.2 164.3 163 167.8 168.2 187 170.5 211.3 179 218.5 166.4 237 150.3 254.8 137.8 275 128.4 286.4 129.4 306.1 118.8 319.2 123.3 331.2 111.1 334.3 93.7 341.9 84.9 350.1 69.2 337.9 68 320.6 51.6 318.5 45 306 43.2 280.2 27.8 271.5 30.1 252.9 20.4 244.5 40.9 233.3 53.1 223.6 71.8 212.7 98.9 201.9 115.1 178.8 134.1Z" data-name="Basse-Pointe" data-x="272.6" data-y="79.7"/><path class="z3" d="M156.9 504 170.4 483.7 176.1 471.1 187.6 459 182 443.6 177.4 439.1 179.5 413.1 197.1 412 203.7 405.7 218.1 399.5 226.6 401.7 238.1 394.3 248.8 392.6 265.1 396 243.4 386.5 232 386.6 220.3 378.3 209.2 374.6 197.7 376.4 191.7 363.6 184 362.6 169.5 373.6 163.7 372.7 155.1 358.6 134.5 367.5 128.2 364.7 122.2 386.8 121.8 396.6 115.5 423.4 123 444.7 135.4 471.9Z" data-name="Le Carbet" data-x="149.4" data-y="413.3"/><path class="z1" d="M276.7 619.2 272.9 611.4 279.4 596.4 276.9 587.6 287.4 577.9 291.8 564.7 299.5 557.5 296.4 544.1 301.3 517.5 304.8 512.1 300.4 492.1 286.4 483 284.7 471.4 279.3 465.7 258.8 466.8 252.1 474.1 252.8 490.5 248 498.2 237.4 505.1 253.8 509.9 248.7 518.5 227 530.8 208.3 544 189.7 551 194.4 566.2 212.1 573.6 227.7 586.8 225.1 591 233 603.7 253.5 608.8 263.6 616.2Z" data-name="Case-Pilote" data-x="258.8" data-y="552.8"/><path class="z3" d="M420.6 912.3 427.9 916.2 437.3 933.3 448.4 939.2 442.1 948.7 433 953.8 425.9 970.2 426.3 980.5 432.4 985.6 433.8 1003.2 422.6 1019.8 430.6 1026.1 432.6 1036.4 443.8 1029.7 449 1017 448.3 1006.9 460.1 993.8 481.5 984.1 508.9 975.4 519 978.3 522.5 984.2 540 992.6 549.5 979.3 565.1 1005.3 583.5 1005.4 582.4 989.4 594.5 993.6 595.2 982.5 600 970.1 606.3 948.2 598 936.1 598.2 924.4 592.9 918.8 578.8 913.1 578.1 924.6 568.5 928.5 558.6 916.2 550.2 918.1 549.4 905.4 537.8 900.7 540.8 914.2 523.9 919.4 507.4 907.7 495.2 905.8 482.3 916.2 465.4 914.8 458.5 902.9 447.8 900.3 442.7 907.8Z" data-name="Le Diamant" data-x="501.4" data-y="942.3"/><path class="z2" d="M555.4 781.7 562.6 777.9 569.1 784.3 567.5 793.9 578.2 798.2 582.5 808.1 611.9 800.6 615.7 811.6 644.6 804.1 649.9 797.6 666.1 792.4 673.5 785.5 676.6 773.7 668.8 765.6 681.6 752.8 692.8 751.2 692.9 738 697.7 726.9 708.8 711.3 710.9 692.2 703.7 688.8 704.7 680.5 692.4 678 681.1 664.7 664.2 659.4 657 662 638.9 661.9 620.4 671.6 616.6 686.7 609.8 697.9 599 699.3 577.5 721.9 569.6 726.3 563.1 749.6 555.4 758.7 551.4 769.4Z" data-name="Ducos" data-x="633.6" data-y="735.8"/><path class="z3" d="M265.1 396 272.9 403.6 277.1 418.7 285.6 437.9 291.4 434.7 311.8 444 315 453.8 326.5 444.8 338.9 423.5 349.6 426.4 355.7 422.8 347.4 396.9 352.4 382.2 365.9 376.2 350.9 359.9 345.4 337.7 332.9 340.9 306.6 365.7 297.3 350.5 285.1 351.1 284.2 338.1 274.1 344.3 244.4 325.9 237.1 330.4 222.8 333.7 200.5 334.5 176.1 332.1 167.8 341 185.4 348 174.1 357.2 184 362.6 191.7 363.6 197.7 376.4 209.2 374.6 220.3 378.3 232 386.6 243.4 386.5Z" data-name="Fonds-Saint-Denis" data-x="306.8" data-y="399.1"/><path class="z0" d="M315 453.8 310.5 457.3 310 471.1 316 477.8 321.9 495.5 320.5 512.9 324.2 533.1 330 532.7 331.1 549.3 343.5 554.2 349.2 578.8 359.7 593.3 361.8 603.5 358.1 615.1 361.6 640.2 346.4 661.3 346.7 668.8 340.7 685.4 358 685.6 367.6 682 383 681.8 388.1 678.3 403 682 419.6 676.4 411.5 692.6 417.2 698.8 427.7 691.7 442.1 689.1 445.6 698.8 458.9 694.1 469.8 696.5 463.1 682.9 460.3 670.7 469.2 670.8 469.5 654 466.8 647.4 472.9 613.1 471 591.5 462.2 582.9 453.4 579.4 450.1 570.7 433.7 574.1 429.8 565.4 414.5 560.3 416.8 552.5 405 533.2 380.5 521.1 371.9 510.4 352.3 507.5 352 500.5 362 486.2 355.6 474.5 352.3 460.3 361.6 445.9 374.3 440.2 370 432.2 355.7 422.8 349.6 426.4 338.9 423.5 326.5 444.8Z" data-name="Fort-de-France" data-x="413.2" data-y="623.7"/><path class="z2" d="M708.8 711.3 721.8 720.6 720.8 729 730 732.6 744.8 730.7 757.1 732.7 777.8 745.8 783.8 756.3 790.8 756 801.7 772.2 816 763 829.8 758.1 828.7 744.6 856.5 744.6 862 738.9 884.3 729.7 896.7 727.3 912 716.4 906.2 696.3 891.8 707 876 701.7 858.6 690.3 859.4 681.1 868.1 681 864.2 666.8 851.4 661.5 845.2 651.4 849.8 642.3 848.2 628.9 824.5 636.7 806 634.4 795.1 626.2 798.7 615.6 804.8 613.2 811.4 601 806.8 589.4 796.2 573.4 782.4 564 792.7 555.5 797.2 562.9 806.6 559.8 802.5 547.1 787.6 550.8 784 546.4 762.2 551.1 729.4 599 703.2 602.6 694.6 597.3 675.3 601.1 682.5 612.6 674.9 620.9 679.8 647.7 686.5 658.1 681.1 664.7 692.4 678 704.7 680.5 703.7 688.8 710.9 692.2ZM882.9 661.5 895.5 653.8 907.7 654.2 907.8 646.3 893.1 650.8Z" data-name="Le François" data-x="767.7" data-y="677.0"/><path class="z3" d="M156.8 158.3 160 145.8 157.8 135.8 162.5 118.9 159.7 88.7 153.1 69.2 155.7 58.9 153.1 50.6 158.1 38.8 155 25.8 155.7 12.4 130.8 19.9 124.4 17.8 118 26.3 87.7 43.5 67 50.2 75.5 62.4 73.3 66.2 101.2 93 98.3 107 101.1 114.6 97.2 122.7 114.3 127.3 114.1 134.1 122.2 140.8 140.1 146.9 149.6 158.9Z" data-name="Grand&#x27;Rivière" data-x="126.8" data-y="80.5"/><path class="z2" d="M567.4 505.5 569.5 487.7 580 479.3 583.7 470.6 594.4 457.6 600.8 460.3 608.2 444.2 611.4 429.6 599.6 420.2 600.8 410.2 590.1 406.6 582.2 390 568.3 384.4 558.3 373.2 540.9 370.8 514.8 362.5 501.3 354.8 479.7 354.6 469.1 343.9 448.3 341.9 427.8 334.2 424.9 346.7 392.6 360.9 374.7 373.3 365.9 376.2 352.4 382.2 371.3 407 387.4 415.7 392.6 422.4 419 436.9 435.9 444.1 439.7 437.6 448.6 449.3 468.1 456.5 477 450.3 496.3 457.3 505.9 464.5 515.2 477.5 529.1 478.6 546 496.4 556.2 493.9Z" data-name="Gros-Morne" data-x="494.1" data-y="405.6"/><path class="z1" d="M555.4 781.7 551.4 769.4 555.4 758.7 563.1 749.6 569.6 726.3 577.5 721.9 599 699.3 609.8 697.9 616.6 686.7 620.4 671.6 638.9 661.9 657 662 664.2 659.4 681.1 664.7 686.5 658.1 679.8 647.7 674.9 620.9 682.5 612.6 675.3 601.1 667.7 578.7 660.1 571.6 658.9 563.8 650.1 559.8 651.1 546.7 625.5 533.9 620.2 536.5 608.6 519.7 600.9 498.8 588.4 493.3 580 479.3 569.5 487.7 567.4 505.5 560.6 511 564.6 518.6 564.4 542.8 547.1 551.8 541.1 543 526 552.8 488.7 570.1 461.5 573.7 462.2 582.9 471 591.5 472.9 613.1 466.8 647.4 469.5 654 469.2 670.8 482.4 669.5 498.7 652.7 509.5 666.7 504.4 676.4 513.3 683.3 517.1 694.8 510.4 702.9 499.4 708.9 498.8 721.5 509.3 721.3 521.4 728.3 533.3 742.5 523.1 756 530.9 763.4 530.1 779.1 547.7 776.6Z" data-name="Le Lamentin" data-x="569.2" data-y="619.3"/><path class="z3" d="M349 329 371.4 322.2 377.5 324.6 386.8 317.3 407.8 310.5 408.7 298.9 405.2 285.4 412.3 265.7 423.1 248.8 419.5 228.9 428 216.2 424.1 200.8 433.9 178.4 434.8 160.4 442.6 139.7 451 126.2 457.6 121.1 447.8 107.6 433.3 117.8 415.3 114.3 402.4 103.9 398.1 92.5 382.5 92.3 367.1 85.2 360.4 75 350.1 69.2 341.9 84.9 334.3 93.7 331.2 111.1 319.2 123.3 313.8 136.3 316.3 161.4 295.5 180.2 297.6 186.3 295.4 214.1 305.2 234.5 314.1 240.2 318.6 267.1 335.1 267.5 346.4 276.3 345.3 298.8 337.8 309 347.3 318.4Z" data-name="Le Lorrain" data-x="362.3" data-y="201.5"/><path class="z3" d="M156.8 158.3 163.2 161.2 178.8 134.1 201.9 115.1 212.7 98.9 223.6 71.8 233.3 53.1 244.5 40.9 252.9 20.4 243.8 16.8 230.6 17.4 221.1 10.3 209.1 12.2 199 8 184.2 11.8 171.6 9.9 155.7 12.4 155 25.8 158.1 38.8 153.1 50.6 155.7 58.9 153.1 69.2 159.7 88.7 162.5 118.9 157.8 135.8 160 145.8Z" data-name="Macouba" data-x="191.0" data-y="60.3"/><path class="z3" d="M365.9 376.2 374.7 373.3 392.6 360.9 424.9 346.7 427.8 334.2 424.5 319.4 429 296.6 439.2 288 430.6 277.8 449.2 256.4 439.4 245.4 439.7 235.7 454.9 215 465.9 204.8 483.1 197.3 500 176.4 507.2 174.3 502.8 166.7 502 152.8 490.8 140.7 476.1 140.7 482 123.5 464.8 124.8 457.6 121.1 451 126.2 442.6 139.7 434.8 160.4 433.9 178.4 424.1 200.8 428 216.2 419.5 228.9 423.1 248.8 412.3 265.7 405.2 285.4 408.7 298.9 407.8 310.5 386.8 317.3 377.5 324.6 371.4 322.2 349 329 345.4 337.7 350.9 359.9Z" data-name="Le Marigot" data-x="465.3" data-y="168.8"/><path class="z3" d="M779.4 1029.6 796.8 1043.3 799 1052.9 814.9 1039.6 813.5 1033.7 836.7 1007.4 855.2 993.8 867.1 999.9 876.6 996.7 880.6 1010.9 921 993 949.6 991 962.8 996.1 977.7 993.3 988.7 992.9 1000.1 988.4 1008 970.7 998.1 956.4 994.6 940.1 982.7 941 976.6 927.6 939.1 913.4 925.9 916.8 920.2 922.6 914.6 910.1 907.9 909.5 893.8 901 890.8 885.2 879.5 888 879.5 894.6 864.4 905.8 865.9 916.6 851.7 935 840.5 938.6 836.1 946.6 822.2 953 817.3 977.4 804.4 980.1 808.4 992.9 794.7 1001.8 799.4 1009.3 792.8 1024.7Z" data-name="Le Marin" data-x="889.4" data-y="956.7"/><path class="z3" d="M237.1 330.4 244.4 325.9 274.1 344.3 284.2 338.1 285.1 351.1 297.3 350.5 306.6 365.7 332.9 340.9 345.4 337.7 349 329 347.3 318.4 337.8 309 345.3 298.8 346.4 276.3 335.1 267.5 318.6 267.1 314.1 240.2 305.2 234.5 295.4 214.1 297.6 186.3 295.5 180.2 284.8 188.6 265.5 199.2 252.9 202.2 244.7 199 226.5 201 209.4 196.1 199.7 185.5 203.9 205.7 208.9 216.1 205.5 248.4 198.7 252.6 179.3 281.6 176.7 297.7 188.8 305.8 201.9 301.8 223.7 324.2Z" data-name="Le Morne-Rouge" data-x="260.9" data-y="272.1"/><path class="z3" d="M44.8 245.9 59 219.4 70.5 217.7 95.5 201.5 112.6 195.2 147.1 174.9 150.1 166.6 163.3 169.9 164.3 163 163.2 161.2 156.8 158.3 149.6 158.9 140.1 146.9 122.2 140.8 114.1 134.1 114.3 127.3 97.2 122.7 101.1 114.6 98.3 107 101.2 93 73.3 66.2 75.5 62.4 67 50.2 61 50.8 46.5 68.5 42.1 84.5 31.5 90.1 31.8 97 22.6 107.8 20.7 119.4 8 147.6 9 172.8 15.6 184.4 13.4 195.1 24.4 206.2 32.7 228.4Z" data-name="Le Prêcheur" data-x="60.9" data-y="159.9"/><path class="z3" d="M779.4 1029.6 792.8 1024.7 799.4 1009.3 794.7 1001.8 808.4 992.9 804.4 980.1 817.3 977.4 822.2 953 836.1 946.6 840.5 938.6 851.7 935 865.9 916.6 864.4 905.8 879.5 894.6 879.5 888 877.6 870.8 869.2 853.2 862.2 845.6 837.1 841.7 831.3 833.5 833.1 823.3 815.7 809.6 805.7 813.4 806.3 832.9 786.9 833.7 771.2 842.8 739.9 831.4 734.8 833.5 732.5 853.7 746.2 858.2 744.6 869.8 731.2 861.6 724.9 881.3 738.4 885 736.7 909.6 745 913 755.4 928.3 768 963.9 766.9 975.4 772.1 990.1 771.3 1001.2 769.2 1021.4Z" data-name="Rivière-Pilote" data-x="802.4" data-y="893.8"/><path class="z3" d="M549.4 905.4 550.2 918.1 558.6 916.2 568.5 928.5 578.1 924.6 578.8 913.1 592.9 918.8 598.2 924.4 630.6 925.6 648.7 923.3 652.2 933.9 672 935.2 679.3 928.8 708.8 913.1 715.8 913 723.1 898.3 724.9 881.3 731.2 861.6 744.6 869.8 746.2 858.2 732.5 853.7 734.8 833.5 735.7 830.2 717.6 808.1 687.9 805 684.2 794.9 666.1 792.4 649.9 797.6 644.6 804.1 615.7 811.6 611.9 800.6 582.5 808.1 558.5 817.9 550.8 827.1 551.1 847.2 554.6 849.8Z" data-name="Rivière-Salée" data-x="641.5" data-y="864.6"/><path class="z1" d="M675.3 601.1 694.6 597.3 703.2 602.6 729.4 599 762.2 551.1 784 546.4 787.6 550.8 802.5 547.1 806.6 559.8 825.5 553.4 832.5 534.5 832.2 522 814.3 521.8 810.8 531.2 793.4 532.8 777.2 519.8 769.7 529.3 763.6 521.5 752 529.1 745 549.4 723.3 553.6 712.8 542 708 525 692.1 519 689.4 506.5 700.6 500.2 704.5 479.1 711 481 720.5 490.9 723.7 469.6 728.9 466 742.9 465.6 746 461 760.3 458.7 770.1 461.6 774.8 448.4 785.9 449.6 783 438.7 770.2 439.6 757.2 431.6 754.5 417.7 758 404.9 747.4 399.8 744.9 410.2 732.6 418.9 714.2 421.6 710.3 410.2 722.7 401.9 720.3 397.2 705.7 413.9 693 419.8 675 420.9 648.1 430.6 629.3 434.7 623.9 450 608.2 444.2 600.8 460.3 594.4 457.6 583.7 470.6 580 479.3 588.4 493.3 600.9 498.8 608.6 519.7 620.2 536.5 625.5 533.9 651.1 546.7 650.1 559.8 658.9 563.8 660.1 571.6 667.7 578.7ZM817.3 463.4 832 455.3 821.9 447.5 810.5 448.9 810.7 460Z" data-name="Le Robert" data-x="648.3" data-y="487.9"/><path class="z3" d="M666.1 792.4 684.2 794.9 687.9 805 717.6 808.1 735.7 830.2 734.8 833.5 739.9 831.4 771.2 842.8 786.9 833.7 806.3 832.9 805.7 813.4 815.7 809.6 807.5 780 801.7 772.2 790.8 756 783.8 756.3 777.8 745.8 757.1 732.7 744.8 730.7 730 732.6 720.8 729 721.8 720.6 708.8 711.3 697.7 726.9 692.9 738 692.8 751.2 681.6 752.8 668.8 765.6 676.6 773.7 673.5 785.5Z" data-name="Saint-Esprit" data-x="745.1" data-y="775.2"/><path class="z1" d="M567.4 505.5 556.2 493.9 546 496.4 529.1 478.6 515.2 477.5 505.9 464.5 496.3 457.3 477 450.3 468.1 456.5 448.6 449.3 439.7 437.6 435.9 444.1 419 436.9 392.6 422.4 387.4 415.7 371.3 407 352.4 382.2 347.4 396.9 355.7 422.8 370 432.2 374.3 440.2 361.6 445.9 352.3 460.3 355.6 474.5 362 486.2 352 500.5 352.3 507.5 371.9 510.4 380.5 521.1 405 533.2 416.8 552.5 414.5 560.3 429.8 565.4 433.7 574.1 450.1 570.7 453.4 579.4 462.2 582.9 461.5 573.7 488.7 570.1 526 552.8 541.1 543 547.1 551.8 564.4 542.8 564.6 518.6 560.6 511Z" data-name="Saint-Joseph" data-x="466.7" data-y="514.5"/><path class="z3" d="M128.2 364.7 134.5 367.5 155.1 358.6 163.7 372.7 169.5 373.6 184 362.6 174.1 357.2 185.4 348 167.8 341 176.1 332.1 200.5 334.5 222.8 333.7 237.1 330.4 223.7 324.2 201.9 301.8 188.8 305.8 176.7 297.7 179.3 281.6 198.7 252.6 205.5 248.4 208.9 216.1 203.9 205.7 199.7 185.5 180.2 184.6 167.2 176.9 163.3 169.9 150.1 166.6 147.1 174.9 112.6 195.2 95.5 201.5 70.5 217.7 59 219.4 44.8 245.9 66.8 251.3 82.3 281.9 97.2 290.7 113.3 304.6 132.8 331.5 134.5 343.6Z" data-name="Saint-Pierre" data-x="134.3" data-y="249.3"/><path class="z3" d="M880.6 1010.9 886 1015.1 858.2 1039.9 862.5 1050.9 833.4 1052.7 841.4 1063.7 844.6 1075 834 1091.5 829.7 1104.2 813.5 1122.2 829.2 1132.4 834.5 1157.5 847.7 1161.6 857.4 1177.4 871.9 1181.6 885.3 1179.1 898.7 1172.7 909.5 1151.4 915.4 1148.8 921.4 1137.9 929.1 1134.9 938.7 1142.2 944.5 1132.1 927.6 1129.3 929.2 1116.4 922.5 1112.8 918.4 1101.9 933.5 1101.6 938.4 1113.3 950.5 1111.1 956.8 1094.5 952.9 1089.2 974.4 1076.2 980.6 1054.4 977.8 1039.6 985.7 1028.4 998.4 1020.2 989.1 999 977.7 993.3 962.8 996.1 949.6 991 921 993Z" data-name="Sainte-Anne" data-x="912.8" data-y="1056.5"/><path class="z3" d="M600 970.1 605.1 970.9 616 986.4 610.1 997.2 621.4 1005.2 638.7 992.4 647.1 994.5 650.5 1002.8 665.5 1011.7 673.3 1007.9 694 1008.6 698.1 1014.5 710.4 1012.8 720.5 1017.2 747.6 1004.6 771.3 1001.2 772.1 990.1 766.9 975.4 768 963.9 755.4 928.3 745 913 736.7 909.6 738.4 885 724.9 881.3 723.1 898.3 715.8 913 708.8 913.1 679.3 928.8 672 935.2 652.2 933.9 648.7 923.3 630.6 925.6 598.2 924.4 598 936.1 606.3 948.2Z" data-name="Sainte-Luce" data-x="713.8" data-y="963.6"/><path class="z3" d="M501.3 354.8 515.8 353.8 529.4 346.6 534.4 334.9 543.6 338.6 553.4 333.3 560.1 324.9 559.6 316.8 573.1 312.6 585.1 314.6 598.1 301.4 604.1 290.8 616.5 286.3 613.3 274 602.8 271.6 593.1 258.9 600.6 251.1 577.4 245 572.8 234 558.6 226.9 555.4 210.8 543.5 204.3 539.3 196.6 543 184.5 532.8 173.6 524.8 179.9 507.2 174.3 500 176.4 483.1 197.3 465.9 204.8 454.9 215 439.7 235.7 439.4 245.4 449.2 256.4 430.6 277.8 439.2 288 429 296.6 424.5 319.4 427.8 334.2 448.3 341.9 469.1 343.9 479.7 354.6Z" data-name="Sainte-Marie" data-x="512.2" data-y="270.4"/><path class="z1" d="M340.7 685.4 346.7 668.8 346.4 661.3 361.6 640.2 358.1 615.1 361.8 603.5 359.7 593.3 349.2 578.8 343.5 554.2 331.1 549.3 330 532.7 324.2 533.1 320.5 512.9 321.9 495.5 316 477.8 310 471.1 310.5 457.3 315 453.8 311.8 444 291.4 434.7 285.6 437.9 285.2 446.4 278.3 459 279.3 465.7 284.7 471.4 286.4 483 300.4 492.1 304.8 512.1 301.3 517.5 296.4 544.1 299.5 557.5 291.8 564.7 287.4 577.9 276.9 587.6 279.4 596.4 272.9 611.4 276.7 619.2 287.5 621.7 303.5 635.7 314.8 648.7 327.9 673.4Z" data-name="Schœlcher" data-x="318.4" data-y="598.4"/><path class="z2" d="M501.3 354.8 514.8 362.5 540.9 370.8 558.3 373.2 568.3 384.4 582.2 390 590.1 406.6 600.8 410.2 599.6 420.2 611.4 429.6 608.2 444.2 623.9 450 629.3 434.7 648.1 430.6 675 420.9 693 419.8 705.7 413.9 720.3 397.2 702.6 399.9 687.5 386.2 680.9 375.2 682.2 364.1 688.2 351.8 684.2 346.3 687.8 333.6 693.6 334.7 704.3 315.9 716.5 319 730 315.6 742.4 325.2 748.7 324.5 761.8 332 764.2 350.2 783 348 787.8 354.2 806.6 347.9 810.1 337.9 794.6 335.7 794.4 326 805 317.7 811.4 321.7 817.1 308.3 811.5 300.7 796.9 295.7 805.4 288.2 809.5 275.5 819.2 278.5 828.1 272.9 836.5 293.4 854.3 295.9 847.3 283.2 850.5 272.4 849.4 255.6 824.7 248.1 816.6 242.8 808.2 258.3 795.4 267.4 785.4 268.6 783.7 275.1 761.4 278.9 760.7 286.4 748.9 290.3 741.1 296.7 726.4 287.3 713.1 286.2 705.5 294 689.9 300.8 672.4 313.6 665.6 321.3 665.1 336.2 655.6 350.9 643.6 347 640.8 326.8 629.4 307.9 632.6 301.8 628.7 291.8 616.5 286.3 604.1 290.8 598.1 301.4 585.1 314.6 573.1 312.6 559.6 316.8 560.1 324.9 553.4 333.3 543.6 338.6 534.4 334.9 529.4 346.6 515.8 353.8Z" data-name="La Trinité" data-x="628.6" data-y="380.2"/><path class="z3" d="M420.6 912.3 442.7 907.8 447.8 900.3 458.5 902.9 465.4 914.8 482.3 916.2 495.2 905.8 507.4 907.7 523.9 919.4 540.8 914.2 537.8 900.7 549.4 905.4 554.6 849.8 551.1 847.2 550.8 827.1 535.1 825.9 527.3 840.7 517.6 844.3 515.5 833.1 502.7 831.2 491.5 837.7 476.6 826 460.8 827.5 454.5 816.8 466.8 804.3 468.4 793.2 462.4 790.1 450.7 801 434.3 803.4 440.1 789.8 432.7 781.1 427.8 790.6 429.9 801.2 412.5 808.6 398.4 831.2 382.4 829.4 387.8 851.5 407.2 884.2 408.3 890.2Z" data-name="Les Trois-Îlets" data-x="475.9" data-y="870.9"/><path class="z3" d="M879.5 888 890.8 885.2 893.8 901 907.9 909.5 914.6 910.1 920.2 922.6 925.9 916.8 939.1 913.4 976.6 927.6 979.7 916 979.3 902.7 973.3 887.5 961.3 888.5 950.2 899.9 945 895.6 952.8 877.1 953.9 866.7 971.2 860 972.8 843.8 953.9 847.6 948.6 837.8 963.9 836.9 967.4 827.3 956.1 813.1 946.1 811.4 947.2 785.7 960 777 953 762.7 944.2 767.6 934.7 767.5 930.4 761.2 916.7 766.8 908.8 757.6 903.9 744.9 906.5 729.3 912 716.4 896.7 727.3 884.3 729.7 862 738.9 856.5 744.6 828.7 744.6 829.8 758.1 816 763 801.7 772.2 807.5 780 815.7 809.6 833.1 823.3 831.3 833.5 837.1 841.7 862.2 845.6 869.2 853.2 877.6 870.8Z" data-name="Le Vauclin" data-x="898.5" data-y="814.9"/><path class="z3" d="M265.1 396 248.8 392.6 238.1 394.3 226.6 401.7 218.1 399.5 203.7 405.7 197.1 412 179.5 413.1 177.4 439.1 182 443.6 187.6 459 209.7 469.1 236.6 469.4 258.8 466.8 279.3 465.7 278.3 459 285.2 446.4 285.6 437.9 277.1 418.7 272.9 403.6Z" data-name="Le Morne-Vert" data-x="233.2" data-y="433.4"/><path class="z3" d="M156.9 504 165.7 512.1 177.7 530.7 183.1 549.5 189.7 551 208.3 544 227 530.8 248.7 518.5 253.8 509.9 237.4 505.1 248 498.2 252.8 490.5 252.1 474.1 258.8 466.8 236.6 469.4 209.7 469.1 187.6 459 176.1 471.1 170.4 483.7Z" data-name="Bellefontaine" data-x="202.4" data-y="503.1"/></svg>
+        <div class="mark mark-base" style="left:40.67%;top:52.41%"><span class="mark-dot"></span><span class="mark-label">Phone Island</span></div>
+        <div class="mark mark-pick" id="mark-pick" hidden><span class="mark-label"><span id="mark-name"></span><small id="mark-fee"></small></span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band light" id="rendez-vous" aria-labelledby="book-title">
+    <div class="wrap">
+      <header class="band-head rv">
+        <h2 id="book-title">Prendre rendez-vous.</h2>
+        <p class="lead">Remplissez ces quelques champs. Votre message s’ouvre dans WhatsApp, prêt à être envoyé.</p>
+      </header>
+      <div class="book">
+        <form class="form rv" id="booking" novalidate>
+          <div class="field">
+            <label for="f-device">Appareil</label>
+            <select class="input" id="f-device">
+              <option value="">Choisir</option>
+              <option>iPhone</option><option>Samsung</option><option>iPad</option><option>Nintendo Switch</option><option>Autre</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="f-model">Modèle</label>
+            <input class="input" id="f-model" type="text" list="iphone-models" placeholder="ex. 13 Pro, Galaxy S23" autocomplete="off">
+            <datalist id="iphone-models"><option value="6 / 6s"></option><option value="7 / 7 Plus"></option><option value="8"></option><option value="8 Plus"></option><option value="SE 2022"></option><option value="X"></option><option value="XS"></option><option value="XS Max"></option><option value="XR"></option><option value="11"></option><option value="11 Pro"></option><option value="11 Pro Max"></option><option value="12 mini"></option><option value="12"></option><option value="12 Pro"></option><option value="12 Pro Max"></option><option value="13 mini"></option><option value="13"></option><option value="13 Pro"></option><option value="13 Pro Max"></option><option value="14"></option><option value="14 Plus"></option><option value="14 Pro"></option><option value="14 Pro Max"></option><option value="15"></option><option value="15 Plus"></option><option value="15 Pro"></option><option value="15 Pro Max"></option><option value="16e"></option><option value="16"></option><option value="16 Plus"></option><option value="16 Pro"></option><option value="16 Pro Max"></option><option value="17e"></option><option value="17"></option><option value="Air"></option><option value="17 Pro"></option><option value="17 Pro Max"></option></datalist>
+          </div>
+          <div class="field full">
+            <label for="f-repair">Réparation</label>
+            <select class="input" id="f-repair">
+              <option value="">Choisir</option>
+              <option>Écran</option><option>Batterie</option><option>Châssis</option><option>Vitre arrière</option><option>Fenêtre arrière</option>
+              <option>Vitre tactile</option><option>Écran LCD</option>
+              <option>Caméra arrière</option><option>Caméra avant</option>
+              <option>Haut-parleur du haut</option><option>Haut-parleur du bas</option>
+              <option>Connecteur de charge</option><option>Bouton power</option><option>Boutons volume</option>
+              <option>Autre panne</option><option>Autre / je ne sais pas</option>
+            </select>
+          </div>
+          <fieldset class="field full place" id="f-place">
+            <legend>Où se fait la réparation&nbsp;?</legend>
+            <div class="places">
+              <label class="place-opt"><input type="radio" name="place" value="home"><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 11 12 4l8.5 7"/><path d="M5.5 9.5V20h13V9.5"/><path d="M10 20v-5.5h4V20"/></svg><b>Chez moi</b><small>On vient jusqu’à vous&nbsp;: déplacement de 10 à 35&nbsp;€ selon la commune</small></span></label>
+              <label class="place-opt"><input type="radio" name="place" value="go"><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.4"/></svg><b>Je me déplace</b><small>Pas de déplacement à payer&nbsp;: on vous envoie notre localisation</small></span></label>
+            </div>
+          </fieldset>
+          <div class="field full come" id="come" hidden>
+            <p class="come-title">On vient jusqu’à vous.</p>
+            <label for="f-town">Votre commune</label>
+            <select class="input" id="f-town">
+              <option value="">Choisir</option>
+              <option>L&#x27;Ajoupa-Bouillon</option>
+              <option>Les Anses-d&#x27;Arlet</option>
+              <option>Basse-Pointe</option>
+              <option>Bellefontaine</option>
+              <option>Le Carbet</option>
+              <option>Case-Pilote</option>
+              <option>Le Diamant</option>
+              <option>Ducos</option>
+              <option>Fonds-Saint-Denis</option>
+              <option>Fort-de-France</option>
+              <option>Le François</option>
+              <option>Grand&#x27;Rivière</option>
+              <option>Gros-Morne</option>
+              <option>Le Lamentin</option>
+              <option>Le Lorrain</option>
+              <option>Macouba</option>
+              <option>Le Marigot</option>
+              <option>Le Marin</option>
+              <option>Le Morne-Rouge</option>
+              <option>Le Morne-Vert</option>
+              <option>Le Prêcheur</option>
+              <option>Rivière-Pilote</option>
+              <option>Rivière-Salée</option>
+              <option>Le Robert</option>
+              <option>Saint-Esprit</option>
+              <option>Saint-Joseph</option>
+              <option>Saint-Pierre</option>
+              <option>Sainte-Anne</option>
+              <option>Sainte-Luce</option>
+              <option>Sainte-Marie</option>
+              <option>Schœlcher</option>
+              <option>La Trinité</option>
+              <option>Les Trois-Îlets</option>
+              <option>Le Vauclin</option>
+            </select>
+            <p class="come-fee" id="come-fee" aria-live="polite">Choisissez votre commune pour voir le prix du déplacement.</p>
+            <ul class="come-zones" id="come-zones">
+              <li data-z="0"><span class="sw" style="background:var(--zone-0)"></span><span>Fort-de-France</span><b>10&nbsp;€</b></li>
+              <li data-z="1"><span class="sw" style="background:var(--zone-1)"></span><span>Proche de Fort-de-France</span><b>20&nbsp;€</b></li>
+              <li data-z="2"><span class="sw" style="background:var(--zone-2)"></span><span>Un peu plus loin</span><b>25&nbsp;€</b></li>
+              <li data-z="3"><span class="sw" style="background:var(--zone-3)"></span><span>Sud et Nord</span><b>35&nbsp;€</b></li>
+            </ul>
+            <a class="come-map" id="come-map" href="#zone">Voir la carte des communes</a>
+          </div>
+          <p class="field full meet" id="meet" hidden>Pas de déplacement à payer. Après votre message, Phone Island vous envoie sa localisation sur WhatsApp.</p>
+          <div class="field">
+            <label for="f-date">Jour souhaité</label>
+            <input class="input" id="f-date" type="date">
+          </div>
+          <div class="field">
+            <label for="f-slot">Moment</label>
+            <select class="input" id="f-slot">
+              <option value="">Choisir</option><option>Matin</option><option>Midi</option><option>Après-midi</option><option>Fin de journée</option>
+            </select>
+          </div>
+          <div class="field full">
+            <label for="f-name">Prénom <span class="opt">(facultatif)</span></label>
+            <input class="input" id="f-name" type="text" autocomplete="given-name">
+          </div>
+          <div class="field full">
+            <label for="f-notes">Précisions <span class="opt">(facultatif)</span></label>
+            <textarea class="input" id="f-notes" placeholder="ex. l’écran est fissuré en bas à droite, le tactile marche encore"></textarea>
+          </div>
+        </form>
+        <aside class="wa-card rv rv-2" aria-label="Aperçu du message WhatsApp">
+          <div class="wa-head">
+            <span class="wa-avatar"><img src="assets/mark-96.webp" alt="" width="96" height="98"></span>
+            <div><p class="wa-name">Phone Island</p><p class="wa-sub">Votre message, prêt à partir</p></div>
+          </div>
+          <div class="bubble" id="wa-preview" aria-live="polite"></div>
+          <p class="wa-need" id="wa-need" role="status">Dites-nous d’abord si l’on vient chez vous ou si vous vous déplacez.</p>
+          <a class="pill" id="wa-send" href="https://wa.me/596696174732" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.9c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3Z"/></svg>Envoyer sur WhatsApp</a>
+          <p class="wa-alt">Ou écrivez-nous au <span class="num" id="num-book">0696 17 47 32</span><button class="copy" type="button" data-copy="0696 17 47 32" data-target="num-book">Copier</button></p>
+        </aside>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot dark">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <img src="assets/logo-360.webp" srcset="assets/logo-360.webp 360w, assets/logo-720.webp 720w" sizes="150px" alt="Phone Island" width="360" height="439" loading="lazy">
+        <p>Réparation et vente de smartphones, à domicile partout en Martinique.</p>
+      </div>
+      <div>
+        <h3>WhatsApp et téléphone</h3>
+        <p class="foot-num num" id="num-foot">0696 17 47 32</p>
+        <button class="copy" type="button" data-copy="0696 17 47 32" data-target="num-foot">Copier le numéro</button>
+        <div class="foot-links">
+          <a id="foot-wa" href="https://wa.me/596696174732" target="_blank" rel="noopener">Écrire sur WhatsApp</a>
+          <a href="https://www.instagram.com/phone._island/" target="_blank" rel="noopener">Instagram @phone._island</a>
+        </div>
+      </div>
+      <div>
+        <h3>Services</h3>
+        <div class="foot-links">
+          <a href="#reparations">Réparations</a>
+          <a href="tarifs.html">Tarifs</a>
+          <a href="boutique.html">Boutique</a>
+          <a href="rachat.html">Rachat</a>
+          <a href="#zone">Zone et déplacement</a>
+        </div>
+      </div>
+    </div>
+    <p class="foot-base">© <span id="year">2026</span> Phone Island, Fort-de-France, Martinique</p>
+  </div>
+</footer>
+
+<div class="dock" id="dock">
+  <a class="pill" href="#rendez-vous">Prendre rendez-vous</a>
+  <a class="dock-wa" id="dock-wa" href="https://wa.me/596696174732" target="_blank" rel="noopener" aria-label="Écrire sur WhatsApp"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.9c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3Z"/></svg></a>
+</div>
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"MobilePhoneStore","name":"Phone Island","description":"Réparation et vente de smartphones à domicile en Martinique","telephone":"+596696174732","address":{"@type":"PostalAddress","addressLocality":"Fort-de-France","addressRegion":"Martinique","addressCountry":"MQ"},"areaServed":{"@type":"AdministrativeArea","name":"Martinique"},"sameAs":["https://www.instagram.com/phone._island/"]}
+</script>
+<script>
+(function () {
+  'use strict';
+  var WA = '596696174732';
+  var DATA = {"gens":[["6, 7, 8, SE",["6 / 6s","7 / 7 Plus","8","8 Plus","SE 2022"]],["X, XS, XR",["X","XS","XS Max","XR"]],["11",["11","11 Pro","11 Pro Max"]],["12",["12 mini","12","12 Pro","12 Pro Max"]],["13",["13 mini","13","13 Pro","13 Pro Max"]],["14",["14","14 Plus","14 Pro","14 Pro Max"]],["15",["15","15 Plus","15 Pro","15 Pro Max"]],["16",["16e","16","16 Plus","16 Pro","16 Pro Max"]],["17",["17e","17","Air","17 Pro","17 Pro Max"]]],"prices":{"6 / 6s":{"e":20,"b":30,"c":40,"v":null,"f":null,"s":[null,null,null,null,null,null,null]},"7 / 7 Plus":{"e":25,"b":40,"c":55,"v":null,"f":null,"s":[null,null,null,null,null,null,null]},"8":{"e":30,"b":40,"c":60,"v":null,"f":null,"s":[null,null,null,null,null,null,null]},"8 Plus":{"e":30,"b":40,"c":70,"v":null,"f":null,"s":[null,null,null,null,null,null,null]},"SE 2022":{"e":45,"b":45,"c":90,"v":null,"f":null,"s":[null,null,null,null,null,null,null]},"X":{"e":45,"b":60,"c":80,"v":null,"f":null,"s":[60,55,60,50,60,70,65]},"XS":{"e":50,"b":60,"c":90,"v":null,"f":null,"s":[70,60,60,50,65,70,65]},"XS Max":{"e":70,"b":65,"c":110,"v":null,"f":null,"s":[70,60,65,50,60,85,65]},"XR":{"e":60,"b":50,"c":100,"v":null,"f":null,"s":[65,55,65,50,60,75,75]},"11":{"e":65,"b":50,"c":110,"v":null,"f":null,"s":[65,55,65,50,65,65,75]},"11 Pro":{"e":70,"b":60,"c":120,"v":null,"f":null,"s":[90,65,70,50,80,75,75]},"11 Pro Max":{"e":85,"b":75,"c":130,"v":null,"f":null,"s":[90,60,65,55,80,75,null]},"12 mini":{"e":120,"b":50,"c":130,"v":null,"f":null,"s":[100,60,65,60,65,70,70]},"12":{"e":100,"b":50,"c":120,"v":null,"f":null,"s":[70,60,65,50,70,75,75]},"12 Pro":{"e":110,"b":50,"c":140,"v":null,"f":null,"s":[160,60,65,50,70,75,75]},"12 Pro Max":{"e":125,"b":70,"c":155,"v":null,"f":null,"s":[130,60,70,60,75,65,65]},"13 mini":{"e":145,"b":60,"c":115,"v":null,"f":null,"s":[65,65,70,55,70,null,null]},"13":{"e":130,"b":60,"c":120,"v":null,"f":null,"s":[65,60,65,55,70,75,null]},"13 Pro":{"e":140,"b":65,"c":150,"v":null,"f":null,"s":[140,65,65,55,75,null,null]},"13 Pro Max":{"e":155,"b":70,"c":165,"v":null,"f":null,"s":[140,60,65,65,75,null,null]},"14":{"e":140,"b":80,"c":140,"v":60,"f":null,"s":[90,70,65,55,65,70,65]},"14 Plus":{"e":175,"b":85,"c":170,"v":60,"f":null,"s":[100,75,65,55,70,70,70]},"14 Pro":{"e":170,"b":75,"c":200,"v":null,"f":null,"s":[130,65,60,60,80,70,70]},"14 Pro Max":{"e":190,"b":90,"c":240,"v":null,"f":null,"s":[120,65,60,60,75,null,70]},"15":{"e":160,"b":80,"c":150,"v":70,"f":null,"s":[120,65,70,60,80,65,75]},"15 Plus":{"e":180,"b":80,"c":180,"v":80,"f":null,"s":[100,70,65,55,80,65,75]},"15 Pro":{"e":200,"b":85,"c":250,"v":null,"f":null,"s":[120,75,65,60,80,65,65]},"15 Pro Max":{"e":220,"b":90,"c":275,"v":null,"f":null,"s":[120,75,70,60,80,70,70]},"16e":{"e":260,"b":130,"c":230,"v":null,"f":null,"s":[100,85,60,60,80,null,75]},"16":{"e":250,"b":90,"c":180,"v":90,"f":null,"s":[120,85,70,60,75,80,80]},"16 Plus":{"e":280,"b":100,"c":200,"v":110,"f":null,"s":[130,75,70,70,75,80,80]},"16 Pro":{"e":300,"b":130,"c":280,"v":null,"f":null,"s":[130,90,65,55,70,80,70]},"16 Pro Max":{"e":360,"b":150,"c":320,"v":null,"f":null,"s":[140,90,75,60,70,80,80]},"17e":{"e":null,"b":null,"c":null,"v":null,"f":null,"s":[100,null,60,60,80,null,70]},"17":{"e":280,"b":110,"c":200,"v":100,"f":null,"s":[130,105,75,60,80,85,85]},"Air":{"e":330,"b":130,"c":260,"v":null,"f":null,"s":[140,135,75,50,80,85,80]},"17 Pro":{"e":340,"b":150,"c":300,"v":null,"f":110,"s":[140,125,70,60,85,85,85]},"17 Pro Max":{"e":400,"b":170,"c":340,"v":null,"f":125,"s":[130,125,70,60,null,85,80]}}};
+  var GENS = DATA.gens, P = DATA.prices;
+  var PARTS = ['Caméra arrière', 'Caméra avant', 'Haut-parleur du haut', 'Haut-parleur du bas', 'Connecteur de charge', 'Bouton power', 'Boutons volume'];
+  var MAIN = [['e', 'Écran'], ['b', 'Batterie'], ['c', 'Châssis'], ['v', 'Vitre arrière'], ['f', 'Fenêtre arrière']];
+  var ZONE_OF = {"Fort-de-France":0,"Le Lamentin":1,"Schœlcher":1,"Saint-Joseph":1,"Case-Pilote":1,"Le Robert":1,"Le François":2,"Ducos":2,"La Trinité":2,"Gros-Morne":2,"Saint-Esprit":3,"Rivière-Salée":3,"Les Trois-Îlets":3,"Les Anses-d'Arlet":3,"Le Diamant":3,"Sainte-Luce":3,"Rivière-Pilote":3,"Le Marin":3,"Le Vauclin":3,"Sainte-Anne":3,"Le Prêcheur":3,"Grand'Rivière":3,"Macouba":3,"Basse-Pointe":3,"Saint-Pierre":3,"L'Ajoupa-Bouillon":3,"Le Lorrain":3,"Le Marigot":3,"Le Morne-Rouge":3,"Fonds-Saint-Denis":3,"Le Carbet":3,"Le Morne-Vert":3,"Bellefontaine":3,"Sainte-Marie":3};
+  var ZINFO = [{ fee: '10 €' }, { fee: '20 €' }, { fee: '25 €' }, { fee: '35 €' }];
+  var DEFAULT_GEN = 6, DEFAULT_MODEL = '15';
+  var CHEVRON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 6l6 6-6 6"/></svg>';
+  var $ = function (id) { return document.getElementById(id); };
+  var all = function (sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); };
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var waLink = function (t) { return 'https://wa.me/' + WA + '?text=' + encodeURIComponent(t); };
+  var euro = function (v) { return v + ' €'; };
+  var clamp = function (v, a, b) { return Math.max(a, Math.min(b, v)); };
+  function iphone(m) { return m === 'Air' ? 'iPhone Air' : m === 'SE 2022' ? 'iPhone SE (2022)' : 'iPhone ' + m; }
+
+  /* ---------- menu ---------- */
+  var burger = $('burger'), menu = $('menu');
+  function setMenu(open) {
+    menu.hidden = !open;
+    burger.setAttribute('aria-expanded', String(open));
+    burger.setAttribute('aria-label', open ? 'Fermer le menu' : 'Ouvrir le menu');
+    document.documentElement.classList.toggle('menu-open', open);
+  }
+  burger.addEventListener('click', function () { setMenu(menu.hidden); });
+  menu.addEventListener('click', function (e) { if (e.target.closest('a')) setMenu(false); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !menu.hidden) { setMenu(false); burger.focus(); } });
+  window.matchMedia('(min-width: 960px)').addEventListener('change', function (m) { if (m.matches) setMenu(false); });
+
+  /* ---------- the phones show the visitor's time ---------- */
+  function two(n) { return (n < 10 ? '0' : '') + n; }
+  function tick() {
+    var d = new Date(), t = two(d.getHours()) + ':' + two(d.getMinutes());
+    var ds = d.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });
+    all('.wall-time, .wall-time-sm').forEach(function (el) { el.textContent = t; });
+    all('.wall-date').forEach(function (el) { el.textContent = ds; });
+  }
+  tick(); setInterval(tick, 15000);
+
+  /* ---------- hero: the phone in 3D (three.js and assets/hero3d.js, fetched only when WebGL works) ---------- */
+  var dev = $('hero-dev'), replay = $('replay'), stage3 = $('hero-stage'), host3 = $('ph3d'), hero3 = null, heroWanted = false, playT = 0;
+  function canGL() {
+    try { var c = document.createElement('canvas'); return !!(window.WebGLRenderingContext && (c.getContext('webgl2') || c.getContext('webgl'))); }
+    catch (e) { return false; }
+  }
+  function addScript(src) {
+    return new Promise(function (ok, ko) { var s = document.createElement('script'); s.src = src; s.async = true; s.onload = ok; s.onerror = ko; document.head.appendChild(s); });
+  }
+  function play3() {
+    if (!hero3) return;
+    hero3.play();
+    if (!reduce.matches) { stage3.classList.add('playing'); clearTimeout(playT); playT = setTimeout(function () { stage3.classList.remove('playing'); }, 10400); }
+  }
+  if (canGL()) {
+    stage3.classList.add('is-3d');
+    addScript('https://cdn.jsdelivr.net/npm/three@0.149.0/build/three.min.js')
+      .then(function () { return addScript('assets/hero3d.js'); })
+      .then(function () { return window.PIHero3D ? window.PIHero3D({ host: host3, base: 'assets/', reduce: reduce.matches }) : null; })
+      .then(function (api) {
+        if (!api) throw new Error('no 3D');
+        hero3 = api;
+        if ('IntersectionObserver' in window) new IntersectionObserver(function (en) { hero3.setVisible(en[0].isIntersecting); }).observe(stage3);
+        if (heroWanted) play3();
+      })
+      .catch(function () { stage3.classList.remove('is-3d'); hero3 = null; });
+  }
+  function runRepair() { heroWanted = true; play3(); }
+  replay.addEventListener('click', function () { play3(); });
+
+  /* ---------- welcome screen: plays once, then the hero starts ---------- */
+  var intro = $('intro'), root = document.documentElement;
+  function heroGo() {
+    if (!('IntersectionObserver' in window)) { runRepair(); return; }
+    var seen = new IntersectionObserver(function (en) {
+      if (en[0].intersectionRatio >= .35) { seen.disconnect(); runRepair(); }
+    }, { threshold: [0, .35, .7] });
+    seen.observe(host3.offsetParent ? host3 : stage3);
+  }
+  if (root.classList.contains('intro-on')) {
+    var done = false, timer = 0;
+    var finish = function () {
+      if (done) return; done = true; clearTimeout(timer);
+      intro.classList.add('out'); root.classList.remove('intro-on');
+      setTimeout(function () { intro.hidden = true; }, 1050);
+      heroGo();
+    };
+    var play = function () { intro.classList.add('play'); timer = setTimeout(finish, 5900); };
+    var imgs = all('img', intro).map(function (im) { return im.decode ? im.decode().catch(function () {}) : Promise.resolve(); });
+    Promise.race([Promise.all(imgs), new Promise(function (r) { setTimeout(r, 1800); })]).then(function () { requestAnimationFrame(play); });
+    $('intro-skip').addEventListener('click', finish);
+    intro.addEventListener('click', function (e) { if (e.target !== $('intro-skip')) finish(); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ') finish(); });
+  } else { heroGo(); }
+
+  /* ---------- the bench: scrolling lays the phone down, opens it, shows each part, closes it ---------- */
+  var xs = $('xp-scroll'), xst = $('xp-stage'), xv = $('xv'), xl = $('xp-list');
+  var xItems = all('li', xl), xLayers = all('.xv-l', xv);
+  var XPARTS = ['ecran', 'batterie', 'cameras', 'chassis'];
+  var BASE = [0, 4, 5, 9];                      // heights of the four layers when the phone is closed (px)
+  var XW = 200, XG = 76, uNow = -1, uGoal = 0, uRaf = 0, uT = 0;
+  var LP = xLayers.map(function (l) { return l.getAttribute('data-part'); }), LOW = {};
+  LP.forEach(function (p, i) { if (!(p in LOW)) LOW[p] = i; });
+  var xTagBox = $('xv-tags'), xTags = all('.xv-tg', xTagBox), xTagsOn = true;
+  var xPaths = all('path', xTagBox), xDots = all('circle', xTagBox);
+  // where each name points, in em of the phone (100em wide), same order as the layers: points that stay in view
+  // when the phone is open (the lower right of most layers, the end of the camera block)
+  var XA = [[93, 190], [70.5, 15.8], [62, 180], [96, 188]], XP = 1700, XZ = [0, 0, 0, 0], XT = null, HH = 0.97968, CC = [50.0, 15.0];
+  var CAMI = LP.indexOf('cameras'), TOP = LP.length - 1, xVis = [1, 1, 1, 1], xFc = 0;
+  // the browser only reports 3D positions one frame late, so the script projects the points itself,
+  // with the same perspective (1700px, from the stage centre), the same turns and the same move as the CSS
+  function turn(x, y, z) {
+    var T = XT, x1 = x * T.cz - y * T.sz, y1 = x * T.sz + y * T.cz;
+    var x2 = x1 * T.cy + z * T.sy, z2 = -x1 * T.sy + z * T.cy;
+    return [x2, y1 * T.cx - z2 * T.sx + T.dy, y1 * T.sx + z2 * T.cx];
+  }
+  function proj(x, y, z) {
+    var r = turn(x, y, z), k = XP / (XP - r[2] - XT.tz);
+    return [XT.ox + (r[0] + XT.tx) * k, XT.oy + (r[1] + XT.ty) * k];
+  }
+  function names(open, focus, best) {
+    if (!xTagsOn) return;
+    var a = clamp((open - .55) / .45, 0, 1);                         // the names come once the layers are apart
+    xTagBox.style.opacity = a > 0 ? '1' : '0';
+    if (a <= 0) return;
+    var em = XW / 100, hw = XW / 2, hh = XW * HH;
+    var pts = XA.map(function (q, i) { var r = proj(q[0] * em - hw, q[1] * em - hh, XZ[i]); return { i: i, x: r[0], y: r[1] }; });
+    // the names stand clear of the whole phone: right of the furthest corner of any layer
+    var col = 0;
+    XZ.forEach(function (z) { [[-hw, -hh], [hw, -hh], [hw, hh], [-hw, hh]].forEach(function (c) { col = Math.max(col, proj(c[0], c[1], z)[0]); }); });
+    pts.forEach(function (q) { col = Math.max(col, q.x + 40); });
+    col += 18;
+    // never past the edge of the stage: the widest name must still fit on the right
+    var wide = Math.max.apply(null, xTags.map(function (t) { return t.offsetWidth; }));
+    col = Math.min(col, xst.clientWidth - wide - 14);
+    // names top to bottom, never closer than 30px, the column kept centred on the points
+    var ord = pts.slice().sort(function (p, q) { return p.y - q.y; }), shift = 0;
+    ord.forEach(function (q, k) { q.ly = k ? Math.max(q.y, ord[k - 1].ly + 30) : q.y; shift += q.y - q.ly; });
+    shift /= ord.length;
+    pts.forEach(function (q) {
+      var t = xTags[q.i], f = focus[LP[q.i]] || 0, ly = q.ly + shift;
+      // a name shows only while its part can be seen, and only the camera's while the view is close on it
+      var op = (a * (1 - .62 * best * (1 - f)) * xVis[q.i] * (q.i === CAMI ? 1 : 1 - xFc)).toFixed(3);
+      t.style.transform = 'translate(' + (col + 10).toFixed(1) + 'px,' + (ly - t.offsetHeight / 2).toFixed(1) + 'px)';
+      t.style.opacity = op;
+      xPaths[q.i].setAttribute('d', 'M' + q.x.toFixed(1) + ' ' + q.y.toFixed(1) + 'H' + (col - 16).toFixed(1) + 'L' + col.toFixed(1) + ' ' + ly.toFixed(1) + 'h4');
+      xPaths[q.i].style.opacity = op;
+      xDots[q.i].setAttribute('cx', q.x.toFixed(1)); xDots[q.i].setAttribute('cy', q.y.toFixed(1)); xDots[q.i].style.opacity = op;
+    });
+  }
+  var sm = function (t) { t = clamp(t, 0, 1); return t * t * (3 - 2 * t); };
+  var eio = function (t) { t = clamp(t, 0, 1); return t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; };
+  function measure() {
+    var w = xst.clientWidth || 320, h = xst.clientHeight || 420;
+    xTagsOn = w >= 600 || window.innerWidth >= 600;
+    XW = Math.max(90, Math.min(w * (w < 600 ? .4 : .34), h * .29, 250));
+    XG = XW * .38;
+    xv.style.setProperty('--w', XW.toFixed(1) + 'px');
+  }
+  function render(u) {
+    var lie = eio(u / .14), close = eio((u - .86) / .12);
+    var open = eio((u - .12) / .16) * (1 - close), walk = sm((u - .3) / .56);
+    var rx = 8 + 50 * lie - 4 * close, ry = -16 * (1 - lie), rz = -34 * lie + 7 * walk - 4 * close;
+    var dy = 1.9 * XG * open * Math.sin(rx * Math.PI / 180);     // keep the open stack centred
+    var R = Math.PI / 180;
+    XT = { cx: Math.cos(rx * R), sx: Math.sin(rx * R), cy: Math.cos(ry * R), sy: Math.sin(ry * R), cz: Math.cos(rz * R), sz: Math.sin(rz * R),
+           dy: dy, ox: xst.clientWidth / 2, oy: xst.clientHeight / 2, tx: 0, ty: 0, tz: 0 };
+    // four equal windows, one per part, cross-fading where they meet
+    var focus = {}, cur = null, best = 0;
+    XPARTS.forEach(function (p, j) {
+      var s0 = .3 + .14 * j, e0 = s0 + .14, f = Math.min(sm((u - s0 + .02) / .04), 1 - sm((u - e0 + .02) / .04));
+      focus[p] = f; if (f > best) { best = f; cur = p; }
+    });
+    // the part shown stays solid and rises a little; the layers above it turn to glass, those below go dark
+    xLayers.forEach(function (l, i) {
+      var mine = LP[i], hl = focus[mine] || 0, ghost = 0, dark = 0;
+      XPARTS.forEach(function (p) { if (p !== mine) { if (LOW[p] < i) ghost = Math.max(ghost, focus[p]); else dark = Math.max(dark, focus[p]); } });
+      XZ[i] = BASE[i] + open * (i * XG + hl * XG * .3);
+      var op = 1 - .86 * ghost;
+      l.style.setProperty('--z', XZ[i].toFixed(1) + 'px');
+      l.style.setProperty('--op', op.toFixed(3));
+      l.style.setProperty('--dim', (.7 * dark).toFixed(3));
+      l.style.setProperty('--hl', hl.toFixed(3));
+      if (!i) return;
+      // its shadow on the housing: dark and tight when close, lighter, wider and further off as the layer rises
+      var g = Math.max(0, XZ[i] - XZ[0] - 3), near = sm(g / (XG * .45)), far = clamp(g / (XG * 3.6), 0, 1);
+      l.style.setProperty('--sz', (-g).toFixed(1) + 'px');
+      l.style.setProperty('--so', (op * near * (.62 - .3 * far)).toFixed(3));
+      l.style.setProperty('--sx', (g * .07).toFixed(1) + 'px');
+      l.style.setProperty('--sy', (g * .12).toFixed(1) + 'px');
+      l.style.setProperty('--ss', (1 + .05 * far).toFixed(3));
+    });
+    // the camera block is small: while it is shown, the view comes close to it (a move of the camera, in 3D)
+    xFc = focus.cameras || 0;
+    if (xFc > 0) {
+      var em = XW / 100, c = turn(CC[0] * em - XW / 2, CC[1] * em - XW * HH, XZ[CAMI]);
+      XT.tx = -c[0] * .92 * xFc; XT.ty = -c[1] * .92 * xFc; XT.tz = 820 * xFc;
+    }
+    xv.style.transform = 'translate3d(' + XT.tx.toFixed(1) + 'px,' + (dy + XT.ty).toFixed(1) + 'px,' + XT.tz.toFixed(1) + 'px) rotateX(' + rx.toFixed(2) + 'deg) rotateY(' + ry.toFixed(2) + 'deg) rotateZ(' + rz.toFixed(2) + 'deg)';
+    xst.style.setProperty('--fade', xFc.toFixed(3));
+    xst.classList.toggle('cam-on', xFc > .5);
+    // the camera block sits under the screen: its name waits until the screen turns to glass
+    var screenOp = +xLayers[TOP].style.getPropertyValue('--op') || 1;
+    xVis[CAMI] = clamp((1 - screenOp) / .6, 0, 1);
+    // the reflection on the glass slides as the phone turns
+    xLayers[TOP].style.setProperty('--gx', (rz * 1.1 - ry * 1.2 + 26 * u - 6).toFixed(1) + '%');
+    names(open, focus, best);
+    var on = best > .5 ? cur : null;
+    xItems.forEach(function (li) { li.classList.toggle('on', li.getAttribute('data-part') === on); });
+    xl.classList.toggle('all', u >= .88);
+  }
+  function step(t) {
+    var dt = uT ? Math.min(64, t - uT) : 16; uT = t;
+    uNow += (uGoal - uNow) * (1 - Math.exp(-dt / 140));
+    if (Math.abs(uGoal - uNow) < .0002) uNow = uGoal;
+    render(uNow);
+    uRaf = uNow !== uGoal ? requestAnimationFrame(step) : 0;
+  }
+  function tour(vh) {
+    var r = xs.getBoundingClientRect(), navH = 56;
+    if (r.bottom < -vh || r.top > 2 * vh) return;                  // far away: nothing to move
+    var span = Math.max(1, r.height - (vh - navH));
+    uGoal = clamp(((navH - r.top) / span - .02) / .94, 0, 1);
+    if (uNow < 0) { uNow = uGoal; render(uNow); return; }        // arriving mid-way: start there
+    if (!uRaf && uNow !== uGoal) { uT = 0; uRaf = requestAnimationFrame(step); }
+  }
+  measure();
+  if (reduce.matches) { render(.27); xl.classList.add('all'); } else { xl.classList.remove('all'); render(0); }
+  function refit() { measure(); if (reduce.matches) { render(.27); xl.classList.add('all'); } else render(Math.max(0, uNow)); }
+  if ('ResizeObserver' in window) new ResizeObserver(refit).observe(xst); else window.addEventListener('resize', refit);
+
+  /* ---------- scroll and pointer driven motion ---------- */
+  var tilt = $('dev-tilt'), stage = $('hero-stage'), px = 0, py = 0;
+  var ticking = false;
+  function frame() {
+    ticking = false;
+    if (reduce.matches) return;
+    var vh = window.innerHeight || 700;
+    var hr = stage.getBoundingClientRect();
+    var hp = clamp(1 - (hr.bottom / (vh + hr.height)), 0, 1);
+    tilt.style.transform = 'rotateY(' + (-10 + px * 10 + hp * 16).toFixed(2) + 'deg) rotateX(' + (5 - py * 8 - hp * 10).toFixed(2) + 'deg)';
+    dev.style.setProperty('--gx', (30 + px * 26 + hp * 40).toFixed(1) + '%');
+    tour(vh);
+  }
+  function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(frame); } }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll);
+  stage.addEventListener('pointermove', function (e) {
+    if (e.pointerType !== 'mouse') return;
+    var r = stage.getBoundingClientRect();
+    px = (e.clientX - r.left) / r.width - .5; py = (e.clientY - r.top) / r.height - .5; onScroll();
+  });
+  stage.addEventListener('pointerleave', function () { px = py = 0; onScroll(); });
+  frame();
+
+  /* ---------- animations run only while their tile is on screen ---------- */
+  var mapWrap = $('map-wrap');
+  if ('IntersectionObserver' in window) {
+    if (!reduce.matches && mapWrap.getBoundingClientRect().top > window.innerHeight) mapWrap.classList.add('pre');
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        en.target.classList.toggle('in', en.isIntersecting);
+        if (en.isIntersecting && en.target === mapWrap) mapWrap.classList.remove('pre');
+      });
+    }, { threshold: .3 });
+    all('[data-anim]').forEach(function (el) { io.observe(el); });
+  } else {
+    all('[data-anim]').forEach(function (el) { el.classList.add('in'); });
+  }
+
+  /* ---------- the price lists, for the price quoted in the booking message ---------- */
+  var DEVS = {"samsung":{"device":"Samsung","gens":[["S10",["S10e","S10","S10+"]],["S20",["S20","S20+","S20 Ultra","S20 FE","S20 FE 5G"]],["S21",["S21","S21+","S21 Ultra","S21 FE"]],["S22",["S22","S22+","S22 Ultra"]],["S23",["S23","S23+","S23 Ultra","S23 FE"]],["S24",["S24","S24+","S24 Ultra","S24 FE"]],["S25",["S25","S25+","S25 Ultra","S25 Edge","S25 FE"]],["S26",["S26","S26+","S26 Ultra"]],["Note 20",["Note 20","Note 20 Ultra"]],["Z Flip",["Z Flip (2020)","Z Flip 3","Z Flip 4","Z Flip 5","Z Flip 6","Z Flip 7","Z Flip 8"]],["Z Fold",["Z Fold 2","Z Fold 3","Z Fold 4","Z Fold 5","Z Fold 6","Z Fold 7","Z Fold 8"]],["A02 à A07",["A02s","A03","A04s","A05s","A06","A07 5G"]],["A10 à A17",["A10","A11","A12","A13","A14 4G","A15","A16","A17 4G","A17 5G"]],["A20 à A27",["A20e","A21s","A22 5G","A23 5G","A24","A25","A26","A27"]],["A31 à A37",["A31","A32 4G","A32 5G","A33","A34","A35","A36","A37"]],["A40 à A42",["A40","A41","A42"]],["A50 à A57",["A50","A51","A52","A52s","A53","A54","A55","A56","A57"]],["A70 à A73",["A70","A71","A72","A73"]],["Série M",["M12","M13","M23","M33","M53","M55"]],["XCover",["XCover 5","XCover 6 Pro","XCover 7"]]],"prices":{"S10e":{"e":150,"b":null,"p":null,"v":50},"S10":{"e":200,"b":null,"p":null,"v":50},"S10+":{"e":230,"b":null,"p":null,"v":55},"S20":{"e":160,"b":null,"p":null,"v":50},"S20+":{"e":180,"b":null,"p":null,"v":55},"S20 Ultra":{"e":230,"b":null,"p":null,"v":65},"S20 FE":{"e":130,"b":null,"p":null,"v":50},"S20 FE 5G":{"e":null,"b":null,"p":null,"v":null},"S21":{"e":170,"b":null,"p":null,"v":55},"S21+":{"e":190,"b":null,"p":null,"v":60},"S21 Ultra":{"e":250,"b":null,"p":null,"v":70},"S21 FE":{"e":160,"b":null,"p":null,"v":55},"S22":{"e":240,"b":null,"p":null,"v":60},"S22+":{"e":250,"b":null,"p":null,"v":65},"S22 Ultra":{"e":290,"b":null,"p":null,"v":75},"S23":{"e":250,"b":null,"p":null,"v":65},"S23+":{"e":270,"b":null,"p":null,"v":70},"S23 Ultra":{"e":320,"b":null,"p":null,"v":80},"S23 FE":{"e":null,"b":null,"p":null,"v":null},"S24":{"e":null,"b":null,"p":null,"v":null},"S24+":{"e":null,"b":null,"p":null,"v":null},"S24 Ultra":{"e":null,"b":null,"p":null,"v":null},"S24 FE":{"e":null,"b":null,"p":null,"v":null},"S25":{"e":null,"b":null,"p":null,"v":null},"S25+":{"e":null,"b":null,"p":null,"v":null},"S25 Ultra":{"e":null,"b":null,"p":null,"v":null},"S25 Edge":{"e":null,"b":null,"p":null,"v":null},"S25 FE":{"e":null,"b":null,"p":null,"v":null},"S26":{"e":null,"b":null,"p":null,"v":null},"S26+":{"e":null,"b":null,"p":null,"v":null},"S26 Ultra":{"e":null,"b":null,"p":null,"v":null},"Note 20":{"e":null,"b":null,"p":null,"v":null},"Note 20 Ultra":{"e":null,"b":null,"p":null,"v":null},"Z Flip (2020)":{"e":null,"b":null,"p":null,"v":null},"Z Flip 3":{"e":null,"b":null,"p":null,"v":null},"Z Flip 4":{"e":null,"b":null,"p":null,"v":null},"Z Flip 5":{"e":null,"b":null,"p":null,"v":null},"Z Flip 6":{"e":null,"b":null,"p":null,"v":null},"Z Flip 7":{"e":null,"b":null,"p":null,"v":null},"Z Flip 8":{"e":null,"b":null,"p":null,"v":null},"Z Fold 2":{"e":null,"b":null,"p":null,"v":null},"Z Fold 3":{"e":null,"b":null,"p":null,"v":null},"Z Fold 4":{"e":null,"b":null,"p":null,"v":null},"Z Fold 5":{"e":null,"b":null,"p":null,"v":null},"Z Fold 6":{"e":null,"b":null,"p":null,"v":null},"Z Fold 7":{"e":null,"b":null,"p":null,"v":null},"Z Fold 8":{"e":null,"b":null,"p":null,"v":null},"A02s":{"e":70,"b":null,"p":null,"v":null},"A03":{"e":70,"b":null,"p":null,"v":null},"A04s":{"e":70,"b":null,"p":null,"v":null},"A05s":{"e":70,"b":null,"p":null,"v":null},"A06":{"e":70,"b":null,"p":null,"v":null},"A07 5G":{"e":80,"b":null,"p":null,"v":null},"A10":{"e":70,"b":null,"p":null,"v":null},"A11":{"e":null,"b":null,"p":null,"v":null},"A12":{"e":70,"b":null,"p":null,"v":null},"A13":{"e":70,"b":null,"p":null,"v":null},"A14 4G":{"e":70,"b":null,"p":null,"v":null},"A15":{"e":70,"b":null,"p":null,"v":null},"A16":{"e":80,"b":null,"p":null,"v":null},"A17 4G":{"e":70,"b":null,"p":null,"v":null},"A17 5G":{"e":80,"b":null,"p":null,"v":null},"A20e":{"e":80,"b":null,"p":null,"v":null},"A21s":{"e":70,"b":null,"p":null,"v":null},"A22 5G":{"e":70,"b":null,"p":null,"v":null},"A23 5G":{"e":70,"b":null,"p":null,"v":null},"A24":{"e":70,"b":null,"p":null,"v":null},"A25":{"e":70,"b":null,"p":null,"v":null},"A26":{"e":80,"b":null,"p":null,"v":null},"A27":{"e":null,"b":null,"p":null,"v":null},"A31":{"e":95,"b":null,"p":null,"v":null},"A32 4G":{"e":95,"b":null,"p":null,"v":null},"A32 5G":{"e":70,"b":null,"p":null,"v":null},"A33":{"e":80,"b":null,"p":null,"v":null},"A34":{"e":80,"b":null,"p":null,"v":null},"A35":{"e":80,"b":null,"p":null,"v":null},"A36":{"e":80,"b":null,"p":null,"v":null},"A37":{"e":null,"b":null,"p":null,"v":null},"A40":{"e":80,"b":null,"p":null,"v":null},"A41":{"e":80,"b":null,"p":null,"v":null},"A42":{"e":80,"b":null,"p":null,"v":null},"A50":{"e":70,"b":null,"p":null,"v":null},"A51":{"e":70,"b":null,"p":null,"v":null},"A52":{"e":80,"b":null,"p":null,"v":null},"A52s":{"e":null,"b":null,"p":null,"v":null},"A53":{"e":80,"b":null,"p":null,"v":null},"A54":{"e":80,"b":null,"p":null,"v":null},"A55":{"e":80,"b":null,"p":null,"v":null},"A56":{"e":80,"b":null,"p":null,"v":null},"A57":{"e":null,"b":null,"p":null,"v":null},"A70":{"e":70,"b":null,"p":null,"v":null},"A71":{"e":70,"b":null,"p":null,"v":null},"A72":{"e":null,"b":null,"p":null,"v":null},"A73":{"e":null,"b":null,"p":null,"v":null},"M12":{"e":null,"b":null,"p":null,"v":null},"M13":{"e":null,"b":null,"p":null,"v":null},"M23":{"e":null,"b":null,"p":null,"v":null},"M33":{"e":null,"b":null,"p":null,"v":null},"M53":{"e":null,"b":null,"p":null,"v":null},"M55":{"e":null,"b":null,"p":null,"v":null},"XCover 5":{"e":null,"b":null,"p":null,"v":null},"XCover 6 Pro":{"e":null,"b":null,"p":null,"v":null},"XCover 7":{"e":null,"b":null,"p":null,"v":null}},"main":[["e","Écran"],["v","Vitre arrière"],["b","Batterie"],["p","Connecteur de charge"]]},"ipad":{"device":"iPad","gens":[["iPad",["1","2","3 / 4","5","6","7 / 8","9","10 / 11"]],["iPad Air",["Air","Air 2","Air 3","Air 4","Air 5","Air M2","Air M3","Air M4"]],["iPad mini",["mini 1","mini 2 / 3","mini 4","mini 5","mini 6","mini 7"]],["iPad Pro",["Pro 9,7\"","Pro 10,5\"","Pro 11\"","Pro 11\" M4","Pro 11\" M5","Pro 12,9\"","Pro 13\" M4","Pro 13\" M5"]]],"prices":{"1":{"t":null,"l":null,"b":null,"p":null},"2":{"t":70,"l":95,"b":null,"p":null},"3 / 4":{"t":70,"l":100,"b":null,"p":null},"5":{"t":70,"l":null,"b":null,"p":null},"6":{"t":70,"l":null,"b":null,"p":null},"7 / 8":{"t":70,"l":null,"b":null,"p":null},"9":{"t":70,"l":null,"b":null,"p":null},"10 / 11":{"t":70,"l":null,"b":null,"p":null},"Air":{"t":70,"l":125,"b":null,"p":null},"Air 2":{"t":70,"l":135,"b":null,"p":null},"Air 3":{"t":null,"l":null,"b":null,"p":null},"Air 4":{"t":null,"l":null,"b":null,"p":null},"Air 5":{"t":null,"l":null,"b":null,"p":null},"Air M2":{"t":null,"l":null,"b":null,"p":null},"Air M3":{"t":null,"l":null,"b":null,"p":null},"Air M4":{"t":null,"l":null,"b":null,"p":null},"mini 1":{"t":70,"l":105,"b":null,"p":null},"mini 2 / 3":{"t":70,"l":120,"b":null,"p":null},"mini 4":{"t":null,"l":null,"b":null,"p":null},"mini 5":{"t":null,"l":null,"b":null,"p":null},"mini 6":{"t":null,"l":null,"b":null,"p":null},"mini 7":{"t":null,"l":null,"b":null,"p":null},"Pro 9,7\"":{"t":null,"l":null,"b":null,"p":null},"Pro 10,5\"":{"t":null,"l":null,"b":null,"p":null},"Pro 11\"":{"t":null,"l":null,"b":null,"p":null},"Pro 11\" M4":{"t":null,"l":null,"b":null,"p":null},"Pro 11\" M5":{"t":null,"l":null,"b":null,"p":null},"Pro 12,9\"":{"t":null,"l":null,"b":null,"p":null},"Pro 13\" M4":{"t":null,"l":null,"b":null,"p":null},"Pro 13\" M5":{"t":null,"l":null,"b":null,"p":null}},"main":[["t","Vitre tactile"],["l","Écran LCD"],["b","Batterie"],["p","Connecteur de charge"]]},"switch":{"device":"Nintendo Switch","gens":[["Nintendo Switch",["Switch","Switch Lite","Switch OLED"]]],"prices":{"Switch":{"e":90,"o":null},"Switch Lite":{"e":120,"o":null},"Switch OLED":{"e":50,"o":null}},"main":[["e","Écran"],["o","Autre panne"]]}};
+  function formModel(dev, m) { return dev === 'samsung' ? 'Galaxy ' + m : dev === 'switch' ? m.replace(/^Switch ?/, '') : m; }
+
+  /* ---------- map ---------- */
+  var map = $('map'), zoneSel = $('zone-select'), pick = $('mark-pick'), VB = map.viewBox.baseVal;
+  function chez(name) {
+    if (/^Le /.test(name)) return 'au ' + name.slice(3);
+    if (/^Les /.test(name)) return 'aux ' + name.slice(4);
+    return 'à ' + name;
+  }
+  function pathFor(name) { return name ? map.querySelector('path[data-name="' + name.replace(/"/g, '\\"') + '"]') : null; }
+  function showPick(path, name) {
+    if (!path) { pick.hidden = true; return; }
+    pick.style.left = (+path.getAttribute('data-x') / VB.width * 100) + '%';
+    pick.style.top = (+path.getAttribute('data-y') / VB.height * 100) + '%';
+    $('mark-name').textContent = name;
+    var z = ZINFO[ZONE_OF[name]];
+    $('mark-fee').textContent = z ? 'Déplacement ' + z.fee : '';
+    pick.classList.toggle('below', +path.getAttribute('data-y') / VB.height < .16);
+    pick.hidden = false;
+    var lab = pick.querySelector('.mark-label');
+    lab.style.setProperty('--dx', '0px');
+    var wr = mapWrap.getBoundingClientRect(), lr = lab.getBoundingClientRect(), dx = 0;
+    if (lr.right > wr.right) dx = wr.right - lr.right;
+    if (lr.left + dx < wr.left) dx = wr.left - lr.left;
+    lab.style.setProperty('--dx', dx.toFixed(1) + 'px');
+  }
+  var selected = '';
+  function selectTown(name) {
+    selected = name || '';
+    all('path', map).forEach(function (p) { p.classList.toggle('on', p.getAttribute('data-name') === selected); });
+    zoneSel.value = selected;
+    if (selected && $('f-town').value !== selected) $('f-town').value = selected;
+    if (selected) { var home = document.querySelector('input[name="place"][value="home"]'); if (home) home.checked = true; }
+    $('zone-cta').textContent = selected ? 'Prendre rendez-vous ' + chez(selected) : 'Prendre rendez-vous';
+    showPick(pathFor(selected), selected);
+    build();
+  }
+  map.addEventListener('click', function (e) { var p = e.target.closest('path'); if (p) selectTown(p.getAttribute('data-name')); });
+  map.addEventListener('mouseover', function (e) { var p = e.target.closest('path'); if (p) showPick(p, p.getAttribute('data-name')); });
+  map.addEventListener('mouseleave', function () { showPick(pathFor(selected), selected); });
+  zoneSel.addEventListener('change', function () { selectTown(zoneSel.value); });
+
+  /* repair tiles open the prices page on that repair; the address says which (tarifs.html#ecran), and the
+     choice is also kept for the visit in case the address loses it on the way */
+  all('.tile-link').forEach(function (a) {
+    a.addEventListener('click', function () { try { sessionStorage.setItem('pi-go', a.getAttribute('data-go')); } catch (e) {} });
+  });
+
+  /* ---------- booking message ---------- */
+  var today = new Date(); today.setHours(0, 0, 0, 0);
+  var iso = function (d) { return d.getFullYear() + '-' + two(d.getMonth() + 1) + '-' + two(d.getDate()); };
+  $('f-date').min = iso(today);
+  function frDate(v) {
+    if (!v) return '';
+    var p = v.split('-'), d = new Date(+p[0], +p[1] - 1, +p[2]);
+    return d.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });
+  }
+  var ALIAS = {};
+  Object.keys(P).forEach(function (m) { ALIAS[m.toLowerCase().replace(/[\s\/()]+/g, '')] = m; });
+  [['6', '6 / 6s'], ['6s', '6 / 6s'], ['7', '7 / 7 Plus'], ['7plus', '7 / 7 Plus'], ['se', 'SE 2022'], ['se3', 'SE 2022'], ['17air', 'Air']]
+    .forEach(function (a) { ALIAS[a[0]] = a[1]; });
+  function modelKey(txt) { return ALIAS[txt.toLowerCase().replace(/iphone/g, '').replace(/[\s\/()]+/g, '')] || null; }
+  var LOOK = {};
+  Object.keys(DEVS).forEach(function (k) {
+    if (k === 'iphone') return;
+    DEVS[k].gens.forEach(function (g) { g[1].forEach(function (m) { LOOK[(DEVS[k].device + '|' + formModel(k, m)).toLowerCase()] = [k, m]; }); });
+  });
+  function shownPrice(device, model, repair) {
+    if (device !== 'iPhone') {
+      var hit = LOOK[(device + '|' + model).toLowerCase().replace(/\s+/g, ' ')], dd, i;
+      if (!hit) return null;
+      dd = DEVS[hit[0]];
+      for (i = 0; i < dd.main.length; i++) if (dd.main[i][1] === repair) return dd.prices[hit[1]][dd.main[i][0]];
+      return null;
+    }
+    var m = modelKey(model); if (!m) return null;
+    var d = P[m];
+    for (var i = 0; i < MAIN.length; i++) if (MAIN[i][1] === repair) return d[MAIN[i][0]];
+    var k = PARTS.indexOf(repair);
+    return k > -1 ? d.s[k] : null;
+  }
+  // where the repair happens: « Chez moi » opens the trip part, « Je me déplace » says the location will come
+  function chezB(n) { return /^Le /.test(n) ? 'au ' + n.slice(3) : /^Les /.test(n) ? 'aux ' + n.slice(4) : 'à ' + n; }
+  function showPlace(place, town) {
+    $('come').hidden = place !== 'home'; $('meet').hidden = place !== 'go';
+    var zi = town ? ZONE_OF[town] : null, z = zi != null ? ZINFO[zi] : null;
+    var fee = $('come-fee');
+    fee.textContent = '';
+    if (z) { fee.appendChild(document.createTextNode('Déplacement ' + chezB(town) + '\u00a0: ')); var b = document.createElement('b'); b.textContent = z.fee; fee.appendChild(b); }
+    else fee.textContent = 'Choisissez votre commune pour voir le prix du déplacement.';
+    all('#come-zones li').forEach(function (li) { li.classList.toggle('on', z != null && +li.getAttribute('data-z') === zi); });
+  }
+  $('come-map').href = $('zone') ? '#zone' : 'index.html#zone';
+  var lastMsg = '';
+  function build() {
+    var device = $('f-device').value, model = $('f-model').value.trim(), repair = $('f-repair').value,
+        town = $('f-town').value, date = frDate($('f-date').value), slot = $('f-slot').value,
+        name = $('f-name').value.trim(), notes = $('f-notes').value.trim();
+    var placeEl = document.querySelector('input[name="place"]:checked'), place = placeEl ? placeEl.value : '';
+    showPlace(place, town);
+    var phone = [device === 'Autre' ? '' : device, model].filter(Boolean).join(' ');
+    var what = device === 'iPad' ? 'Tablette : ' : device === 'Nintendo Switch' ? 'Console : ' : device === 'Autre' ? 'Appareil : ' : 'Téléphone : ';
+    var when = [date, slot ? slot.toLowerCase() : ''].filter(Boolean).join(', ');
+    var lines = [
+      ['Bonjour Phone Island, je souhaite prendre rendez-vous.', null],
+      [what, phone || '[votre modèle]'],
+      ['Réparation : ', repair || '[la panne]'],
+      ['Lieu : ', place === 'home' ? 'chez moi, vous venez jusqu’à moi' : place === 'go' ? 'je me déplace, merci de m’envoyer votre localisation' : '[chez vous ou vous vous déplacez]']
+    ];
+    if (place === 'home') lines.push(['Commune : ', town || '[votre commune]']);
+    lines.push(['Créneau souhaité : ', when || '[jour et moment]']);
+    var price = shownPrice(device, model, repair);
+    if (price != null) lines.splice(3, 0, ['Prix indiqué sur le site : ', euro(price)]);
+    var z = town ? ZINFO[ZONE_OF[town]] : null;
+    if (z && place === 'home') lines.splice(lines.length - 1, 0, ['Déplacement : ', z.fee]);
+    if (name) lines.push(['Prénom : ', name]);
+    if (notes) lines.push(['Précisions : ', notes]);
+    var prev = $('wa-preview'), plain = [];
+    prev.textContent = '';
+    lines.forEach(function (l, i) {
+      if (i) prev.appendChild(document.createTextNode('\n'));
+      prev.appendChild(document.createTextNode(l[0]));
+      if (l[1] === null) { plain.push(l[0]); return; }
+      var ph = l[1].charAt(0) === '[';
+      var s = document.createElement('span'); s.textContent = l[1]; if (ph) s.className = 'ph';
+      prev.appendChild(s);
+      plain.push(l[0] + (ph ? '' : l[1]));
+    });
+    var msg = plain.join('\n');
+    $('wa-send').href = waLink(msg);
+    var need = !place ? 'Dites-nous d’abord si l’on vient chez vous ou si vous vous déplacez.'
+      : place === 'home' && !town ? 'Choisissez votre commune pour le prix du déplacement.' : '';
+    var send = $('wa-send');
+    send.classList.toggle('is-off', !!need); send.setAttribute('aria-disabled', need ? 'true' : 'false');
+    $('wa-need').textContent = need; $('wa-need').hidden = !need;
+    if (!need) { $('f-place').classList.remove('want'); $('come').classList.remove('want'); }
+    if (lastMsg && msg !== lastMsg && !reduce.matches) { prev.classList.remove('bump'); void prev.offsetWidth; prev.classList.add('bump'); }
+    lastMsg = msg;
+  }
+  function setSelect(id, value) {
+    var sel = $(id), ok = Array.prototype.some.call(sel.options, function (o) { return o.value === value || o.text === value; });
+    if (ok) sel.value = value;
+  }
+  function prefill(o) {
+    if (o.device) setSelect('f-device', o.device);
+    if (o.model != null) $('f-model').value = o.model;
+    if (o.repair) setSelect('f-repair', o.repair);
+    build();
+  }
+  ['f-device', 'f-model', 'f-repair', 'f-town', 'f-date', 'f-slot', 'f-name', 'f-notes'].forEach(function (id) {
+    $(id).addEventListener('input', build); $(id).addEventListener('change', build);
+  });
+  if (typeof selectTown === 'function') $('f-town').addEventListener('change', function () { if ($('f-town').value !== selected) selectTown($('f-town').value); });
+  all('input[name="place"]').forEach(function (r) { r.addEventListener('change', build); });
+  // the message cannot go before the visitor has said where the repair happens (and the commune, if we come)
+  $('wa-send').addEventListener('click', function (e) {
+    if (!$('wa-send').classList.contains('is-off')) return;
+    e.preventDefault();
+    var placed = document.querySelector('input[name="place"]:checked');
+    var spot = placed ? $('come') : $('f-place');
+    spot.classList.add('want');
+    spot.scrollIntoView({ behavior: reduce.matches ? 'auto' : 'smooth', block: 'center' });
+    setTimeout(function () { (placed ? $('f-town') : document.querySelector('input[name="place"]')).focus({ preventScroll: true }); }, reduce.matches ? 0 : 450);
+  });
+  $('booking').addEventListener('submit', function (e) { e.preventDefault(); });
+  build();
+
+  /* ---------- prefilled WhatsApp links ---------- */
+  var hello = 'Bonjour Phone Island, ';
+  $('quote-link').href = waLink(hello + 'j’ai une panne sur mon téléphone.\nModèle : \nProblème : ');
+  $('foot-wa').href = $('dock-wa').href = waLink(hello);
+  $('year').textContent = new Date().getFullYear();
+
+  /* ---------- copy number ---------- */
+  all('.copy').forEach(function (b) {
+    var label = b.textContent;
+    b.addEventListener('click', function () {
+      var done = function () { b.textContent = 'Copié'; setTimeout(function () { b.textContent = label; }, 1800); };
+      var fallback = function () {
+        var t = $(b.getAttribute('data-target')); if (!t) return;
+        var r = document.createRange(); r.selectNodeContents(t);
+        var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+        b.textContent = 'Numéro sélectionné'; setTimeout(function () { b.textContent = label; }, 2200);
+      };
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(b.getAttribute('data-copy')).then(done, fallback);
+        else fallback();
+      } catch (err) { fallback(); }
+    });
+  });
+
+  /* ---------- phone dock ---------- */
+  var dock = $('dock');
+  if ('IntersectionObserver' in window) {
+    var heroGone = false, bookingIn = false;
+    var upd = function () { dock.classList.toggle('show', heroGone && !bookingIn); };
+    new IntersectionObserver(function (en) { heroGone = !en[0].isIntersecting; upd(); }, { threshold: 0 }).observe(document.querySelector('.hero'));
+    new IntersectionObserver(function (en) { bookingIn = en[0].isIntersecting; upd(); }, { threshold: 0 }).observe($('rendez-vous'));
+  }
+})();
+</script>
+</body>
+</html>
