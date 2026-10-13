@@ -340,7 +340,7 @@
       new Promise(function (r) { tex.before = loader.load(base + 'hero3d-back.webp', r, undefined, r); }),
       new Promise(function (r) { tex.crack = loader.load(base + 'hero3d-crack.webp', r, undefined, r); }),
       loadImg(base + 'logo-720.webp'), loadImg(base + 'mark-96.webp'),
-      (document.fonts && document.fonts.load) ? Promise.all([document.fonts.load('600 80px Poppins'), document.fonts.load('500 40px Poppins'), document.fonts.load('400 40px Poppins')]).catch(function () {}) : Promise.resolve()
+      (document.fonts && document.fonts.load) ? Promise.all([document.fonts.load('600 80px ' + font), document.fonts.load('500 40px ' + font), document.fonts.load('400 40px ' + font)]).catch(function () {}) : Promise.resolve()
     ]);
     var P = build(tex);
     var pivot = new T.Group(); pivot.add(P.group); scene.add(pivot);
@@ -367,7 +367,7 @@
     function pose(t) {
       // t in seconds from the start of the show
       var ry, rx, py = 0, k = 1;
-      if (t < 1.2) { var e = easeOut(seg(t, 0, 1.2)); ry = lerp(BACK.y + .2, BACK.y, e); rx = BACK.x; py = lerp(-9, 0, e); k = e; }
+      if (t < 1.2) { var e = easeOut(seg(t, 0, 1.2)); ry = lerp(BACK.y + .2, BACK.y, e); rx = BACK.x; py = lerp(-9, 0, e); }
       else if (t < 4.6) { ry = lerp(BACK.y, BACK.y - .2, seg(t, 1.2, 4.6)); rx = BACK.x; }
       else { var e2 = ease(seg(t, 4.6, 7.6)); ry = lerp(BACK.y - .2, FRONT.y, e2); rx = lerp(BACK.x, FRONT.x, e2); py = Math.sin(e2 * PI) * 3; }
       P.U.uR.value = lerp(1.35, 0, ease(seg(t, 2.6, 4.5)));
@@ -394,7 +394,7 @@
         p = idle(now / 1000);
         P.U.uR.value = 0; P.lock.opacity = 1; P.notifMat.opacity = 1; P.notif.position.y = P.notifY; P.notif.scale.setScalar(1);
       } else if (!S.playing) {
-        p = pose(0.9);
+        p = pose(0);
       } else {
         p = pose(t);
       }

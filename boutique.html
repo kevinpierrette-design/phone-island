@@ -4,470 +4,545 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Boutique · Phone Island</title>
-<meta name="description" content="La boutique de Phone Island, en Martinique : iPhone reconditionnés, AirPods et accessoires (chargeurs, vitres de protection, batteries externes). Réservez sur WhatsApp.">
+<meta name="description" content="iPhone reconditionnés, AirPods et accessoires chez Phone Island, en Martinique. Réservez sur WhatsApp.">
 <link rel="icon" type="image/png" href="assets/favicon-64.png">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..700&display=swap">
 <style>
 :root { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
 html { scroll-padding-top: env(safe-area-inset-top, 0px); }
 [hidden] { display: none !important; }
-/* Layout: Apple-style bands, all black (near-black with a breath of the brand's brown). Each band carries one idea:
-   a short headline, one line of text, then one large thing (a phone drawn in code, a price tool, an
-   exploded view, a map, a form). Text is left-aligned on a 1120px column.
-   One typeface, Poppins, for text and every number; the Phone Island name is the logo artwork itself.
-   The hero phone, the price tool and the buy-back screen are drawn in CSS/SVG; repairs, the bench and the
-   shop use real photographs (the owner's own, and Unsplash pictures, free for commercial use). */
+/* Phone Island, v14: the apple.com way.
+   Light pages (white and a warm light grey) with dark sections for the big moments, one system typeface (SF on
+   Apple devices, Inter elsewhere), large centred headlines, a lot of air, rounded tiles, pill buttons, a thin
+   translucent bar on top. The brand stays in the details: espresso brown for the text and the buttons, gold on the
+   dark sections, cream on one tile, the palm logo in the bar.
+   The site commits to this one look (like apple.com): light pages with dark sections, whatever the device's theme. */
 :root {
-  --espresso: #1B140D;     /* brand brown: dark fills, text on gold and cream */
-  --ink: #060504;          /* the page: black with a breath of warmth */
-  --ink-2: #0B0907;        /* alternate bands */
-  --card: #15110D;         /* tiles and cards */
-  --card-2: #211A14;       /* raised: inputs, small buttons on cards */
-  --roast: #271D14;
-  --roast-2: #3A2D20;
-  --cream: #F3EBDD;        /* text */
-  --sand: #B9AE9C;         /* secondary text */
-  --stone: #A99F91;        /* tertiary text */
-  --gold: #E2B662;         /* brand gold: primary buttons, accents */
-  --gold-hi: #ECC47A;
-  --bronze: #D9AE5F;       /* links, icons, marks */
-  --white: #FFFFFF;
-  --rule: rgba(243, 235, 221, .1);
-  --rule-strong: rgba(243, 235, 221, .17);
-  --wa-bg: #0B141A;        /* WhatsApp, dark mode */
-  --wa-bubble: #005C4B;
-  --wa-ink: #E9EDEF;
-  --wa-muted: #8696A0;
-  --zone-0: #E2B662;       /* Fort-de-France: 10 € */
-  --zone-1: #A17A45;       /* proche: 20 € */
-  --zone-2: #735634;       /* un peu plus loin: 25 € */
-  --zone-3: #50402C;       /* sud et nord: 35 € */
-  --sans: "Poppins", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  --serif: "Playfair Display", Georgia, "Times New Roman", serif;
-  --gutter: clamp(20px, 5vw, 44px);
-  --radius: clamp(22px, 2.6vw, 30px);
-  --nav-h: 56px;
-  --ease: cubic-bezier(.2, .75, .2, 1);
+  --bg: #ffffff;
+  --bg-2: #f5f3ef;          /* alternate sections, tiles on white */
+  --bg-3: #ebe7e0;          /* pressed, tracks */
+  --card: #ffffff;          /* cards on the grey */
+  --ink: #1b140d;           /* the brand's espresso, as text */
+  --ink-2: #6e665d;         /* secondary text (5:1 on the grey) */
+  --ink-3: #8a8178;         /* large or decorative text only */
+  --link: #8a5d14;          /* bronze: links on light (5.2:1 on the grey) */
+  --gold: #e2b662;
+  --gold-hi: #ecc47a;
+  --cream: #f3ebdd;
+  --espresso: #1b140d;
+  --line: rgba(27, 20, 13, .12);
+  --line-2: rgba(27, 20, 13, .24);
+  --btn: #1b140d;  --btn-ink: #ffffff;  --btn-hover: #3a2c1f;  --btn-line: rgba(27, 20, 13, .9);
+  --focus: rgba(138, 93, 20, .45);
+  --shadow: 0 4px 18px rgba(27, 20, 13, .08);
+  --shadow-hi: 0 10px 34px rgba(27, 20, 13, .14);
+  --wa-chat: #efeae2; --wa-bubble: #d9fdd3; --wa-ink: #111b21; --wa-muted: #667781; --wa-green: #1f8f4e;
+  --zone-0: #b8862f; --zone-1: #d4ab62; --zone-2: #e7cd99; --zone-3: #f2e6cf;
+  --font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Inter", "Helvetica Neue", "Segoe UI", Roboto, Arial, sans-serif;
+  --gutter: max(22px, env(safe-area-inset-left, 0px));
+  --nav-h: 48px;
+  --r-xl: clamp(22px, 2.4vw, 30px);
+  --r-l: 18px;
+  --r-m: 12px;
+  --ease: cubic-bezier(.25, .1, .25, 1);
+  --ease-out: cubic-bezier(.22, .61, .36, 1);
+  color-scheme: light;
+}
+/* a dark section: the same names, other values; everything inside follows */
+.dark {
+  --bg: #0c0a08;
+  --bg-2: #171310;
+  --bg-3: #241d17;
+  --card: #171310;
+  --ink: #f5f1ea;
+  --ink-2: #a39b91;
+  --ink-3: #8d857c;
+  --link: #e2b662;
+  --line: rgba(245, 241, 234, .13);
+  --line-2: rgba(245, 241, 234, .26);
+  --btn: #e2b662;  --btn-ink: #1b140d;  --btn-hover: #ecc47a;  --btn-line: #e2b662;
+  --focus: rgba(226, 182, 98, .55);
+  --shadow: 0 4px 18px rgba(0, 0, 0, .4);
+  --wa-chat: #0b141a; --wa-bubble: #005c4b; --wa-ink: #e9edef; --wa-muted: #8696a0;       /* WhatsApp, dark mode */
+  --zone-0: #e2b662; --zone-1: #a17a45; --zone-2: #735634; --zone-3: #4a3b29;            /* the island at night */
   color-scheme: dark;
 }
+
 *, *::before, *::after { box-sizing: border-box; }
-html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; scroll-padding-top: calc(var(--nav-h) + 12px); }
+html:focus-within { scroll-behavior: smooth; }
 @media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+  html:focus-within { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
 }
 body {
-  margin: 0; background: var(--ink); color: var(--cream);
-  font: 400 1.0625rem/1.55 var(--sans);
+  margin: 0; background: var(--bg); color: var(--ink);
+  font-family: var(--font); font-size: 1.0625rem; line-height: 1.47; font-weight: 400; letter-spacing: -.016em;
+  font-optical-sizing: auto; font-synthesis: none;
   -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility;
 }
-img, video, svg, picture { display: block; max-width: 100%; }
+.dark, .light { background: var(--bg); color: var(--ink); }
+img, svg, video, canvas, picture { display: block; max-width: 100%; }
 img { height: auto; }
-a { color: inherit; }
-button, input, select, textarea { font: inherit; color: inherit; }
-h1, h2, h3, p, ol, ul, figure, fieldset { margin: 0; }
-h1, h2, h3 { font-weight: 600; text-wrap: balance; }
+a { color: inherit; text-decoration: none; }
+button, input, select, textarea { font: inherit; letter-spacing: inherit; color: inherit; }
+button { cursor: pointer; }
+h1, h2, h3, h4, p, ul, ol, figure, fieldset, blockquote { margin: 0; }
+ul, ol { padding: 0; }
+h1, h2, h3, h4 { font-weight: 600; text-wrap: balance; }
 p { text-wrap: pretty; }
-.wrap { width: 100%; max-width: calc(1120px + 2 * var(--gutter)); margin-inline: auto; padding-inline: var(--gutter); }
+b, strong { font-weight: 600; }
+:focus-visible { outline: 2px solid var(--link); outline-offset: 3px; border-radius: 4px; }
 .visually-hidden { position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
-:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
-.light :focus-visible, .alt :focus-visible { outline-color: var(--gold); }
-main section[id], .promo[id] { scroll-margin-top: calc(var(--nav-h) + 8px); }
-.num { font-variant-numeric: lining-nums tabular-nums; }
+.num, .tnum { font-variant-numeric: tabular-nums; }
+.nw { white-space: nowrap; }
 
-/* bands */
-.band { padding-block: clamp(76px, 11vw, 140px); }
-.light { background: var(--ink); color: var(--cream); }
-.alt { background: var(--ink-2); color: var(--cream); }
-.dark { background: var(--ink); color: var(--cream); }
-.band-head { max-width: 46rem; margin-bottom: clamp(36px, 5.5vw, 64px); }
-.band-head h2 { font-size: clamp(2.1rem, 6.2vw, 3.75rem); line-height: 1.04; letter-spacing: -0.035em; }
-.lead { margin-top: 18px; max-width: 38rem; font-size: clamp(1.0625rem, 1.9vw, 1.375rem); line-height: 1.45; color: var(--stone); }
-.dark .lead { color: var(--sand); }
+/* ---------- layout ---------- */
+.wrap { width: 100%; max-width: calc(1024px + 2 * var(--gutter)); margin-inline: auto; padding-inline: var(--gutter); }
+.wrap-wide { max-width: calc(1260px + 2 * var(--gutter)); }
+.wrap-narrow { max-width: calc(820px + 2 * var(--gutter)); }
+.section { padding-block: clamp(84px, 11vw, 150px); }
+.section-tight { padding-block: clamp(64px, 8vw, 110px); }
+.bg-2 { background: var(--bg-2); }
 
-/* scroll-linked entrances: elements rise into place as they enter; they stay readable at rest */
-@supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) {
-    .rv { animation: rv linear both; animation-timeline: view(); animation-range: entry 0% cover 26%; }
-    .rv-2 { animation-range: entry 8% cover 32%; }
-    .rv-3 { animation-range: entry 16% cover 38%; }
-    @keyframes rv { from { opacity: .22; transform: translateY(64px) scale(.965); } to { opacity: 1; transform: none; } }
-  }
+/* ---------- type: Apple's scale, adapted (SF on Apple devices, Inter elsewhere) ---------- */
+.t-display { font-size: clamp(2.75rem, 1.55rem + 4.9vw, 5rem); line-height: 1.05; letter-spacing: -.022em; font-weight: 600; }
+.t-headline { font-size: clamp(2.25rem, 1.45rem + 3.3vw, 3.5rem); line-height: 1.07; letter-spacing: -.016em; font-weight: 600; }
+.t-headline-s { font-size: clamp(1.875rem, 1.3rem + 2.3vw, 2.75rem); line-height: 1.09; letter-spacing: -.012em; font-weight: 600; }
+.t-title { font-size: clamp(1.5rem, 1.2rem + 1.2vw, 2rem); line-height: 1.13; letter-spacing: -.01em; font-weight: 600; }
+.t-sub { font-size: clamp(1.1875rem, .98rem + .9vw, 1.75rem); line-height: 1.19; letter-spacing: -.004em; font-weight: 400; }
+.t-lead { font-size: clamp(1.0625rem, .94rem + .55vw, 1.3125rem); line-height: 1.38; letter-spacing: -.008em; font-weight: 600; color: var(--ink-2); }
+.t-lead b, .t-lead strong { color: var(--ink); }
+.t-eyebrow { font-size: clamp(1.0625rem, .98rem + .35vw, 1.3125rem); line-height: 1.2; letter-spacing: -.004em; font-weight: 600; color: var(--link); }
+.t-body { font-size: 1.0625rem; line-height: 1.47; }
+.t-small { font-size: .875rem; line-height: 1.43; letter-spacing: -.01em; }
+.t-foot { font-size: .75rem; line-height: 1.34; letter-spacing: -.005em; color: var(--ink-2); }
+.muted { color: var(--ink-2); }
+.two b, .two strong { color: var(--ink); font-weight: 600; }
+.two { color: var(--ink-2); }
+
+/* a centred heading block, as on apple.com */
+.head { display: grid; justify-items: center; gap: 14px; text-align: center; max-width: 860px; margin-inline: auto; }
+.head .t-sub, .head .t-lead { max-width: 40ch; }
+.head + * { margin-top: clamp(40px, 6vw, 72px); }
+.head-l { display: grid; gap: 12px; max-width: 760px; }
+.head-l + * { margin-top: clamp(32px, 5vw, 56px); }
+
+/* ---------- buttons and links ---------- */
+.btn { position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: 11px 22px;
+  border: 0; border-radius: 980px; font-size: 1.0625rem; line-height: 1.18; font-weight: 400; letter-spacing: -.016em; white-space: nowrap; text-align: center;
+  transition: background-color .3s var(--ease), color .3s var(--ease), box-shadow .3s var(--ease), opacity .3s var(--ease); -webkit-tap-highlight-color: transparent; }
+.btn svg { width: 1.15em; height: 1.15em; flex: none; }
+.btn-fill { background: var(--btn); color: var(--btn-ink); }
+.btn-fill:hover { background: var(--btn-hover); }
+.btn-line { background: transparent; color: var(--ink); box-shadow: inset 0 0 0 1px var(--btn-line); }
+.dark .btn-line { color: var(--link); }
+.btn-line:hover { background: var(--ink); color: var(--bg); box-shadow: inset 0 0 0 1px var(--ink); }
+.dark .btn-line:hover { background: var(--link); color: var(--btn-ink); box-shadow: inset 0 0 0 1px var(--link); }
+.btn-s { min-height: 36px; padding: 8px 16px; font-size: .9375rem; }
+.btn-xs { min-height: 28px; padding: 4px 12px; font-size: .75rem; letter-spacing: -.005em; }
+.btn-xs::after { content: ""; position: absolute; inset: -8px -4px; }
+.btn-wide { width: 100%; white-space: normal; }
+@media (max-width: 400px) { .wide-only { display: none; } }
+.btn.is-off, .btn[aria-disabled="true"] { opacity: .42; cursor: not-allowed; }
+.btns { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 14px 16px; }
+.btns-l { justify-content: flex-start; }
+.more { display: inline-flex; align-items: center; gap: .18em; color: var(--link); font-weight: 400; }
+.more svg { width: .78em; height: .78em; margin-top: .08em; transition: transform .3s var(--ease); }
+.more:hover { text-decoration: underline; text-underline-offset: .18em; }
+.more:hover svg { transform: translateX(2px); }
+.link { color: var(--link); }
+.link:hover { text-decoration: underline; text-underline-offset: .18em; }
+.copy { min-height: 32px; padding: 4px 12px; border: 0; border-radius: 980px; background: var(--bg-3); color: var(--ink); font-size: .8125rem; letter-spacing: -.005em; transition: background-color .25s; }
+.copy:hover { background: var(--line-2); }
+.badge { display: inline-flex; align-items: center; min-height: 22px; padding: 2px 9px; border-radius: 980px; background: var(--bg-3); color: var(--ink); font-size: .75rem; font-weight: 600; letter-spacing: 0; }
+.badge-gold { background: var(--gold); color: var(--espresso); }
+
+/* ---------- global bar: thin, translucent; it turns dark over the dark sections ---------- */
+.gn { position: sticky; top: 0; z-index: 50; height: calc(var(--nav-h) + env(safe-area-inset-top, 0px)); padding-top: env(safe-area-inset-top, 0px);
+  background: rgba(251, 250, 248, .8); color: rgba(27, 20, 13, .88);
+  -webkit-backdrop-filter: saturate(180%) blur(20px); backdrop-filter: saturate(180%) blur(20px);
+  transition: background-color .5s var(--ease), color .5s var(--ease), box-shadow .5s var(--ease); }
+.gn.scrolled { box-shadow: 0 1px 0 rgba(27, 20, 13, .08); }
+.gn.on-dark { background: rgba(14, 11, 9, .74); color: rgba(245, 241, 234, .92); box-shadow: none; }
+.gn-in { display: flex; align-items: center; gap: 12px; height: var(--nav-h); max-width: calc(1024px + 2 * var(--gutter)); margin-inline: auto; padding-inline: var(--gutter); }
+.gn-brand { display: flex; align-items: center; gap: 8px; height: 100%; margin-right: auto; color: inherit; }
+.gn-mark, .gn-name { display: block; background: currentColor; -webkit-mask: var(--m) center / contain no-repeat; mask: var(--m) center / contain no-repeat; }
+.gn-mark { --m: url("assets/mark-96.webp"); width: 28px; height: 29px; }
+.gn-name { --m: url("assets/name-96.webp"); width: 63px; height: 28px; }
+.gn.on-dark .gn-mark { background: var(--gold); }
+.gn-links { display: none; list-style: none; }
+.gn-links a { display: block; padding: 0 9px; line-height: var(--nav-h); font-size: .75rem; letter-spacing: -.005em; color: inherit; opacity: .88; transition: opacity .25s; }
+.gn-links a:hover, .gn-links a[aria-current="page"] { opacity: 1; }
+.gn-links a[aria-current="page"] { font-weight: 600; }
+.gn-cta { margin-left: 6px; }
+.gn.on-dark .gn-cta { background: var(--gold); color: var(--espresso); }
+.gn-burger { display: grid; place-items: center; width: 44px; height: 44px; margin-right: -12px; padding: 0; border: 0; background: transparent; color: inherit; }
+.gn-burger svg { width: 18px; height: 18px; overflow: visible; }
+.gn-burger line { transition: transform .35s var(--ease); transform-origin: 9px 9px; }
+html.menu-open .gn-burger .l1 { transform: translateY(3px) rotate(45deg); }
+html.menu-open .gn-burger .l2 { transform: translateY(-3px) rotate(-45deg); }
+@media (max-width: 833px) { .gn-cta { display: none; } }
+@media (min-width: 834px) {
+  .gn-links { display: flex; align-items: center; gap: 4px; margin-inline: auto; }
+  .gn-brand { margin-right: 0; flex: 1 1 0; }
+  .gn-end { flex: 1 1 0; display: flex; justify-content: flex-end; }
+  .gn-burger { display: none; }
 }
 
-/* buttons and links */
-.pill {
-  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
-  min-height: 50px; padding: 12px 26px; border: 0; border-radius: 999px;
-  background: var(--gold); color: var(--espresso); font-size: 1rem; font-weight: 500; line-height: 1.2;
-  text-align: center; text-decoration: none; cursor: pointer; -webkit-tap-highlight-color: transparent;
-  transition: background-color .2s ease, transform .15s ease;
-}
-.pill:hover { background: var(--gold-hi); }
-.pill:active { transform: scale(.97); }
-.pill svg { width: 20px; height: 20px; flex: none; }
-.pill-ink { background: var(--cream); color: var(--espresso); }
-.pill-ink:hover { background: #FFF7EA; }
-.pill-sm { min-height: 36px; padding: 6px 16px; font-size: .875rem; }
-.link { display: inline-flex; align-items: center; gap: 2px; color: var(--bronze); font-weight: 500; text-decoration: none; }
-.link svg { width: 18px; height: 18px; transition: transform .2s ease; }
-.link:hover { text-decoration: underline; text-underline-offset: 4px; }
-.link:hover svg { transform: translateX(3px); }
-.dark .link { color: var(--gold); }
-.cta-row { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 28px; }
-
-/* navigation */
-.site-nav {
-  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 60;
-  background: rgba(6, 5, 4, .8); color: var(--cream);
-  -webkit-backdrop-filter: saturate(160%) blur(18px); backdrop-filter: saturate(160%) blur(18px);
-  border-bottom: 1px solid rgba(243, 235, 221, .08);
-}
-.nav-row { display: flex; align-items: center; gap: 18px; height: var(--nav-h); }
-.brand { display: inline-flex; align-items: center; gap: 8px; margin-right: auto; text-decoration: none; }
-.brand-mark { width: auto; height: 38px; }
-.brand-name { width: auto; height: 24px; margin-top: 2px; }
-.nav-links { display: none; align-items: center; gap: clamp(18px, 2.2vw, 30px); }
-.nav-links a { color: var(--sand); text-decoration: none; font-size: .875rem; transition: color .2s; }
-.nav-links a:hover { color: var(--cream); }
-.burger { display: inline-grid; place-items: center; width: 44px; height: 44px; margin-right: -10px; padding: 0; border: 0; background: none; color: var(--cream); cursor: pointer; }
-.burger svg { width: 22px; height: 22px; overflow: visible; }
-.burger line { transition: transform .3s ease; transform-origin: 12px 12px; }
-.burger[aria-expanded="true"] .l1 { transform: translateY(3.5px) rotate(45deg); }
-.burger[aria-expanded="true"] .l2 { transform: translateY(-3.5px) rotate(-45deg); }
-@media (min-width: 960px) { .nav-links { display: flex; } .burger { display: none; } }
-@media (max-width: 379px) { .nav-row .pill-sm { display: none; } }
-.menu {
-  position: fixed; z-index: 55; left: 0; right: 0; bottom: 0; top: calc(var(--nav-h) + env(safe-area-inset-top, 0px));
-  overflow-y: auto; background: var(--ink); color: var(--cream);
-  padding-block: 8px calc(32px + env(safe-area-inset-bottom, 0px));
-}
-.menu nav { display: grid; }
-.menu nav a {
-  padding-block: 14px; border-bottom: 1px solid rgba(243, 235, 221, .1);
-  font-size: 1.75rem; font-weight: 600; letter-spacing: -0.02em; text-decoration: none;
-  animation: menu-in .42s var(--ease) both; animation-delay: calc(var(--i) * 35ms);
-}
-@keyframes menu-in { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: none; } }
-.menu .pill { width: 100%; margin-top: 28px; }
-.menu-contact { margin-top: 18px; color: var(--sand); font-size: .9375rem; }
+/* the menu on phones: a sheet under the bar, the links come down one after the other */
+.menu { position: fixed; z-index: 49; inset: calc(var(--nav-h) + env(safe-area-inset-top, 0px)) 0 0; overflow-y: auto; overscroll-behavior: contain;
+  background: rgba(251, 250, 248, .98); color: var(--ink); -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px); }
+.menu[hidden] { display: none; }
+.menu-in { display: grid; gap: 34px; padding-block: 18px calc(40px + env(safe-area-inset-bottom, 0px)); }
+.menu-links { display: grid; list-style: none; }
+.menu-links a { display: block; padding: 7px 0; font-size: 1.75rem; line-height: 1.14; font-weight: 600; letter-spacing: -.012em; }
+.menu-links li { opacity: 0; transform: translateY(-6px); animation: menuIn .45s var(--ease-out) forwards; animation-delay: calc(var(--i) * 40ms + 60ms); }
+.menu-sub { display: grid; gap: 14px; justify-items: start; opacity: 0; animation: menuIn .45s var(--ease-out) .32s forwards; }
+.menu-sub p { color: var(--ink-2); font-size: .9375rem; }
+@keyframes menuIn { to { opacity: 1; transform: none; } }
 html.menu-open { overflow: hidden; }
+html.menu-open .gn { background: rgba(251, 250, 248, .98); color: rgba(27, 20, 13, .88); }
+html.menu-open .gn .gn-mark { background: currentColor; }
 
-.badge { display: inline-flex; align-items: center; min-height: 24px; padding: 2px 10px; border-radius: 999px; background: rgba(226, 182, 98, .14); color: var(--gold); font-size: .75rem; font-weight: 600; letter-spacing: .02em; }
-/* ---------- booking ---------- */
-.book { display: grid; gap: clamp(28px, 4vw, 48px); align-items: start; }
-@media (min-width: 900px) { .book { grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); } }
-.form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 14px; }
-@media (max-width: 520px) { .form { grid-template-columns: minmax(0, 1fr); } }
-.field { display: grid; gap: 8px; min-width: 0; }
-.field.full { grid-column: 1 / -1; }
-.field label { font-size: .875rem; font-weight: 500; }
-.field .opt { color: var(--stone); font-weight: 400; }
-.input {
-  display: block; width: 100%; min-width: 0; min-height: 52px; padding: 12px 16px;
-  border: 1px solid rgba(243, 235, 221, .2); border-radius: 14px; background: var(--card); color: var(--cream);
-  font-size: 1rem; line-height: 1.4; transition: border-color .2s, box-shadow .2s; -webkit-appearance: none; appearance: none;
-}
-.input::placeholder { color: #8A8073; }
-.input:hover { border-color: rgba(243, 235, 221, .38); }
-.input:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 4px rgba(226, 182, 98, .2); }
-textarea.input { min-height: 110px; resize: vertical; }
-select.input {
-  padding-right: 44px; background-repeat: no-repeat; background-position: right 16px center; background-size: 14px;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14'%3E%3Cpath d='M2.5 5l4.5 4.5L11.5 5' fill='none' stroke='%23F3EBDD' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-}
-input[type="date"].input { line-height: 26px; }
-.wa-card { display: grid; gap: 16px; min-width: 0; padding: clamp(18px, 2.6vw, 26px); border-radius: var(--radius); background: var(--wa-bg); color: var(--wa-ink); }
-@media (min-width: 900px) { .wa-card { position: sticky; top: calc(var(--nav-h) + 24px); } }
-.wa-head { display: flex; align-items: center; gap: 12px; padding-bottom: 14px; border-bottom: 1px solid rgba(233, 237, 239, .08); }
-.wa-avatar { display: grid; place-items: center; width: 42px; height: 42px; flex: none; border-radius: 50%; background: #000; box-shadow: inset 0 0 0 1px rgba(233, 237, 239, .12); }
-.wa-avatar img { width: 30px; height: auto; }
-.wa-name { font-weight: 600; font-size: .9375rem; line-height: 1.3; }
-.wa-sub { color: var(--wa-muted); font-size: .8125rem; }
-.bubble {
-  justify-self: end; max-width: 94%; padding: 11px 14px; border-radius: 16px 16px 4px 16px; background: var(--wa-bubble); color: var(--wa-ink);
-  box-shadow: 0 1px .5px rgba(0, 0, 0, .3); font-size: .9375rem; line-height: 1.5; white-space: pre-wrap; overflow-wrap: anywhere;
-}
-.bubble .ph { color: #9FC7BD; }
-.bubble.bump { animation: bump .35s var(--ease); }
-@keyframes bump { 0% { transform: scale(.985); } 100% { transform: none; } }
-.wa-card .pill { width: 100%; }
-.wa-alt { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; color: var(--wa-muted); font-size: .875rem; }
-.wa-alt .num { color: var(--wa-ink); font-weight: 500; user-select: all; }
-.copy {
-  min-height: 32px; padding: 4px 12px; border: 1px solid rgba(233, 237, 239, .22); border-radius: 999px; background: transparent;
-  color: var(--wa-ink); font-size: .8125rem; font-weight: 500; cursor: pointer; transition: background-color .2s;
-}
-.copy:hover { background: rgba(233, 237, 239, .08); }
+/* ---------- reveals: the text rises slowly into place (only once the script runs; at rest everything shows) ---------- */
+.js .rv { opacity: 0; transform: translateY(26px); transition: opacity 1.2s var(--ease-out), transform 1.2s var(--ease-out); transition-delay: calc(var(--d, 0) * 120ms); }
+.js .rv.in { opacity: 1; transform: none; }
+.js .rv-fade { transform: none; }
+.js .rv-zoom { transform: scale(.96); transform-origin: 50% 60%; }
+.js .rv-zoom.in { transform: none; }
+@media (prefers-reduced-motion: reduce) { .js .rv { opacity: 1; transform: none; transition: none; } }
 
-/* where the repair happens: asked before the message can go */
-.place { margin: 0; padding: 0; border: 0; min-width: 0; }
-.place legend { padding: 0; margin-bottom: 8px; font-size: .875rem; font-weight: 500; }
-.places { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
-@media (max-width: 420px) { .places { grid-template-columns: minmax(0, 1fr); } }
-.place-opt { position: relative; display: flex; min-width: 0; }
-.place-opt input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; }
-.place-opt > span {
-  display: grid; grid-template-columns: 26px minmax(0, 1fr); grid-template-rows: auto 1fr; column-gap: 12px; row-gap: 3px; align-content: start; width: 100%;
-  padding: 14px 16px; border-radius: 14px; background: var(--card); box-shadow: inset 0 0 0 1px rgba(243, 235, 221, .2);
-  transition: background-color .3s, box-shadow .3s, color .3s;
+/* ---------- forms: Apple's boxes, the label inside at the top ---------- */
+.form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; align-content: start; }
+.form .full { grid-column: 1 / -1; }
+@media (max-width: 560px) { .form { grid-template-columns: minmax(0, 1fr); } }
+.fl { position: relative; min-width: 0; }
+.fl-input { display: block; width: 100%; min-height: 58px; margin: 0; padding: 25px 15px 8px; border: 1px solid var(--line-2); border-radius: var(--r-m);
+  background: var(--card); color: var(--ink); font-size: 1.0625rem; line-height: 1.25; -webkit-appearance: none; appearance: none;
+  transition: border-color .2s, box-shadow .2s; }
+.fl-input::placeholder { color: var(--ink-3); }
+.fl-input:hover { border-color: rgba(27, 20, 13, .4); }
+.dark .fl-input:hover { border-color: rgba(245, 241, 234, .4); }
+.fl-input:focus { outline: none; border-color: var(--link); box-shadow: 0 0 0 4px var(--focus); }
+.fl-label { position: absolute; left: 16px; top: 9px; right: 40px; color: var(--ink-2); font-size: .75rem; line-height: 1.33; letter-spacing: -.005em; pointer-events: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.fl-label .fl-opt { color: var(--ink-3); }
+select.fl-input { padding-right: 42px; cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236e665d' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9.5l6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 15px center; background-size: 16px; }
+textarea.fl-input { min-height: 112px; resize: vertical; padding-top: 28px; }
+input[type="date"].fl-input { min-height: 58px; }
+input[type="date"].fl-input::-webkit-date-and-time-value { text-align: left; }
+.fl-unit { position: absolute; right: 16px; bottom: 9px; color: var(--ink-2); }
+.want .fl-input, .want.fl-input { border-color: var(--link); box-shadow: 0 0 0 4px var(--focus); }
+
+/* option tiles: the choice is a box, the chosen one has a thick border */
+.opts { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 12px; }
+.opt { position: relative; display: block; cursor: pointer; }
+.opt input { position: absolute; opacity: 0; pointer-events: none; }
+.opt-in { display: grid; grid-template-columns: auto 1fr; gap: 2px 12px; align-items: start; height: 100%; padding: 15px 16px; border-radius: var(--r-m);
+  background: var(--card); box-shadow: inset 0 0 0 1px var(--line-2); transition: box-shadow .25s var(--ease), background-color .25s; }
+.opt-in svg { grid-row: span 2; width: 26px; height: 26px; margin-top: 1px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.opt-in b { font-size: 1.0625rem; font-weight: 600; line-height: 1.3; }
+.opt-in small { color: var(--ink-2); font-size: .875rem; line-height: 1.38; }
+.opt:hover .opt-in { box-shadow: inset 0 0 0 1px var(--ink-3); }
+.opt input:checked + .opt-in { box-shadow: inset 0 0 0 2px var(--ink); }
+.dark .opt input:checked + .opt-in { box-shadow: inset 0 0 0 2px var(--gold); }
+.opt input:focus-visible + .opt-in { box-shadow: inset 0 0 0 2px var(--ink), 0 0 0 4px var(--focus); }
+.want .opt-in { box-shadow: inset 0 0 0 1px var(--link), 0 0 0 4px var(--focus); }
+
+/* chips: generations, capacities, yes / no */
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.rail { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; scroll-snap-type: x proximity; padding: 3px 3px 6px; margin: -3px -3px -6px; }
+.rail::-webkit-scrollbar { display: none; }
+.chip { position: relative; flex: none; display: inline-flex; cursor: pointer; scroll-snap-align: center; }
+.chip input { position: absolute; opacity: 0; pointer-events: none; }
+.chip span { display: inline-flex; align-items: center; justify-content: center; min-height: 40px; min-width: 44px; padding: 0 16px; border-radius: 980px;
+  background: var(--card); color: var(--ink); box-shadow: inset 0 0 0 1px var(--line-2); font-size: .9375rem; letter-spacing: -.01em; white-space: nowrap;
+  transition: background-color .25s var(--ease), color .25s var(--ease), box-shadow .25s var(--ease); }
+.chip:hover span { box-shadow: inset 0 0 0 1px var(--ink-3); }
+.chip input:checked + span { background: var(--ink); color: var(--bg); box-shadow: inset 0 0 0 1px var(--ink); }
+.chip input:focus-visible + span { box-shadow: inset 0 0 0 1px var(--ink), 0 0 0 4px var(--focus); }
+
+/* segmented control (iOS): the white thumb slides under the chosen model */
+.seg { position: relative; display: flex; gap: 0; padding: 3px; border-radius: 12px; background: var(--bg-3); overflow-x: auto; scrollbar-width: none; max-width: 100%; }
+.seg::-webkit-scrollbar { display: none; }
+.seg-thumb { position: absolute; left: 0; top: 3px; bottom: 3px; width: 0; border-radius: 9px; background: var(--card); box-shadow: 0 3px 8px rgba(27, 20, 13, .12), 0 0 0 .5px rgba(27, 20, 13, .06);
+  transition: transform .45s var(--ease-out), width .45s var(--ease-out); }
+.seg-opt { position: relative; z-index: 1; flex: 1 0 auto; display: flex; cursor: pointer; }
+.seg-opt input { position: absolute; opacity: 0; pointer-events: none; }
+.seg-opt span { display: flex; align-items: center; justify-content: center; width: 100%; min-height: 38px; padding: 0 14px; border-radius: 9px; font-size: .9375rem; color: var(--ink-2); white-space: nowrap; transition: color .3s; }
+.seg-opt input:checked + span { color: var(--ink); font-weight: 600; }
+.seg-opt input:focus-visible + span { box-shadow: 0 0 0 3px var(--focus); }
+.seg.seg-in .seg-opt { animation: segIn .5s var(--ease-out) both; }
+@keyframes segIn { from { opacity: 0; } to { opacity: 1; } }
+
+/* ---------- the WhatsApp card: the message, as it will be sent ---------- */
+.wa { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; align-content: start; padding: 18px; border-radius: var(--r-xl); background: var(--card); box-shadow: var(--shadow); }
+.wa-head { display: flex; align-items: center; gap: 12px; }
+.wa-avatar { display: grid; place-items: center; width: 40px; height: 40px; flex: none; border-radius: 50%; background: var(--espresso); }
+.wa-avatar img { width: 26px; height: auto; }
+.wa-name { font-weight: 600; font-size: 1rem; line-height: 1.2; }
+.wa-sub { color: var(--ink-2); font-size: .8125rem; }
+.wa-chat { padding: 16px 14px 18px; border-radius: 16px; background: var(--wa-chat); }
+.bubble { position: relative; max-width: 100%; margin-left: auto; padding: 9px 12px 10px; border-radius: 10px 0 10px 10px; background: var(--wa-bubble); color: var(--wa-ink);
+  font-size: .9375rem; line-height: 1.45; letter-spacing: -.005em; white-space: pre-wrap; overflow-wrap: anywhere; box-shadow: 0 1px .5px rgba(11, 20, 26, .13); }
+.bubble::after { content: ""; position: absolute; top: 0; right: -8px; width: 8px; height: 13px; background: var(--wa-bubble); clip-path: polygon(0 0, 100% 0, 0 100%); }
+.bubble .ph { color: var(--wa-muted); }
+.bubble.bump { animation: bump .6s var(--ease-out); }
+@keyframes bump { 0% { transform: scale(.985); } 60% { transform: scale(1.006); } 100% { transform: none; } }
+.wa-need { color: var(--link); font-size: .875rem; line-height: 1.4; }
+.wa-need[hidden] { display: none; }
+.wa-alt { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; color: var(--ink-2); font-size: .8125rem; }
+.wa-alt .num { color: var(--ink); font-weight: 600; }
+
+/* ---------- footer: small, quiet, grey, as on apple.com ---------- */
+.gf { background: var(--bg-2); color: var(--ink-2); font-size: .75rem; line-height: 1.34; letter-spacing: -.005em; padding-block: 22px calc(22px + env(safe-area-inset-bottom, 0px)); }
+.gf-notes { display: grid; gap: 8px; padding-bottom: 16px; border-bottom: 1px solid var(--line); }
+.gf-dir { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 22px 28px; padding-block: 22px 26px; border-bottom: 1px solid var(--line); }
+.gf-dir h3 { margin-bottom: 8px; color: var(--ink); font-size: .75rem; font-weight: 600; }
+.gf-dir ul { display: grid; gap: 7px; list-style: none; }
+.gf-dir a:hover { color: var(--ink); text-decoration: underline; }
+.gf-num { color: var(--ink); font-size: 1.0625rem; font-weight: 600; letter-spacing: -.01em; }
+.gf-contact { display: grid; gap: 8px; justify-items: start; }
+.gf-base { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding-top: 16px; }
+.gf-logo { width: 34px; height: 35px; background: var(--ink-3); -webkit-mask: url("assets/mark-96.webp") center / contain no-repeat; mask: url("assets/mark-96.webp") center / contain no-repeat; }
+
+/* ---------- phone dock: a floating pill at the bottom of small screens ---------- */
+.dock { position: fixed; z-index: 40; left: 50%; bottom: calc(14px + env(safe-area-inset-bottom, 0px)); display: flex; align-items: center; gap: 8px; padding: 6px;
+  border-radius: 980px; background: rgba(251, 250, 248, .82); box-shadow: 0 8px 30px rgba(27, 20, 13, .16), 0 0 0 .5px rgba(27, 20, 13, .08);
+  -webkit-backdrop-filter: saturate(180%) blur(20px); backdrop-filter: saturate(180%) blur(20px);
+  transform: translate(-50%, 140%); opacity: 0; transition: transform .6s var(--ease-out), opacity .4s; pointer-events: none; }
+.dock.show { transform: translate(-50%, 0); opacity: 1; pointer-events: auto; }
+.dock .btn { min-height: 44px; }
+.dock-wa { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; background: var(--wa-green); color: #fff; }
+.dock-wa svg { width: 22px; height: 22px; }
+@media (min-width: 834px) { .dock { display: none; } }
+html.menu-open .dock { opacity: 0; pointer-events: none; }
+.skip { position: absolute; left: 12px; top: -60px; z-index: 300; padding: 10px 16px; border-radius: 980px; background: var(--espresso); color: #fff; font-size: .875rem; transition: top .25s; }
+.skip:focus { top: calc(10px + env(safe-area-inset-top, 0px)); }
+
+/* ---------- sub-page heading, as on the Apple Store: one large two-tone line, help on the right ---------- */
+.ph-head { padding-block: clamp(40px, 6vw, 80px) clamp(28px, 4vw, 52px); }
+.ph-head-in { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 22px 48px; }
+.ph-title { max-width: 26ch; font-size: clamp(2.25rem, 1.5rem + 3vw, 4rem); line-height: 1.06; letter-spacing: -.022em; font-weight: 600; color: var(--ink-3); }
+.ph-title b { color: var(--ink); }
+.ph-lead { max-width: 52ch; margin-top: 18px; color: var(--ink-2); font-size: clamp(1.0625rem, .98rem + .4vw, 1.3125rem); line-height: 1.38; }
+.ph-help { display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 4px 12px; max-width: 290px; padding-bottom: 6px; font-size: .875rem; line-height: 1.35; color: var(--ink-2); }
+.ph-help-ico { grid-row: span 2; display: grid; place-items: center; width: 42px; height: 42px; border-radius: 50%; background: var(--wa-green); color: #fff; }
+.ph-help-ico svg { width: 22px; height: 22px; }
+.ph-help b { color: var(--ink); font-weight: 600; }
+.ph-help .more { font-size: .875rem; }
+
+/* chapter navigation (Apple's row of icons with a name under each): devices, shop sections */
+.chapters { display: flex; justify-content: center; gap: clamp(6px, 2vw, 28px); margin-bottom: clamp(26px, 3.4vw, 44px); overflow-x: auto; scrollbar-width: none; padding: 4px 2px 6px; margin-inline: calc(-1 * var(--gutter)); padding-inline: var(--gutter); }
+.chapters::-webkit-scrollbar { display: none; }
+@media (max-width: 600px) { .chapters { justify-content: flex-start; } }
+.chap { position: relative; flex: none; display: grid; justify-items: center; align-content: start; gap: 8px; min-width: 84px; padding: 8px 8px 12px; border: 0; background: none; color: var(--ink-2); font-size: .8125rem; letter-spacing: -.005em; line-height: 1.2; text-align: center; cursor: pointer; transition: color .3s var(--ease); }
+.chap svg { width: 52px; height: 52px; fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; transition: transform .45s var(--ease-out); }
+.chap:hover { color: var(--ink); }
+.chap:hover svg { transform: translateY(-2px); }
+.chap[aria-selected="true"], .chap[aria-current="true"] { color: var(--ink); font-weight: 600; }
+.chap[aria-selected="true"]::after, .chap[aria-current="true"]::after { content: ""; position: absolute; left: 50%; bottom: 0; width: 22px; height: 2px; margin-left: -11px; border-radius: 2px; background: var(--ink); }
+.chap small { display: block; margin-top: -4px; color: var(--link); font-size: .6875rem; font-weight: 600; letter-spacing: 0; }
+.chap-n { color: var(--ink-3); font-weight: 400; }
+.dark select.fl-input { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23a39b91' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9.5l6 6 6-6'/%3E%3C/svg%3E"); }
+.dock.on-dark { background: rgba(22, 17, 13, .74); box-shadow: 0 8px 30px rgba(0, 0, 0, .45), 0 0 0 .5px rgba(245, 241, 234, .12); }
+.dock.on-dark .btn-fill { background: var(--gold); color: var(--espresso); }
+
+/* the starry sky of the black sections (the tile is drawn by a small script at the top of the page; without it, plain
+   black): one picture pixel per screen pixel on ordinary screens, two on sharp ones */
+.starry { background-color: #000; background-image: var(--stars, none); background-size: 1024px 1024px; }
+@media (min-resolution: 1.5dppx) { .starry { background-size: 512px 512px; } }
+.dark .sw.z3 { box-shadow: none; }
+.dark .wa { box-shadow: 0 0 0 1px var(--line), 0 18px 50px rgba(0, 0, 0, .5); }
+.dark .bubble { box-shadow: none; }
+
+/* ---------- booking: the form on the left, the WhatsApp message on the right ---------- */
+.book { display: grid; gap: clamp(28px, 4vw, 48px); align-items: start; max-width: 1080px; margin-inline: auto; }
+@media (min-width: 900px) {
+  .book { grid-template-columns: minmax(0, 1.2fr) minmax(0, .8fr); }
+  .book-wa { position: sticky; top: calc(var(--nav-h) + 24px); }
 }
-.place-opt svg { grid-row: span 2; width: 26px; height: 26px; fill: none; stroke: var(--bronze); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; transition: stroke .3s; }
-.place-opt b { font-size: .9375rem; font-weight: 600; line-height: 1.3; }
-.place-opt small { color: var(--stone); font-size: .8125rem; line-height: 1.4; transition: color .3s; }
-.place-opt input:hover + span { box-shadow: inset 0 0 0 1px rgba(243, 235, 221, .45); }
-.place-opt input:checked + span { background: var(--cream); color: var(--espresso); box-shadow: inset 0 0 0 1px var(--cream); }
-.place-opt input:checked + span small { color: #6B5E4D; }
-.place-opt input:checked + span svg { stroke: var(--espresso); }
-.place-opt input:focus-visible + span { outline: 2px solid var(--gold); outline-offset: 2px; }
-.place.want .place-opt > span { box-shadow: inset 0 0 0 1px var(--gold); }
-.come { gap: 10px; padding: 18px; border-radius: 16px; background: rgba(243, 235, 221, .04); box-shadow: inset 0 0 0 1px rgba(243, 235, 221, .1); }
-.come[hidden], .meet[hidden], .wa-need[hidden] { display: none; }
-.come-title { font-size: 1.0625rem; font-weight: 600; letter-spacing: -.01em; }
-.come-fee { color: var(--sand); font-size: .9375rem; line-height: 1.45; }
-.come-fee b { color: var(--gold); font-weight: 600; }
-.come.want #f-town { border-color: var(--gold); }
-.come-zones { display: grid; gap: 7px; margin: 2px 0 0; padding: 0; list-style: none; color: var(--stone); font-size: .8125rem; line-height: 1.35; }
-.come-zones li { display: grid; grid-template-columns: 10px minmax(0, 1fr) auto; align-items: center; gap: 10px; transition: color .3s; }
-.come-zones .sw { width: 10px; height: 10px; border-radius: 3px; }
-.come-zones b { color: var(--sand); font-weight: 500; font-variant-numeric: tabular-nums; transition: color .3s; }
-.come-zones li.on { color: var(--cream); }
-.come-zones li.on b { color: var(--gold); }
-.come-map { justify-self: start; color: var(--bronze); font-size: .875rem; text-decoration: underline; text-underline-offset: 3px; }
-.meet { padding: 14px 16px; border-radius: 14px; background: rgba(243, 235, 221, .04); box-shadow: inset 0 0 0 1px rgba(243, 235, 221, .1); color: var(--sand); font-size: .9375rem; line-height: 1.45; }
-.wa-need { color: #E9D3A6; font-size: .875rem; line-height: 1.45; }
-.wa-card .pill.is-off { opacity: .42; }
-.wa-card .pill.is-off:hover { background: var(--gold); }
+.place { min-width: 0; margin: 6px 0 0; padding: 0; border: 0; }
+.place-q { margin-bottom: 12px; padding: 0; font-size: 1.1875rem; font-weight: 600; letter-spacing: -.012em; }
+.place.want .place-q { color: var(--link); }
+.come { display: grid; gap: 14px; padding: 18px; border-radius: var(--r-l); background: var(--card); box-shadow: inset 0 0 0 1px var(--line); }
+.come[hidden] { display: none; }
+.come.want { box-shadow: inset 0 0 0 1px var(--link), 0 0 0 4px var(--focus); }
+.come-fee { font-size: 1.0625rem; }
+.come-fee b { font-weight: 600; }
+.come-zones { display: grid; gap: 0; list-style: none; border-top: 1px solid var(--line); }
+.come-zones li { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 9px 2px; border-bottom: 1px solid var(--line); color: var(--ink-2); font-size: .9375rem; transition: color .3s; }
+.come-zones li b { font-weight: 600; font-variant-numeric: tabular-nums; }
+.come-zones li.on { color: var(--ink); }
+.come-zones li.on span:nth-child(2) { font-weight: 600; }
+.come-map { font-size: .9375rem; }
+.meet { padding: 14px 16px; border-radius: var(--r-m); background: var(--card); box-shadow: inset 0 0 0 1px var(--line); color: var(--ink-2); font-size: .9375rem; }
+.meet[hidden] { display: none; }
+.sw { display: inline-block; width: 12px; height: 12px; border-radius: 4px; }
+.sw.z0 { background: var(--zone-0); } .sw.z1 { background: var(--zone-1); } .sw.z2 { background: var(--zone-2); } .sw.z3 { background: var(--zone-3); box-shadow: inset 0 0 0 1px rgba(27, 20, 13, .14); }
 
-/* footer */
-.foot { padding-block: clamp(56px, 8vw, 88px) clamp(28px, 4vw, 40px); }
-.foot-grid { display: grid; gap: 40px; }
-@media (min-width: 800px) { .foot-grid { grid-template-columns: minmax(0, 1.3fr) repeat(2, minmax(0, 1fr)); } }
-.foot-brand img { width: 150px; height: auto; }
-.foot-brand p { max-width: 28ch; margin-top: 18px; color: var(--sand); font-size: .9375rem; }
-.foot h3 { margin-bottom: 12px; color: var(--sand); font-size: .875rem; font-weight: 500; }
-.foot-links { display: grid; justify-items: start; gap: 9px; }
-.foot-links a { color: var(--cream); font-size: .9375rem; text-decoration: none; }
-.foot-links a:hover { text-decoration: underline; text-underline-offset: 4px; }
-.foot-num { font-size: 1.5rem; font-weight: 600; letter-spacing: -0.02em; line-height: 1.2; user-select: all; }
-.foot .copy { margin-block: 10px 6px; border-color: rgba(243, 235, 221, .25); color: var(--cream); }
-.foot .copy:hover { background: rgba(243, 235, 221, .08); }
-.foot { border-top: 1px solid var(--rule); }
-.foot-base { margin-top: 52px; padding-top: 22px; border-top: 1px solid rgba(243, 235, 221, .1); color: var(--sand); font-size: .8125rem; }
-@media (max-width: 899px) { .foot { padding-bottom: calc(108px + env(safe-area-inset-bottom, 0px)); } }
+/* ---------- the shop: the Apple Store way (sections as icons, a shelf of cards that slides) ---------- */
+.shop-sec { padding-block: clamp(26px, 3.6vw, 44px) clamp(64px, 8vw, 110px); }
+.subcats { margin-top: -10px; padding-top: 14px; border-top: 1px solid var(--line); }
+.cats:has(+ .subcats:not([hidden])) { margin-bottom: 14px; }
+.subcats .chap svg { width: 40px; height: 40px; }
+.subcats.show { animation: fadeIn .6s var(--ease-out) both; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.cat-n { color: var(--ink-3); font-weight: 400; }
+.shelf { margin-top: 0; }
+.shelf.show { animation: fadeIn .6s var(--ease-out) both; }
+.shelf-head { margin-bottom: 18px; }
+.shelf-head .two b { color: var(--ink); }
+.shelf-n { margin-left: .35em; }
+.stock { display: flex; gap: 20px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; list-style: none;
+  margin: -20px calc(-1 * var(--gutter)) -30px; padding: 20px var(--gutter) 30px; scroll-padding-inline: var(--gutter); }
+.stock::-webkit-scrollbar { display: none; }
+.stock.show .ph-card { animation: cardIn .7s var(--ease-out) both; animation-delay: calc(var(--k, 0) * 70ms); }
+@keyframes cardIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+.ph-card { flex: 0 0 clamp(262px, 28vw, 330px); display: flex; flex-direction: column; scroll-snap-align: start; border-radius: var(--r-l); background: var(--card);
+  box-shadow: 2px 4px 12px rgba(27, 20, 13, .08); overflow: hidden; transition: transform .5s var(--ease-out), box-shadow .5s var(--ease-out); }
+.ph-card:hover { transform: scale(1.012); box-shadow: 2px 6px 22px rgba(27, 20, 13, .14); }
+.ph-pic { display: grid; place-items: center; height: 250px; padding: 20px; color: var(--ink-3); }
+.ph-pic img { width: 100%; height: 100%; object-fit: contain; }
+.ph-pic svg { width: 110px; height: 110px; fill: none; stroke: currentColor; stroke-width: 1; stroke-linecap: round; stroke-linejoin: round; }
+.ph-body { display: grid; gap: 4px; padding: 4px 26px 24px; flex: 1 1 auto; align-content: start; }
+.ph-grade { color: var(--link); font-size: .75rem; font-weight: 600; letter-spacing: 0; }
+.ph-name { font-size: 1.3125rem; line-height: 1.2; letter-spacing: -.012em; }
+.ph-spec { color: var(--ink-2); font-size: .875rem; }
+.ph-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: auto; padding-top: 16px; }
+.ph-price { font-size: 1.3125rem; font-weight: 600; letter-spacing: -.012em; font-variant-numeric: tabular-nums; }
+.ph-price small { margin-left: 2px; font-size: .7em; }
+.ph-card.sold { opacity: .55; }
+.none { display: grid; justify-items: center; gap: 12px; max-width: 720px; margin-inline: auto; padding: clamp(36px, 5vw, 60px) 28px; border-radius: var(--r-xl); background: var(--card); text-align: center; }
+.none[hidden] { display: none; }
+.none-art svg { width: 76px; height: 76px; fill: none; stroke: var(--ink-3); stroke-width: 1.1; stroke-linecap: round; stroke-linejoin: round; }
+.none p { max-width: 44ch; color: var(--ink-2); }
+.none .btn { margin-top: 10px; }
 
-
-/* ---------- pages: home, prices, refurbished phones, buy-back ---------- */
-.nav-links a[aria-current="page"] { color: var(--cream); }
-.menu nav a[aria-current="page"] { color: var(--gold); }
-.foot-links a[aria-current="page"] { color: var(--gold); }
-.page-top { padding-top: clamp(18px, 3.4vw, 40px); }
-.crumbs { display: flex; flex-wrap: wrap; align-items: center; gap: 2px 3px; margin-bottom: clamp(28px, 4.4vw, 50px); color: var(--stone); font-size: .875rem; }
-.crumbs a { color: var(--sand); text-decoration: none; }
-.crumbs a:hover { color: var(--cream); text-decoration: underline; text-underline-offset: 4px; }
-.crumbs svg { width: 14px; height: 14px; flex: none; }
-.page-head h1 { font-size: clamp(2.4rem, 7.4vw, 4.375rem); line-height: 1.02; letter-spacing: -0.042em; }
-.page-head .lead { max-width: 40rem; }
-
-/* ---------- the shop: three sections (iPhone, AirPods, accessories, the last one in three), then what is for sale ---------- */
-.page-head { margin-bottom: clamp(28px, 4vw, 44px); }
-.cats { display: flex; gap: 6px; margin-inline: calc(-1 * var(--gutter)); padding: 2px var(--gutter) 4px; overflow-x: auto; scrollbar-width: none; }
-.cats::-webkit-scrollbar { display: none; }
-@media (min-width: 700px) { .cats { gap: 10px; margin-inline: -14px; padding-inline: 0; overflow: visible; } }
-.cat { display: grid; justify-items: center; align-content: start; gap: 10px; flex: none; min-width: 108px; padding: 16px 16px 14px; border-radius: 22px;
-  color: var(--sand); font-size: .9375rem; font-weight: 500; text-decoration: none; -webkit-tap-highlight-color: transparent;
-  transition: background-color .35s var(--ease), color .35s var(--ease); }
-.cat svg { width: 54px; height: 54px; fill: none; stroke: currentColor; stroke-width: 1.35; stroke-linecap: round; stroke-linejoin: round; transition: transform .45s var(--ease); }
-.cat:hover { color: var(--cream); }
-.cat:hover svg { transform: translateY(-3px); }
-.cat[aria-current="true"] { background: var(--card); color: var(--cream); }
-.cat[aria-current="true"] svg { color: var(--gold); }
-.cat-n { margin-left: 2px; color: var(--stone); font-size: .8125rem; font-weight: 500; font-variant-numeric: tabular-nums; }
-.subcat[aria-current="true"] .cat-n { color: #6B5E4D; }
-.cat:focus-visible, .subcat:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
-.subcats { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
-.subcat { display: inline-flex; align-items: center; gap: 8px; min-height: 46px; padding: 0 18px 0 12px; border-radius: 999px; background: var(--card);
-  box-shadow: inset 0 0 0 1px var(--rule-strong); color: var(--cream); font-size: .9375rem; font-weight: 500; text-decoration: none;
-  transition: background-color .3s, box-shadow .3s, color .3s; }
-.subcat svg { width: 26px; height: 26px; fill: none; stroke: var(--bronze); stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; transition: stroke .3s; }
-.subcat:hover { box-shadow: inset 0 0 0 1px rgba(243, 235, 221, .5); }
-.subcat[aria-current="true"] { background: var(--cream); box-shadow: inset 0 0 0 1px var(--cream); color: var(--espresso); }
-.subcat[aria-current="true"] svg { stroke: var(--espresso); }
-.subcats.show { animation: panelIn .5s var(--ease) both; }
-@media (max-width: 599px) {
-  .subcat { min-height: 42px; gap: 6px; padding: 0 14px 0 10px; font-size: .875rem; }
-  .subcat svg { width: 22px; height: 22px; }
-}
-.shelf { margin-top: clamp(26px, 3.6vw, 40px); }
-.shelf.show { animation: panelIn .5s var(--ease) both; }
-@keyframes panelIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
-.shelf-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 20px; margin-bottom: 18px; }
-.shelf-t { font-size: clamp(1.375rem, 2.6vw, 1.875rem); letter-spacing: -0.03em; line-height: 1.15; }
-.shelf-n { color: var(--stone); font-size: .875rem; }
-/* nothing in this section yet: a quiet card, the way a store says the bag is empty */
-.none { display: grid; justify-items: center; gap: 12px; padding: clamp(40px, 6vw, 72px) clamp(22px, 5vw, 56px); border-radius: var(--radius); background: var(--card); text-align: center; }
-.none h2 { max-width: 22ch; font-size: clamp(1.5rem, 3.2vw, 2.25rem); letter-spacing: -0.035em; line-height: 1.1; }
-.none p { max-width: 44ch; color: var(--sand); }
-.none .pill { margin-top: 10px; }
-
-/* the cards of what is for sale */
-.stock { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr)); gap: 14px; margin: 0; padding: 0; list-style: none; }
-.ph-card { display: flex; flex-direction: column; min-width: 0; overflow: hidden; border-radius: var(--radius); background: var(--card); }
-.ph-pic { position: relative; display: grid; place-items: center; aspect-ratio: 4 / 4.4; margin: 10px 10px 0; overflow: hidden; border-radius: calc(var(--radius) - 10px); background: var(--card-2); }
-.ph-pic img { width: 100%; height: 100%; object-fit: cover; }
-.ph-pic svg { width: 38%; height: auto; fill: none; stroke: var(--bronze); stroke-width: 1.1; stroke-linecap: round; stroke-linejoin: round; opacity: .85; }
-.ph-body { display: grid; align-content: start; gap: 3px; flex: 1 0 auto; padding: 18px 20px 20px; }
-.ph-grade { color: var(--bronze); font-size: .8125rem; font-weight: 500; }
-.ph-name { font-size: 1.375rem; letter-spacing: -0.025em; line-height: 1.15; }
-.ph-spec { color: var(--sand); font-size: .9375rem; }
-.ph-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 14px; }
-.ph-price { font-size: 1.875rem; font-weight: 600; letter-spacing: -0.04em; line-height: 1; font-variant-numeric: tabular-nums; }
-.ph-price small { margin-left: .2em; color: var(--stone); font-size: .56em; font-weight: 500; letter-spacing: 0; }
-.ph-card.sold .ph-pic, .ph-card.sold .ph-name, .ph-card.sold .ph-price { opacity: .45; }
-@media (max-width: 599px) {
-  .stock { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
-  .ph-card { border-radius: 22px; }
-  .ph-pic { margin: 8px 8px 0; border-radius: 15px; }
-  .ph-body { padding: 14px 14px 16px; }
-  .ph-name { font-size: 1.0625rem; letter-spacing: -0.015em; }
-  .ph-spec, .ph-grade { font-size: .8125rem; }
-  .ph-foot { flex-direction: column; align-items: stretch; gap: 10px; margin-top: 10px; }
-  .ph-price { font-size: 1.5rem; }
-  .ph-foot .badge { align-self: start; }
-}
-@media (prefers-reduced-motion: no-preference) {
-  .stock.show .ph-card { animation: cardIn .6s var(--ease) both; animation-delay: calc(var(--k, 0) * 60ms); }
-  @keyframes cardIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
-}
-
-/* the « je cherche » form: an amount in euros */
-.unit { position: relative; }
-.unit .input { padding-right: 40px; }
-.unit span { position: absolute; top: 50%; right: 16px; transform: translateY(-50%); color: var(--stone); pointer-events: none; }
-@media (max-width: 899px) { .foot { padding-bottom: calc(40px + env(safe-area-inset-bottom, 0px)); } }
 </style>
 </head>
 <body>
-<header class="site-nav">
-  <div class="wrap nav-row">
-    <a class="brand" href="index.html" aria-label="Phone Island, accueil">
-      <img class="brand-mark" src="assets/mark-96.webp" srcset="assets/mark-96.webp 1x, assets/mark-192.webp 2x" alt="" width="96" height="98">
-      <img class="brand-name" src="assets/name-48.webp" srcset="assets/name-48.webp 1x, assets/name-96.webp 2x" alt="" width="107" height="48">
-    </a>
-    <nav class="nav-links" aria-label="Navigation principale">
-      <a href="index.html#reparations">Réparations</a>
-      <a href="tarifs.html">Tarifs</a>
-      <a href="index.html#savoir-faire">Savoir-faire</a>
-      <a href="boutique.html" aria-current="page">Boutique</a>
-      <a href="rachat.html">Rachat</a>
-      <a href="index.html#zone">Zone</a>
-    </nav>
-    <a class="pill pill-sm" href="index.html#rendez-vous">Rendez-vous</a>
-    <button class="burger" id="burger" type="button" aria-expanded="false" aria-controls="menu" aria-label="Ouvrir le menu">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><line class="l1" x1="4" y1="8.5" x2="20" y2="8.5"/><line class="l2" x1="4" y1="15.5" x2="20" y2="15.5"/></svg>
-    </button>
-  </div>
+<script>document.documentElement.classList.add('js');</script>
+<a class="skip" href="#main">Aller au contenu</a>
+<header class="gn" id="gn">
+  <nav class="gn-in" aria-label="Navigation principale">
+    <a class="gn-brand" href="index.html" aria-label="Phone Island, accueil"><span class="gn-mark" aria-hidden="true"></span><span class="gn-name" aria-hidden="true"></span></a>
+    <ul class="gn-links">
+      <li><a href="index.html#reparations">Réparations</a></li>
+      <li><a href="tarifs.html">Tarifs</a></li>
+      <li><a href="boutique.html" aria-current="page">Boutique</a></li>
+      <li><a href="rachat.html">Rachat</a></li>
+      <li><a href="index.html#zone">Zone</a></li>
+    </ul>
+    <div class="gn-end">
+      <a class="btn btn-fill btn-xs gn-cta" href="index.html#rendez-vous">Rendez-vous</a>
+      <button class="gn-burger" id="burger" type="button" aria-expanded="false" aria-controls="menu" aria-label="Ouvrir le menu"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" aria-hidden="true"><line class="l1" x1="2.5" y1="6" x2="15.5" y2="6"/><line class="l2" x1="2.5" y1="12" x2="15.5" y2="12"/></svg></button>
+    </div>
+  </nav>
 </header>
 <div class="menu" id="menu" hidden>
-  <div class="wrap">
-    <nav aria-label="Menu">
-      <a href="index.html" style="--i:0">Accueil</a>
-      <a href="index.html#reparations" style="--i:1">Réparations</a>
-      <a href="tarifs.html" style="--i:2">Tarifs</a>
-      <a href="index.html#savoir-faire" style="--i:3">Savoir-faire</a>
-      <a href="boutique.html" aria-current="page" style="--i:4">Boutique</a>
-      <a href="rachat.html" style="--i:5">Rachat</a>
-      <a href="index.html#zone" style="--i:6">Zone</a>
-    </nav>
-    <a class="pill" href="index.html#rendez-vous">Prendre rendez-vous</a>
-    <p class="menu-contact">WhatsApp et téléphone&nbsp;: <span class="num">0696 17 47 32</span></p>
+  <div class="wrap menu-in">
+    <ul class="menu-links">
+      <li style="--i:0"><a href="index.html#reparations">Réparations</a></li>
+      <li style="--i:1"><a href="tarifs.html">Tarifs</a></li>
+      <li style="--i:2"><a href="boutique.html">Boutique</a></li>
+      <li style="--i:3"><a href="rachat.html">Rachat</a></li>
+      <li style="--i:4"><a href="index.html#zone">Zone et déplacement</a></li>
+    </ul>
+    <div class="menu-sub">
+      <a class="btn btn-fill" href="index.html#rendez-vous">Prendre rendez-vous</a>
+      <p>WhatsApp et téléphone&nbsp;: <span class="num">0696 17 47 32</span></p>
+    </div>
   </div>
 </div>
 
-<main id="top">
-  <section class="band alt page-top" aria-labelledby="shop-title">
-    <div class="wrap">
-      <nav class="crumbs" aria-label="Vous êtes ici"><a href="index.html">Accueil</a><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 6l6 6-6 6"/></svg><span aria-current="page">Boutique</span></nav>
-      <header class="band-head page-head">
-        <h1 id="shop-title">Boutique.</h1>
-        <p class="lead">iPhone reconditionnés, AirPods et accessoires, en vente chez Phone Island.</p>
-      </header>
-      <nav class="cats" id="cats" aria-label="Rayons">
-        <a class="cat" href="#iphone" data-cat="iphone" aria-current="true"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="13.5" y="4.5" width="21" height="39" rx="5.5"/><rect x="20.5" y="8.2" width="7" height="2.4" rx="1.2"/></svg><span>iPhone</span></a>
-        <a class="cat" href="#airpods" data-cat="airpods"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M18.2 21.47V32.8a2.2 2.2 0 0 0 4.4 0V16a5.6 5.6 0 1 0-4.4 5.47z"/><path d="M29.8 21.47V32.8a2.2 2.2 0 0 1-4.4 0V16a5.6 5.6 0 1 1 4.4 5.47z"/></svg><span>AirPods</span></a>
-        <a class="cat" href="#accessoires" data-cat="accessoires"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="7.5" y="11.5" width="17" height="17" rx="4.5"/><path d="M12.5 11.5V7M19.5 11.5V7"/><path d="M16 28.5v3.5c0 4.4 3.6 8 8 8h5.5c4.1 0 7.5-3.4 7.5-7.5V20.5"/><rect x="33.5" y="9.5" width="7" height="11" rx="2.2"/><path d="M35.5 9.5V6.5h3v3"/></svg><span>Accessoires</span></a>
+<main id="main">
+  <section class="ph-head" data-dock-after aria-labelledby="shop-title">
+    <div class="wrap wrap-wide">
+      <div class="ph-head-in">
+        <h1 class="ph-title rv" id="shop-title"><b>Boutique.</b> iPhone reconditionnés, AirPods et accessoires.</h1>
+        <p class="ph-help rv" style="--d:1"><span class="ph-help-ico"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.9c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3Z"/></svg></span><b>Une question sur un article&nbsp;?</b><a class="more" href="https://wa.me/596696174732" data-wa="Bonjour Phone Island, j’ai une question sur la boutique." target="_blank" rel="noopener">Écrivez-nous sur WhatsApp<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 6l6 6-6 6"/></svg></a></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="shop-sec bg-2" aria-label="Les rayons">
+    <div class="wrap wrap-wide">
+      <nav class="chapters cats rv" id="cats" aria-label="Rayons">
+        <a class="chap cat" href="#iphone" data-cat="iphone" aria-current="true"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="14" y="4.5" width="20" height="39" rx="5.2"/><rect x="20.6" y="8" width="6.8" height="2.4" rx="1.2"/></svg><span>iPhone</span></a>
+        <a class="chap cat" href="#airpods" data-cat="airpods"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M17.2 22.5V35a2.3 2.3 0 0 0 4.6 0V15.5a6 6 0 1 0-4.6 7z"/><path d="M30.8 22.5V35a2.3 2.3 0 0 1-4.6 0V15.5a6 6 0 1 1 4.6 7z"/></svg><span>AirPods</span></a>
+        <a class="chap cat" href="#accessoires" data-cat="accessoires"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="7.5" y="11.5" width="17" height="17" rx="4.5"/><path d="M12.5 11.5V7M19.5 11.5V7"/><path d="M16 28.5v3.5c0 4.4 3.6 8 8 8h5.5c4.1 0 7.5-3.4 7.5-7.5V20.5"/><rect x="33.5" y="9.5" width="7" height="11" rx="2.2"/><path d="M35.5 9.5V6.5h3v3"/></svg><span>Accessoires</span></a>
       </nav>
-      <nav class="subcats" id="subcats" aria-label="Accessoires" hidden>
-        <a class="subcat" href="#chargeurs" data-cat="chargeurs"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="12" y="15" width="24" height="24" rx="6"/><path d="M19.5 15V9.5M28.5 15V9.5"/><rect x="20" y="25.75" width="8" height="2.5" rx="1.25"/></svg><span>Chargeurs</span></a>
-        <a class="subcat" href="#vitres" data-cat="vitres"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="13.5" y="4.5" width="21" height="39" rx="5.5"/><path d="M18 17.5l9-9M18 26l13.5-13.5"/></svg><span>Vitres de protection</span></a>
-        <a class="subcat" href="#batteries" data-cat="batteries"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="12" y="8.5" width="24" height="31" rx="6"/><path d="M25.4 14l-4.6 8.4h6.4l-4.6 8.6"/><path d="M19.5 34.8h.01M22.5 34.8h.01M25.5 34.8h.01M28.5 34.8h.01" stroke-width="2.2"/></svg><span>Batteries externes</span></a>
+      <nav class="chapters subcats" id="subcats" aria-label="Accessoires" hidden>
+        <a class="chap subcat" href="#chargeurs" data-cat="chargeurs"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="12" y="15" width="24" height="24" rx="6"/><path d="M19.5 15V9.5M28.5 15V9.5"/><rect x="20" y="25.75" width="8" height="2.5" rx="1.25"/></svg><span>Chargeurs</span></a>
+        <a class="chap subcat" href="#vitres" data-cat="vitres"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="13.5" y="4.5" width="21" height="39" rx="5.5"/><path d="M18 17.5l9-9M18 26l13.5-13.5"/></svg><span>Vitres de protection</span></a>
+        <a class="chap subcat" href="#batteries" data-cat="batteries"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="12" y="8.5" width="24" height="31" rx="6"/><path d="M25.4 14l-4.6 8.4h6.4l-4.6 8.6"/><path d="M19.5 34.8h.01M22.5 34.8h.01M25.5 34.8h.01M28.5 34.8h.01" stroke-width="2.2"/></svg><span>Batteries externes</span></a>
       </nav>
       <div class="shelf" id="shelf">
         <div class="shelf-head" id="shelf-head" hidden>
-          <h2 class="shelf-t" id="shelf-t">iPhone reconditionnés</h2>
-          <p class="shelf-n" id="shelf-n" aria-live="polite"></p>
+          <h2 class="t-title two"><b id="shelf-t">iPhone reconditionnés</b><span class="shelf-n" id="shelf-n" aria-live="polite"></span></h2>
         </div>
         <ul class="stock" id="stock" aria-labelledby="shelf-t" hidden></ul>
-        <div class="none" id="none">
-          <h2 id="none-t">Aucun iPhone disponible pour le moment.</h2>
+        <div class="none rv" id="none">
+          <div class="none-art" aria-hidden="true"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="14" y="4.5" width="20" height="39" rx="5.2"/><rect x="20.6" y="8" width="6.8" height="2.4" rx="1.2"/></svg></div>
+          <h2 class="t-title" id="none-t">Aucun iPhone disponible pour le moment.</h2>
           <p id="none-p">Les reconditionnés partent vite. Dites-nous ce que vous cherchez&nbsp;: on vous écrit dès qu’un iPhone correspond.</p>
-          <a class="pill" href="#je-cherche" id="none-go">Dire ce que je cherche</a>
+          <a class="btn btn-fill" href="#je-cherche" id="none-go">Dire ce que je cherche</a>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="band light" id="je-cherche" aria-labelledby="want-title">
-    <div class="wrap">
-      <header class="band-head rv">
-        <h2 id="want-title">Vous cherchez quelque chose&nbsp;?</h2>
-        <p class="lead">Dites-nous quoi. Votre message s’ouvre dans WhatsApp, prêt à être envoyé, et on vous répond.</p>
+  <section class="section" id="je-cherche" aria-labelledby="want-title" data-dock-hide>
+    <div class="wrap wrap-wide">
+      <header class="head rv">
+        <h2 class="t-headline" id="want-title">Vous cherchez quelque chose&nbsp;?</h2>
+        <p class="t-sub muted">Dites-nous quoi. Votre message s’ouvre dans WhatsApp, prêt à partir, et on vous répond.</p>
       </header>
       <div class="book">
         <form class="form rv" id="want" novalidate>
-          <div class="field">
-            <label for="w-cat">Ce que vous cherchez</label>
-            <select class="input" id="w-cat">
+          <div class="fl">
+            <select class="fl-input" id="w-cat">
               <option value="iphone">Un iPhone</option><option value="airpods">Des AirPods</option><option value="chargeurs">Un chargeur</option>
               <option value="vitres">Une vitre de protection</option><option value="batteries">Une batterie externe</option>
             </select>
+            <label class="fl-label" for="w-cat">Ce que vous cherchez</label>
           </div>
-          <div class="field">
-            <label for="w-model" id="w-model-l">Modèle</label>
-            <input class="input" id="w-model" type="text" list="w-list-iphone" placeholder="ex. iPhone 13 Pro" autocomplete="off">
-            <datalist id="w-list-iphone"><option value="iPhone 8"></option><option value="iPhone 8 Plus"></option><option value="iPhone SE (2022)"></option><option value="iPhone X"></option><option value="iPhone XS"></option><option value="iPhone XS Max"></option><option value="iPhone XR"></option><option value="iPhone 11"></option><option value="iPhone 11 Pro"></option><option value="iPhone 11 Pro Max"></option><option value="iPhone 12 mini"></option><option value="iPhone 12"></option><option value="iPhone 12 Pro"></option><option value="iPhone 12 Pro Max"></option><option value="iPhone 13 mini"></option><option value="iPhone 13"></option><option value="iPhone 13 Pro"></option><option value="iPhone 13 Pro Max"></option><option value="iPhone 14"></option><option value="iPhone 14 Plus"></option><option value="iPhone 14 Pro"></option><option value="iPhone 14 Pro Max"></option><option value="iPhone 15"></option><option value="iPhone 15 Plus"></option><option value="iPhone 15 Pro"></option><option value="iPhone 15 Pro Max"></option><option value="iPhone 16e"></option><option value="iPhone 16"></option><option value="iPhone 16 Plus"></option><option value="iPhone 16 Pro"></option><option value="iPhone 16 Pro Max"></option><option value="iPhone 17e"></option><option value="iPhone 17"></option><option value="iPhone Air"></option><option value="iPhone 17 Pro"></option><option value="iPhone 17 Pro Max"></option></datalist>
-            <datalist id="w-list-airpods"><option value="AirPods 2"></option><option value="AirPods 3"></option><option value="AirPods 4"></option><option value="AirPods 4 (réduction de bruit)"></option><option value="AirPods Pro"></option><option value="AirPods Pro 2"></option><option value="AirPods Pro 3"></option><option value="AirPods Max"></option></datalist>
-            <datalist id="w-list-phones"><option value="iPhone 8"></option><option value="iPhone 8 Plus"></option><option value="iPhone SE (2022)"></option><option value="iPhone X"></option><option value="iPhone XS"></option><option value="iPhone XS Max"></option><option value="iPhone XR"></option><option value="iPhone 11"></option><option value="iPhone 11 Pro"></option><option value="iPhone 11 Pro Max"></option><option value="iPhone 12 mini"></option><option value="iPhone 12"></option><option value="iPhone 12 Pro"></option><option value="iPhone 12 Pro Max"></option><option value="iPhone 13 mini"></option><option value="iPhone 13"></option><option value="iPhone 13 Pro"></option><option value="iPhone 13 Pro Max"></option><option value="iPhone 14"></option><option value="iPhone 14 Plus"></option><option value="iPhone 14 Pro"></option><option value="iPhone 14 Pro Max"></option><option value="iPhone 15"></option><option value="iPhone 15 Plus"></option><option value="iPhone 15 Pro"></option><option value="iPhone 15 Pro Max"></option><option value="iPhone 16e"></option><option value="iPhone 16"></option><option value="iPhone 16 Plus"></option><option value="iPhone 16 Pro"></option><option value="iPhone 16 Pro Max"></option><option value="iPhone 17e"></option><option value="iPhone 17"></option><option value="iPhone Air"></option><option value="iPhone 17 Pro"></option><option value="iPhone 17 Pro Max"></option><option value="Galaxy S10e"></option><option value="Galaxy S10"></option><option value="Galaxy S10+"></option><option value="Galaxy S20"></option><option value="Galaxy S20+"></option><option value="Galaxy S20 Ultra"></option><option value="Galaxy S20 FE"></option><option value="Galaxy S20 FE 5G"></option><option value="Galaxy S21"></option><option value="Galaxy S21+"></option><option value="Galaxy S21 Ultra"></option><option value="Galaxy S21 FE"></option><option value="Galaxy S22"></option><option value="Galaxy S22+"></option><option value="Galaxy S22 Ultra"></option><option value="Galaxy S23"></option><option value="Galaxy S23+"></option><option value="Galaxy S23 Ultra"></option><option value="Galaxy S23 FE"></option><option value="Galaxy S24"></option><option value="Galaxy S24+"></option><option value="Galaxy S24 Ultra"></option><option value="Galaxy S24 FE"></option><option value="Galaxy S25"></option><option value="Galaxy S25+"></option><option value="Galaxy S25 Ultra"></option><option value="Galaxy S25 Edge"></option><option value="Galaxy S25 FE"></option><option value="Galaxy S26"></option><option value="Galaxy S26+"></option><option value="Galaxy S26 Ultra"></option><option value="Galaxy Note 20"></option><option value="Galaxy Note 20 Ultra"></option><option value="Galaxy Z Flip (2020)"></option><option value="Galaxy Z Flip 3"></option><option value="Galaxy Z Flip 4"></option><option value="Galaxy Z Flip 5"></option><option value="Galaxy Z Flip 6"></option><option value="Galaxy Z Flip 7"></option><option value="Galaxy Z Flip 8"></option><option value="Galaxy Z Fold 2"></option><option value="Galaxy Z Fold 3"></option><option value="Galaxy Z Fold 4"></option><option value="Galaxy Z Fold 5"></option><option value="Galaxy Z Fold 6"></option><option value="Galaxy Z Fold 7"></option><option value="Galaxy Z Fold 8"></option><option value="Galaxy A02s"></option><option value="Galaxy A03"></option><option value="Galaxy A04s"></option><option value="Galaxy A05s"></option><option value="Galaxy A06"></option><option value="Galaxy A07 5G"></option><option value="Galaxy A10"></option><option value="Galaxy A11"></option><option value="Galaxy A12"></option><option value="Galaxy A13"></option><option value="Galaxy A14 4G"></option><option value="Galaxy A15"></option><option value="Galaxy A16"></option><option value="Galaxy A17 4G"></option><option value="Galaxy A17 5G"></option><option value="Galaxy A20e"></option><option value="Galaxy A21s"></option><option value="Galaxy A22 5G"></option><option value="Galaxy A23 5G"></option><option value="Galaxy A24"></option><option value="Galaxy A25"></option><option value="Galaxy A26"></option><option value="Galaxy A27"></option><option value="Galaxy A31"></option><option value="Galaxy A32 4G"></option><option value="Galaxy A32 5G"></option><option value="Galaxy A33"></option><option value="Galaxy A34"></option><option value="Galaxy A35"></option><option value="Galaxy A36"></option><option value="Galaxy A37"></option><option value="Galaxy A40"></option><option value="Galaxy A41"></option><option value="Galaxy A42"></option><option value="Galaxy A50"></option><option value="Galaxy A51"></option><option value="Galaxy A52"></option><option value="Galaxy A52s"></option><option value="Galaxy A53"></option><option value="Galaxy A54"></option><option value="Galaxy A55"></option><option value="Galaxy A56"></option><option value="Galaxy A57"></option><option value="Galaxy A70"></option><option value="Galaxy A71"></option><option value="Galaxy A72"></option><option value="Galaxy A73"></option><option value="Galaxy M12"></option><option value="Galaxy M13"></option><option value="Galaxy M23"></option><option value="Galaxy M33"></option><option value="Galaxy M53"></option><option value="Galaxy M55"></option><option value="Galaxy XCover 5"></option><option value="Galaxy XCover 6 Pro"></option><option value="Galaxy XCover 7"></option></datalist>
+          <div class="fl">
+            <input class="fl-input" id="w-model" type="text" list="w-list-iphone" placeholder="ex. iPhone 13 Pro" autocomplete="off">
+            <label class="fl-label" for="w-model" id="w-model-l">Modèle</label>
+            <datalist id="w-list-iphone"><option value="iPhone 8"></option><option value="iPhone 8 Plus"></option><option value="iPhone SE (2022)"></option><option value="iPhone X"></option><option value="iPhone XS"></option><option value="iPhone XS Max"></option><option value="iPhone XR"></option><option value="iPhone 11"></option><option value="iPhone 11 Pro"></option><option value="iPhone 11 Pro Max"></option><option value="iPhone 12 mini"></option><option value="iPhone 12"></option><option value="iPhone 12 Pro"></option><option value="iPhone 12 Pro Max"></option><option value="iPhone 13 mini"></option><option value="iPhone 13"></option><option value="iPhone 13 Pro"></option><option value="iPhone 13 Pro Max"></option><option value="iPhone 14"></option><option value="iPhone 14 Plus"></option><option value="iPhone 14 Pro"></option><option value="iPhone 14 Pro Max"></option><option value="iPhone 15"></option><option value="iPhone 15 Plus"></option><option value="iPhone 15 Pro"></option><option value="iPhone 15 Pro Max"></option><option value="iPhone 16e"></option><option value="iPhone 16"></option><option value="iPhone 16 Plus"></option><option value="iPhone 16 Pro"></option><option value="iPhone 16 Pro Max"></option><option value="iPhone 17e"></option><option value="iPhone 17"></option><option value="iPhone Air"></option><option value="iPhone 17 Pro"></option><option value="iPhone 17 Pro Max"></option></datalist><datalist id="w-list-airpods"><option value="AirPods 2"></option><option value="AirPods 3"></option><option value="AirPods 4"></option><option value="AirPods 4 (réduction de bruit)"></option><option value="AirPods Pro"></option><option value="AirPods Pro 2"></option><option value="AirPods Pro 3"></option><option value="AirPods Max"></option></datalist><datalist id="w-list-phones"><option value="iPhone 8"></option><option value="iPhone 8 Plus"></option><option value="iPhone SE (2022)"></option><option value="iPhone X"></option><option value="iPhone XS"></option><option value="iPhone XS Max"></option><option value="iPhone XR"></option><option value="iPhone 11"></option><option value="iPhone 11 Pro"></option><option value="iPhone 11 Pro Max"></option><option value="iPhone 12 mini"></option><option value="iPhone 12"></option><option value="iPhone 12 Pro"></option><option value="iPhone 12 Pro Max"></option><option value="iPhone 13 mini"></option><option value="iPhone 13"></option><option value="iPhone 13 Pro"></option><option value="iPhone 13 Pro Max"></option><option value="iPhone 14"></option><option value="iPhone 14 Plus"></option><option value="iPhone 14 Pro"></option><option value="iPhone 14 Pro Max"></option><option value="iPhone 15"></option><option value="iPhone 15 Plus"></option><option value="iPhone 15 Pro"></option><option value="iPhone 15 Pro Max"></option><option value="iPhone 16e"></option><option value="iPhone 16"></option><option value="iPhone 16 Plus"></option><option value="iPhone 16 Pro"></option><option value="iPhone 16 Pro Max"></option><option value="iPhone 17e"></option><option value="iPhone 17"></option><option value="iPhone Air"></option><option value="iPhone 17 Pro"></option><option value="iPhone 17 Pro Max"></option><option value="Galaxy S10e"></option><option value="Galaxy S10"></option><option value="Galaxy S10+"></option><option value="Galaxy S20"></option><option value="Galaxy S20+"></option><option value="Galaxy S20 Ultra"></option><option value="Galaxy S20 FE"></option><option value="Galaxy S20 FE 5G"></option><option value="Galaxy S21"></option><option value="Galaxy S21+"></option><option value="Galaxy S21 Ultra"></option><option value="Galaxy S21 FE"></option><option value="Galaxy S22"></option><option value="Galaxy S22+"></option><option value="Galaxy S22 Ultra"></option><option value="Galaxy S23"></option><option value="Galaxy S23+"></option><option value="Galaxy S23 Ultra"></option><option value="Galaxy S23 FE"></option><option value="Galaxy S24"></option><option value="Galaxy S24+"></option><option value="Galaxy S24 Ultra"></option><option value="Galaxy S24 FE"></option><option value="Galaxy S25"></option><option value="Galaxy S25+"></option><option value="Galaxy S25 Ultra"></option><option value="Galaxy S25 Edge"></option><option value="Galaxy S25 FE"></option><option value="Galaxy S26"></option><option value="Galaxy S26+"></option><option value="Galaxy S26 Ultra"></option><option value="Galaxy Note 20"></option><option value="Galaxy Note 20 Ultra"></option><option value="Galaxy Z Flip (2020)"></option><option value="Galaxy Z Flip 3"></option><option value="Galaxy Z Flip 4"></option><option value="Galaxy Z Flip 5"></option><option value="Galaxy Z Flip 6"></option><option value="Galaxy Z Flip 7"></option><option value="Galaxy Z Flip 8"></option><option value="Galaxy Z Fold 2"></option><option value="Galaxy Z Fold 3"></option><option value="Galaxy Z Fold 4"></option><option value="Galaxy Z Fold 5"></option><option value="Galaxy Z Fold 6"></option><option value="Galaxy Z Fold 7"></option><option value="Galaxy Z Fold 8"></option><option value="Galaxy A02s"></option><option value="Galaxy A03"></option><option value="Galaxy A04s"></option><option value="Galaxy A05s"></option><option value="Galaxy A06"></option><option value="Galaxy A07 5G"></option><option value="Galaxy A10"></option><option value="Galaxy A11"></option><option value="Galaxy A12"></option><option value="Galaxy A13"></option><option value="Galaxy A14 4G"></option><option value="Galaxy A15"></option><option value="Galaxy A16"></option><option value="Galaxy A17 4G"></option><option value="Galaxy A17 5G"></option><option value="Galaxy A20e"></option><option value="Galaxy A21s"></option><option value="Galaxy A22 5G"></option><option value="Galaxy A23 5G"></option><option value="Galaxy A24"></option><option value="Galaxy A25"></option><option value="Galaxy A26"></option><option value="Galaxy A27"></option><option value="Galaxy A31"></option><option value="Galaxy A32 4G"></option><option value="Galaxy A32 5G"></option><option value="Galaxy A33"></option><option value="Galaxy A34"></option><option value="Galaxy A35"></option><option value="Galaxy A36"></option><option value="Galaxy A37"></option><option value="Galaxy A40"></option><option value="Galaxy A41"></option><option value="Galaxy A42"></option><option value="Galaxy A50"></option><option value="Galaxy A51"></option><option value="Galaxy A52"></option><option value="Galaxy A52s"></option><option value="Galaxy A53"></option><option value="Galaxy A54"></option><option value="Galaxy A55"></option><option value="Galaxy A56"></option><option value="Galaxy A57"></option><option value="Galaxy A70"></option><option value="Galaxy A71"></option><option value="Galaxy A72"></option><option value="Galaxy A73"></option><option value="Galaxy M12"></option><option value="Galaxy M13"></option><option value="Galaxy M23"></option><option value="Galaxy M33"></option><option value="Galaxy M53"></option><option value="Galaxy M55"></option><option value="Galaxy XCover 5"></option><option value="Galaxy XCover 6 Pro"></option><option value="Galaxy XCover 7"></option></datalist>
           </div>
-          <div class="field" id="w-storage-f">
-            <label for="w-storage">Capacité</label>
-            <select class="input" id="w-storage">
+          <div class="fl" id="w-storage-f">
+            <select class="fl-input" id="w-storage">
               <option value="">Peu importe</option><option>64 Go</option><option>128 Go</option><option>256 Go</option><option>512 Go</option><option>1 To</option>
             </select>
+            <label class="fl-label" for="w-storage">Capacité</label>
           </div>
-          <div class="field">
-            <label for="w-budget">Budget maximum <span class="opt">(facultatif)</span></label>
-            <div class="unit"><input class="input" id="w-budget" type="text" inputmode="numeric" maxlength="5" placeholder="ex. 400" autocomplete="off"><span aria-hidden="true">€</span></div>
+          <div class="fl">
+            <input class="fl-input" id="w-budget" type="text" inputmode="numeric" maxlength="5" placeholder="ex. 400" autocomplete="off">
+            <label class="fl-label" for="w-budget">Budget maximum <span class="fl-opt">(facultatif)</span></label>
+            <span class="fl-unit" aria-hidden="true">€</span>
           </div>
-          <div class="field full">
-            <label for="w-name">Prénom <span class="opt">(facultatif)</span></label>
-            <input class="input" id="w-name" type="text" autocomplete="given-name">
+          <div class="fl full">
+            <input class="fl-input" id="w-name" type="text" autocomplete="given-name">
+            <label class="fl-label" for="w-name">Prénom <span class="fl-opt">(facultatif)</span></label>
           </div>
-          <div class="field full">
-            <label for="w-notes">Précisions <span class="opt">(facultatif)</span></label>
-            <textarea class="input" id="w-notes" placeholder="ex. une couleur, l’état de la batterie, pour quand vous en avez besoin"></textarea>
+          <div class="fl full">
+            <textarea class="fl-input" id="w-notes" placeholder="ex. une couleur, l’état de la batterie, pour quand vous en avez besoin"></textarea>
+            <label class="fl-label" for="w-notes">Précisions <span class="fl-opt">(facultatif)</span></label>
           </div>
         </form>
-        <aside class="wa-card rv rv-2" aria-label="Aperçu du message WhatsApp">
+        <aside class="wa book-wa rv" style="--d:1" aria-label="Aperçu du message WhatsApp">
           <div class="wa-head">
             <span class="wa-avatar"><img src="assets/mark-96.webp" alt="" width="96" height="98"></span>
             <div><p class="wa-name">Phone Island</p><p class="wa-sub">Votre message, prêt à partir</p></div>
           </div>
-          <div class="bubble" id="w-preview" aria-live="polite"></div>
-          <a class="pill" id="w-send" href="https://wa.me/596696174732" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.9c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3Z"/></svg>Envoyer sur WhatsApp</a>
+          <div class="wa-chat"><div class="bubble" id="w-preview" aria-live="polite"></div></div>
+          <a class="btn btn-fill btn-wide" id="w-send" href="https://wa.me/596696174732" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.9c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3Z"/></svg>Envoyer sur WhatsApp</a>
           <p class="wa-alt">Ou écrivez-nous au <span class="num" id="num-want">0696 17 47 32</span><button class="copy" type="button" data-copy="0696 17 47 32" data-target="num-want">Copier</button></p>
         </aside>
       </div>
@@ -475,34 +550,45 @@ input[type="date"].input { line-height: 26px; }
   </section>
 </main>
 
-<footer class="foot dark">
+<footer class="gf">
   <div class="wrap">
-    <div class="foot-grid">
-      <div class="foot-brand">
-        <img src="assets/logo-360.webp" srcset="assets/logo-360.webp 360w, assets/logo-720.webp 720w" sizes="150px" alt="Phone Island" width="360" height="439" loading="lazy">
-        <p>Réparation et vente de smartphones, à domicile partout en Martinique.</p>
-      </div>
-      <div>
-        <h3>WhatsApp et téléphone</h3>
-        <p class="foot-num num" id="num-foot">0696 17 47 32</p>
-        <button class="copy" type="button" data-copy="0696 17 47 32" data-target="num-foot">Copier le numéro</button>
-        <div class="foot-links">
-          <a id="foot-wa" href="https://wa.me/596696174732" target="_blank" rel="noopener">Écrire sur WhatsApp</a>
-          <a href="https://www.instagram.com/phone._island/" target="_blank" rel="noopener">Instagram @phone._island</a>
-        </div>
-      </div>
-      <div>
-        <h3>Services</h3>
-        <div class="foot-links">
-          <a href="index.html#reparations">Réparations</a>
-          <a href="tarifs.html">Tarifs</a>
-          <a href="boutique.html" aria-current="page">Boutique</a>
-          <a href="rachat.html">Rachat</a>
-          <a href="index.html#zone">Zone et déplacement</a>
-        </div>
-      </div>
+    <div class="gf-notes">
+      <p>Prix des réparations&nbsp;: pièce et main-d’œuvre comprises. Diagnostic gratuit. Délai selon disponibilité de la pièce.</p>
+      <p>Déplacement de 10 à 35&nbsp;€ selon votre commune. Si vous venez à nous, pas de déplacement à payer&nbsp;: on vous envoie notre localisation sur WhatsApp.</p>
     </div>
-    <p class="foot-base">© <span id="year">2026</span> Phone Island, Fort-de-France, Martinique</p>
+    <nav class="gf-dir" aria-label="Plan du site">
+      <div>
+        <h3>Réparer</h3>
+        <ul>
+          <li><a href="index.html#reparations">Réparations</a></li>
+          <li><a href="tarifs.html">Tarifs</a></li>
+          <li><a href="index.html#zone">Zone et déplacement</a></li>
+          <li><a href="index.html#rendez-vous">Prendre rendez-vous</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Acheter et vendre</h3>
+        <ul>
+          <li><a href="boutique.html#iphone">iPhone reconditionnés</a></li>
+          <li><a href="boutique.html#airpods">AirPods</a></li>
+          <li><a href="boutique.html#accessoires">Accessoires</a></li>
+          <li><a href="rachat.html">Rachat de votre iPhone</a></li>
+        </ul>
+      </div>
+      <div class="gf-contact">
+        <h3>WhatsApp et téléphone</h3>
+        <p class="gf-num num" id="num-foot">0696 17 47 32</p>
+        <button class="copy" type="button" data-copy="0696 17 47 32" data-target="num-foot">Copier le numéro</button>
+        <ul>
+          <li><a href="https://wa.me/596696174732" data-wa="Bonjour Phone Island, " target="_blank" rel="noopener">Écrire sur WhatsApp</a></li>
+          <li><a href="https://www.instagram.com/phone._island/" target="_blank" rel="noopener">Instagram @phone._island</a></li>
+        </ul>
+      </div>
+    </nav>
+    <div class="gf-base">
+      <p>© <span class="year">2026</span> Phone Island. Réparation et vente de smartphones, à domicile partout en Martinique. Fort-de-France.</p>
+      <span class="gf-logo" role="img" aria-label="Phone Island"></span>
+    </div>
   </div>
 </footer>
 
@@ -510,17 +596,19 @@ input[type="date"].input { line-height: 26px; }
 (function () {
   'use strict';
   var WA = '596696174732';
-  var CHEVRON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 6l6 6-6 6"/></svg>';
   var $ = function (id) { return document.getElementById(id); };
   var all = function (sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); };
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
-  var waLink = function (t) { return 'https://wa.me/' + WA + '?text=' + encodeURIComponent(t); };
-  var euro = function (v) { return v + ' €'; };
+  var waLink = function (t) { return 'https://wa.me/' + WA + (t ? '?text=' + encodeURIComponent(t) : ''); };
+  var euro = function (v) { return v + ' €'; };
   var clamp = function (v, a, b) { return Math.max(a, Math.min(b, v)); };
+  var CHEVRON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 6l6 6-6 6"/></svg>';
   function iphone(m) { return m === 'Air' ? 'iPhone Air' : m === 'SE 2022' ? 'iPhone SE (2022)' : 'iPhone ' + m; }
+  function two(n) { return (n < 10 ? '0' : '') + n; }
+  function restart(el, cls) { if (reduce.matches || !el) return; el.classList.remove(cls); void el.offsetWidth; el.classList.add(cls); }
 
-  /* ---------- menu ---------- */
-  var burger = $('burger'), menu = $('menu');
+  /* ---------- the bar: menu on phones; dark over the dark sections; a hairline once the page moves ---------- */
+  var gn = $('gn'), burger = $('burger'), menu = $('menu');
   function setMenu(open) {
     menu.hidden = !open;
     burger.setAttribute('aria-expanded', String(open));
@@ -530,18 +618,47 @@ input[type="date"].input { line-height: 26px; }
   burger.addEventListener('click', function () { setMenu(menu.hidden); });
   menu.addEventListener('click', function (e) { if (e.target.closest('a')) setMenu(false); });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !menu.hidden) { setMenu(false); burger.focus(); } });
-  window.matchMedia('(min-width: 960px)').addEventListener('change', function (m) { if (m.matches) setMenu(false); });
+  window.matchMedia('(min-width: 834px)').addEventListener('change', function (m) { if (m.matches) setMenu(false); });
+  var darks = all('[data-nav="dark"]'), navTick = false, dockEl = $('dock');
+  function darkAt(y) { return darks.some(function (s) { var r = s.getBoundingClientRect(); return r.top <= y && r.bottom > y; }); }
+  function navTheme() {
+    navTick = false;
+    gn.classList.toggle('on-dark', darkAt(gn.getBoundingClientRect().bottom + 1));
+    gn.classList.toggle('scrolled', window.scrollY > 4);
+    if (dockEl) dockEl.classList.toggle('on-dark', darkAt(window.innerHeight - 40));   // the dock too, over the dark sections
+  }
+  function onNav() { if (!navTick) { navTick = true; requestAnimationFrame(navTheme); } }
+  window.addEventListener('scroll', onNav, { passive: true });
+  window.addEventListener('resize', onNav);
+  navTheme();
 
-  /* ---------- the WhatsApp message, shown as it will be sent ---------- */
-  // lines: [text] for a sentence, [label, value] for an answer; a value in [brackets] is still to be given:
-  // it shows in the preview, and stays out of the message
+  /* ---------- reveals: each block rises into place once, as it comes into view ---------- */
+  if ('IntersectionObserver' in window && !reduce.matches) {
+    var rio = new IntersectionObserver(function (en) {
+      en.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); rio.unobserve(e.target); } });
+    }, { rootMargin: '0px 0px -12% 0px', threshold: .01 });
+    all('.rv').forEach(function (el) { rio.observe(el); });
+  } else all('.rv').forEach(function (el) { el.classList.add('in'); });
+
+  /* ---------- the drawn phones show the visitor's time ---------- */
+  function tick() {
+    var d = new Date(), t = two(d.getHours()) + ':' + two(d.getMinutes());
+    var ds = d.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });
+    all('.wall-time, .wall-time-sm').forEach(function (el) { el.textContent = t; });
+    all('.wall-date').forEach(function (el) { el.textContent = ds; });
+  }
+  tick(); setInterval(tick, 15000);
+
+  /* ---------- the WhatsApp message, shown as it will be sent ----------
+     lines: [text] for a sentence, [label, value] for an answer; a value in [brackets] is still to be given:
+     it shows in the preview, and stays out of the message */
   function bubble(box, lines) {
     var plain = [];
     box.textContent = '';
     lines.forEach(function (l, i) {
       if (i) box.appendChild(document.createTextNode('\n'));
       box.appendChild(document.createTextNode(l[0]));
-      if (l.length < 2) { plain.push(l[0]); return; }
+      if (l.length < 2 || l[1] === null) { plain.push(l[0]); return; }
       var v = String(l[1]), ph = v.charAt(0) === '[';
       var s = document.createElement('span'); s.textContent = v; if (ph) s.className = 'ph';
       box.appendChild(s);
@@ -549,7 +666,42 @@ input[type="date"].input { line-height: 26px; }
     });
     return plain.join('\n');
   }
-  function bump(box) { if (reduce.matches) return; box.classList.remove('bump'); void box.offsetWidth; box.classList.add('bump'); }
+  function bump(box) { restart(box, 'bump'); }
+
+  /* ---------- prefilled WhatsApp links, the year ---------- */
+  all('[data-wa]').forEach(function (a) { a.href = waLink(a.getAttribute('data-wa')); });
+  all('.year').forEach(function (el) { el.textContent = new Date().getFullYear(); });
+
+  /* ---------- copy the number (the selection is the fallback) ---------- */
+  all('.copy').forEach(function (b) {
+    var label = b.textContent;
+    b.addEventListener('click', function () {
+      var done = function () { b.textContent = 'Copié'; setTimeout(function () { b.textContent = label; }, 1800); };
+      var fallback = function () {
+        var t = $(b.getAttribute('data-target')); if (!t) return;
+        var r = document.createRange(); r.selectNodeContents(t);
+        var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+        b.textContent = 'Numéro sélectionné'; setTimeout(function () { b.textContent = label; }, 2200);
+      };
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(b.getAttribute('data-copy')).then(done, fallback);
+        else fallback();
+      } catch (err) { fallback(); }
+    });
+  });
+
+  /* ---------- the dock on phones: once the top of the page is gone, hidden over the forms ---------- */
+  var dock = $('dock');
+  if (dock && 'IntersectionObserver' in window) {
+    var topGone = false, hideIn = [];
+    var upd = function () { dock.classList.toggle('show', topGone && !hideIn.some(Boolean)); };
+    var topEl = document.querySelector('[data-dock-after]');
+    if (topEl) new IntersectionObserver(function (en) { topGone = !en[0].isIntersecting; upd(); }).observe(topEl);
+    all('[data-dock-hide]').forEach(function (el, i) {
+      hideIn[i] = false;
+      new IntersectionObserver(function (en) { hideIn[i] = en[0].isIntersecting; upd(); }).observe(el);
+    });
+  }
 
   /* ---------- the shop ----------
      What is for sale, one entry per item, in the order it shows. cat: 'iphone', 'airpods', 'chargeurs', 'vitres' or
@@ -607,7 +759,7 @@ input[type="date"].input { line-height: 26px; }
     if (p.price) { var pr = el('p', 'ph-price', String(p.price)); pr.appendChild(el('small', '', '€')); foot.appendChild(pr); }
     if (p.sold) foot.appendChild(el('span', 'badge', 'Vendu'));
     else {
-      var a = el('a', 'pill pill-sm', 'Réserver');
+      var a = el('a', 'btn btn-fill btn-s', 'Réserver');
       var what = [p.name, p.detail, p.grade ? p.grade.toLowerCase() : '', p.price ? p.price + ' €' : ''].filter(Boolean).join(', ');
       a.href = waLink('Bonjour Phone Island, ' + (p.cat === 'iphone' ? 'cet iPhone reconditionné' : 'cet article') + ' m’intéresse : ' + what + '. Est-il toujours disponible ?');
       a.target = '_blank'; a.rel = 'noopener';
@@ -699,31 +851,6 @@ input[type="date"].input { line-height: 26px; }
     show(own(SECTIONS, kept) ? kept : 'iphone', false);
   }
 
-  /* ---------- prefilled WhatsApp links ---------- */
-  var hello = 'Bonjour Phone Island, ';
-  $('foot-wa').href = waLink(hello);
-  $('year').textContent = new Date().getFullYear();
-
-  /* ---------- copy number ---------- */
-  all('.copy').forEach(function (b) {
-    var label = b.textContent;
-    b.addEventListener('click', function () {
-      var done = function () { b.textContent = 'Copié'; setTimeout(function () { b.textContent = label; }, 1800); };
-      var fallback = function () {
-        var t = $(b.getAttribute('data-target')); if (!t) return;
-        var r = document.createRange(); r.selectNodeContents(t);
-        var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
-        b.textContent = 'Numéro sélectionné'; setTimeout(function () { b.textContent = label; }, 2200);
-      };
-      try {
-        if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(b.getAttribute('data-copy')).then(done, fallback);
-        else fallback();
-      } catch (err) { fallback(); }
-    });
-  });
-
-  /* ---------- the welcome screen of the home page plays on a first visit only, not after this page ---------- */
-  try { sessionStorage.setItem('pi-intro', '1'); } catch (e) {}
 
 })();
 </script>
