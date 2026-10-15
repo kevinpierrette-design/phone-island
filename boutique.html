@@ -1117,8 +1117,9 @@ html.search-open .dock { opacity: 0; pointer-events: none; }
     ]
   };
 
-  /* the screen protectors: four kinds, for each iPhone from the X. VITRES.price['15 Pro'] = { standard: 0 } gives a
-     price; VITRES.dispo['15 Pro'] = ['standard'] puts one in stock. */
+  /* the screen protectors: four kinds, for each iPhone from the X. VITRES.base: the price of each kind, fitted, the
+     same for every iPhone (the owner's prices, October 2026); VITRES.price['15 Pro'] = { standard: 20 } gives one model
+     another price; VITRES.dispo['15 Pro'] = ['standard'] puts one in stock. */
   var VKINDS = [
     { key: 'standard', name: 'Vitre standard', detail: 'Verre trempé transparent : la protection de tous les jours.', photo: 'assets/shop-vitre-standard-hd.webp', art: 'glass' },
     { key: 'espion', name: 'Vitre anti-espion', detail: 'Verre trempé teinté : l’écran ne se lit que de face.', photo: 'assets/shop-vitre-anti-espion-hd.webp', art: 'privacy' },
@@ -1130,7 +1131,7 @@ html.search-open .dock { opacity: 0; pointer-events: none; }
     ['13', ['13 mini', '13', '13 Pro', '13 Pro Max']], ['14', ['14', '14 Plus', '14 Pro', '14 Pro Max']], ['15', ['15', '15 Plus', '15 Pro', '15 Pro Max']],
     ['16', ['16e', '16', '16 Plus', '16 Pro', '16 Pro Max']], ['17', ['17e', '17', 'Air', '17 Pro', '17 Pro Max']], ['18', ['18 Pro', '18 Pro Max']]
   ];
-  var VITRES = { price: {}, dispo: {} };
+  var VITRES = { base: { standard: 15, espion: 20, hydrogel: 20, 'hydrogel-mat': 25 }, price: {}, dispo: {} };
 
   // the sections; the accessories have three of their own
   var SECTIONS = {
@@ -1282,7 +1283,7 @@ html.search-open .dock { opacity: 0; pointer-events: none; }
     var box = el('section', 'grp vit'), pick = el('div', 'vit-pick'), head = el('div', 'grp-head'), tx = el('div', 'grp-tx');
     var gi = vGenOf(vModel), ul = el('ul', 'stock show vit-cards');
     tx.appendChild(el('h3', 'grp-t', 'Pour quel iPhone ?'));
-    tx.appendChild(el('p', 'grp-n', 'Pour chaque iPhone depuis l’iPhone X : vitre standard ou anti-espion, protection hydrogel normale ou mate.'));
+    tx.appendChild(el('p', 'grp-n', 'Pour chaque iPhone depuis l’iPhone X : vitre standard ou anti-espion, protection hydrogel normale ou mate. Pose comprise.'));
     head.appendChild(tx); head.appendChild(paddlesFor(ul));
     pick.appendChild(head);
     var gens = el('div', 'rail'); gens.setAttribute('role', 'radiogroup'); gens.setAttribute('aria-label', 'Génération');
@@ -1323,7 +1324,7 @@ html.search-open .dock { opacity: 0; pointer-events: none; }
       ul.textContent = '';
       VKINDS.forEach(function (t, k) {
         var p = { name: t.name, detail: vModel ? 'Pour ' + iphone(vModel) : t.detail, art: t.art, photo: t.photo,
-                  price: (VITRES.price[vModel] || {})[t.key], dispo: (VITRES.dispo[vModel] || []).indexOf(t.key) > -1 };
+                  price: (VITRES.price[vModel] || {})[t.key] || VITRES.base[t.key], dispo: (VITRES.dispo[vModel] || []).indexOf(t.key) > -1 };
         var li = ccard(p, k, vModel ? t.name + ' pour ' + iphone(vModel) : null);
         if (vModel) li.querySelector('.ph-spec').insertAdjacentElement('afterend', el('p', 'ph-spec ph-more', t.detail));
         ul.appendChild(li);

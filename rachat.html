@@ -532,6 +532,29 @@ html.search-open .dock { opacity: 0; pointer-events: none; }
 .s-models { display: grid; gap: 14px; margin-top: 6px; }
 .s-models[hidden] { display: none; }
 .sell-qs { display: grid; grid-template-columns: minmax(0, 1fr); gap: clamp(30px, 4vw, 44px); }
+/* the colour: Apple's swatches (44 px to touch), the name under them */
+.sws { display: flex; flex-wrap: wrap; gap: 4px; margin: -5px; }
+.sws[hidden], .sw-name[hidden] { display: none; }
+.sw { position: relative; display: inline-flex; padding: 5px; cursor: pointer; }
+.sw input { position: absolute; opacity: 0; pointer-events: none; }
+.sw span { width: 34px; height: 34px; border-radius: 50%; background: var(--c);
+  box-shadow: inset 0 0 0 1px rgba(27, 20, 13, .14), inset 0 -6px 10px rgba(27, 20, 13, .08), inset 0 5px 8px rgba(255, 255, 255, .16);
+  outline: 2px solid transparent; outline-offset: 3px; transition: outline-color .25s var(--ease); }
+.sw:hover span { outline-color: var(--line-2); }
+.sw input:checked + span { outline-color: var(--ink); }
+.sw input:focus-visible + span { outline-color: var(--link); }
+.sw-name { min-height: 1.45em; margin-top: -4px; color: var(--ink-2); font-size: .9375rem; }
+/* the drawn phone takes the colour: its metal edge, and its wallpaper (gold until a colour is chosen), the change eased */
+@property --fin { syntax: '<color>'; inherits: true; initial-value: #e2b662; }
+.sell .pz-phone { transition: width .7s var(--ease-out), height .7s var(--ease-out), border-radius .7s var(--ease-out), --fin .6s var(--ease-out); }
+.sell .pz-phone::before { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; opacity: 0;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .42), inset 0 0 0 var(--ring, 2px) var(--fin, #e2b662), inset 0 0 0 calc(var(--ring, 2px) + 1px) rgba(0, 0, 0, .55);
+  transition: opacity .6s var(--ease-out); }
+.sell .pz-phone[data-fin]::before { opacity: 1; }
+@supports (color: color-mix(in srgb, red 50%, blue)) {
+  .sell .pz-screen { background: radial-gradient(140% 70% at 50% 120%, color-mix(in srgb, var(--fin, #e2b662) 50%, transparent) 0%,
+    color-mix(in srgb, color-mix(in srgb, var(--fin, #e2b662) 70%, #000) 32%, transparent) 40%, rgba(40, 27, 16, 0) 72%), linear-gradient(180deg, #120c07, #2a1c10); }
+}
 @media (min-width: 560px) { .opts-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 .s-cap { color: var(--ink-2); font-size: .9375rem; }
 /* the estimate: under the phone, the whole width of its card; on a computer the column stays in view, the phone
@@ -709,6 +732,12 @@ html.search-open .dock { opacity: 0; pointer-events: none; }
             </div>
           </div>
           <form class="sell-qs" id="sell-form" novalidate>
+            <div class="cfg-step" role="radiogroup" aria-labelledby="q-color">
+              <h2 class="cfg-t" id="q-color">Couleur</h2>
+              <p class="cfg-help" id="s-color-help">Choisissez d’abord le modèle.</p>
+              <div class="sws" id="s-colors" hidden></div>
+              <p class="sw-name" id="s-color-name" aria-hidden="true" hidden></p>
+            </div>
             <div class="cfg-step" role="radiogroup" aria-labelledby="q-storage">
               <h2 class="cfg-t" id="q-storage">Capacité</h2>
               <p class="cfg-help" id="s-storage-help">Choisissez d’abord le modèle.</p>
@@ -1140,6 +1169,28 @@ html.search-open .dock { opacity: 0; pointer-events: none; }
     '15': S3, '15 Plus': S3, '15 Pro': S4, '15 Pro Max': L3, '16e': S3, '16': S3, '16 Plus': S3, '16 Pro': S4, '16 Pro Max': L3,
     '17e': L2, '17': L2, 'Air': L3, '17 Pro': L3, '17 Pro Max': L3.concat('2 To')
   };
+  // the colours Apple sold for each model, by their names in France (Apple's support page "Identifier votre modèle
+  // d'iPhone"; for the 17, Air and 17 Pro, as the French shops name them), in the order of Apple's pages. The swatch
+  // is the colour of the back. Information only: the colour does not change the estimate.
+  var C13 = [['Rose', '#f4d7d2'], ['Bleu', '#276787'], ['Minuit', '#232a31'], ['Lumière stellaire', '#f9f3ee'], ['(PRODUCT)RED', '#ba0c1f'], ['Vert', '#3b4e3c']];
+  var C13P = [['Vert alpin', '#55644f'], ['Argent', '#e9eae5'], ['Or', '#f3e3c3'], ['Graphite', '#54524f'], ['Bleu alpin', '#a0b9d2']];
+  var C14 = [['Bleu', '#a5b8cb'], ['Mauve', '#ddd3e5'], ['Minuit', '#222930'], ['Lumière stellaire', '#f9f3ee'], ['(PRODUCT)RED', '#d7172a'], ['Jaune', '#f4de7a']];
+  var C14P = [['Violet intense', '#5a5163'], ['Or', '#f2e3c6'], ['Argent', '#e8eaea'], ['Noir sidéral', '#3d3b39']];
+  var C15 = [['Rose', '#eed6d5'], ['Jaune', '#f1e8bf'], ['Vert', '#d2dccb'], ['Bleu', '#ccd8e2'], ['Noir', '#36393b']];
+  var C15P = [['Titane naturel', '#b8b2a7'], ['Titane bleu', '#3a4554'], ['Titane blanc', '#edede8'], ['Titane noir', '#403f3d']];
+  var C16E = [['Noir', '#313133'], ['Blanc', '#f2f2ee']];
+  var C16 = [['Outremer', '#8a9bea'], ['Sarcelle', '#94c5c0'], ['Rose', '#f0b3d6'], ['Blanc', '#f3f3f1'], ['Noir', '#3a3c3e']];
+  var C16P = [['Titane sable', '#c3a893'], ['Titane naturel', '#bfb9af'], ['Titane blanc', '#eeede8'], ['Titane noir', '#3d3d3e']];
+  var C17E = [['Noir', '#313133'], ['Blanc', '#f3f3f1'], ['Rose pastel', '#f2d0d8']];
+  var C17 = [['Lavande', '#d5c7e3'], ['Brume', '#a9bcd8'], ['Sauge', '#abb59a'], ['Blanc', '#f3f3f1'], ['Noir', '#343436']];
+  var CAIR = [['Bleu ciel', '#d7e3f0'], ['Or clair', '#eadbbe'], ['Blanc nuage', '#f4f3ef'], ['Noir sidéral', '#2f2f31']];
+  var C17P = [['Orange cosmique', '#e8742c'], ['Bleu intense', '#34405a'], ['Argent', '#e2e3e3']];
+  var COLORS = {
+    '13 mini': C13, '13': C13, '13 Pro': C13P, '13 Pro Max': C13P, '14': C14, '14 Plus': C14, '14 Pro': C14P, '14 Pro Max': C14P,
+    '15': C15, '15 Plus': C15, '15 Pro': C15P, '15 Pro Max': C15P, '16e': C16E, '16': C16, '16 Plus': C16, '16 Pro': C16P, '16 Pro Max': C16P,
+    '17e': C17E, '17': C17, 'Air': CAIR, '17 Pro': C17P, '17 Pro Max': C17P
+  };
+  function colorOf(model, name) { return (COLORS[model] || []).filter(function (c) { return c[0] === name; })[0] || null; }
   var SCREEN = ['impeccable', 'légères rayures', 'rayures marquées', 'fissuré ou défaut d’affichage'];
   var BACK = ['impeccable', 'légères traces', 'rayures ou chocs marqués', 'vitre arrière fissurée'];
   var FIX = { jamais: 'jamais', oui: 'oui', nsp: 'je ne sais pas' };
@@ -1265,6 +1316,7 @@ html.search-open .dock { opacity: 0; pointer-events: none; }
     var w = d[0] * k, h = d[1] * k, r = (home ? .13 : .17) * d[0] * k;
     var side = (home ? 4.4 : d[3]) * k, top = home ? (d[1] > 150 ? 18.8 : 17.6) * k : side;
     setPx(phone, { width: w, height: h, borderRadius: r, aspectRatio: 'auto' });
+    phone.style.setProperty('--ring', Math.max(1.5, side * .4).toFixed(2) + 'px');   // the metal band seen from the front
     setPx(scr, { top: top, bottom: top, left: side, right: side, borderRadius: home ? 1.4 * k : Math.max(2, r - side) });
     if (home) setPx(notch, { width: 10.5 * k, height: 1.5 * k, top: top / 2 - .75 * k, left: '50%', borderRadius: 9 * k, background: '#2b241e', opacity: '1' });
     else if (d[2] === 'notch') setPx(notch, { width: d[4] * k, height: 5.7 * k, top: top - .5, left: '50%', borderRadius: '0 0 ' + (3.4 * k).toFixed(2) + 'px ' + (3.4 * k).toFixed(2) + 'px', background: '#070504', opacity: '1' });
@@ -1272,8 +1324,9 @@ html.search-open .dock { opacity: 0; pointer-events: none; }
     setPx(homeB, { width: 11 * k, height: 11 * k, bottom: (top - 11 * k) / 2, opacity: home ? '1' : '0' });
     setPx(ptime, { fontSize: (home ? 9.5 : 11) * k, top: home ? '9%' : '15%', opacity: '1' });
   }
-  var A = { gen: -1, model: '', storage: '' }, battSet = false;
+  var A = { gen: -1, model: '', storage: '', color: '' }, battSet = false;
   var gensBox = $('s-gens'), modelsBox = $('s-models'), thumb = $('s-thumb'), storeBox = $('s-storage'), sName = $('s-name');
+  var colorsBox = $('s-colors'), colorName = $('s-color-name'), hoverable = window.matchMedia('(hover: hover) and (pointer: fine)');
   function radio(cls, name, value, label, checked, onChange) {
     var l = document.createElement('label'); l.className = cls;
     var i = document.createElement('input'); i.type = 'radio'; i.name = name; i.value = value; i.checked = checked;
@@ -1312,10 +1365,38 @@ html.search-open .dock { opacity: 0; pointer-events: none; }
     list.forEach(function (c) { storeBox.appendChild(radio('chip', 's-storage', c, c, c === A.storage, function () { A.storage = c; update(); })); });
     $('s-storage-help').textContent = A.model ? 'Dans Réglages, puis Général, puis Informations\u00a0: la ligne «\u00a0Capacité\u00a0».' : 'Choisissez d’abord le modèle.';
   }
+  /* the colour: Apple's swatches; the name shows under them (on a computer, that of the swatch under the pointer) */
+  function renderColors() {
+    var list = A.model ? COLORS[A.model] || [] : [];
+    colorsBox.textContent = '';
+    list.forEach(function (c) {
+      var l = document.createElement('label'); l.className = 'sw'; l.title = c[0];
+      var i = document.createElement('input'); i.type = 'radio'; i.name = 's-color'; i.value = c[0]; i.checked = c[0] === A.color;
+      i.setAttribute('aria-label', c[0]);
+      i.addEventListener('change', function () { A.color = c[0]; showColor(); update(); });
+      var s = document.createElement('span'); s.style.setProperty('--c', c[1]);
+      l.appendChild(i); l.appendChild(s);
+      l.addEventListener('pointerenter', function () { if (hoverable.matches) colorName.textContent = c[0]; });
+      l.addEventListener('pointerleave', function () { if (hoverable.matches) colorName.textContent = A.color; });
+      colorsBox.appendChild(l);
+    });
+    colorsBox.hidden = colorName.hidden = !list.length;
+    $('s-color-help').textContent = A.model ? 'Celle du dos de votre iPhone.' : 'Choisissez d’abord le modèle.';
+    showColor();
+  }
+  // the edge of the drawn phone and its wallpaper take the colour, as on Apple's pictures
+  function showColor() {
+    var c = colorOf(A.model, A.color);
+    colorName.textContent = c ? c[0] : '';
+    if (c) { phone.style.setProperty('--fin', c[1]); phone.setAttribute('data-fin', ''); }
+    else { phone.style.removeProperty('--fin'); phone.removeAttribute('data-fin'); }
+  }
   function onModel() {
     sName.textContent = A.model ? iphone(A.model) : 'Votre iPhone';
     if (!reduce.matches) { sName.classList.remove('flip'); void sName.offsetWidth; sName.classList.add('flip'); }
     drawPhone(A.model || '15');
+    if (!colorOf(A.model, A.color)) A.color = '';                 // a colour the new model also had stays chosen
+    renderColors();
     renderStorage();
     moveThumb(true);
     update();
@@ -1349,12 +1430,13 @@ html.search-open .dock { opacity: 0; pointer-events: none; }
   function val(name) { var i = document.querySelector('input[name="' + name + '"]:checked'); return i ? i.value : ''; }
   function lower(s) { return s.charAt(0).toLowerCase() + s.slice(1); }
   function update() {
-    var a = { model: A.model, storage: A.model && STORAGE[A.model].indexOf(A.storage) > -1 ? A.storage : '', screen: val('s-screen'), back: val('s-back'), faceid: val('s-faceid'), lock: val('s-lock'),
+    var a = { model: A.model, storage: A.model && STORAGE[A.model].indexOf(A.storage) > -1 ? A.storage : '', color: colorOf(A.model, A.color) ? A.color : '',
+              screen: val('s-screen'), back: val('s-back'), faceid: val('s-faceid'), lock: val('s-lock'),
               fix: val('s-fix'), box: $('s-box').checked, charger: $('s-charger').checked,
               batt: battX.checked ? 'nsp' : battSet ? +range.value : null,
               works: val('s-works'), issues: all('input[name="s-issue"]:checked').map(function (i) { return i.value; }) };
     issuesBox.hidden = a.works !== 'non';
-    $('s-cap').textContent = a.storage || (a.model ? 'Capacité à choisir' : A.gen > -1 ? 'Choisissez son modèle.' : 'Choisissez sa génération, puis son modèle.');
+    $('s-cap').textContent = [a.storage, a.color].filter(Boolean).join(' · ') || (a.model ? 'Capacité à choisir' : A.gen > -1 ? 'Choisissez son modèle.' : 'Choisissez sa génération, puis son modèle.');
     var noFace = a.faceid === 'non', locked = a.lock === 'non', stop = noFace || locked;
     $('stop-faceid').hidden = !noFace; $('stop-lock').hidden = !locked;
     var est = estimate(a);
@@ -1364,6 +1446,7 @@ html.search-open .dock { opacity: 0; pointer-events: none; }
     var lines = [
       ['Bonjour Phone Island, je voudrais vous vendre mon iPhone.'],
       ['Modèle : ', a.model ? iphone(a.model) : '[le modèle]'],
+      ['Couleur : ', a.color ? lower(a.color) : '[la couleur]'],
       ['Capacité : ', a.storage || '[la capacité]'],
       ['Écran : ', a.screen ? SCREEN[+a.screen] : '[son état]'],
       ['Dos et contour : ', a.back ? BACK[+a.back] : '[leur état]'],
@@ -1379,7 +1462,7 @@ html.search-open .dock { opacity: 0; pointer-events: none; }
     if (first) lines.push(['Prénom : ', first]);
     var msg = bubble(prev, lines);
     var miss = [];
-    if (!a.model) miss.push('le modèle'); else if (!a.storage) miss.push('la capacité');
+    if (!a.model) miss.push('le modèle'); else { if (!a.color) miss.push('la couleur'); if (!a.storage) miss.push('la capacité'); }
     if (!a.screen) miss.push('l’écran');
     if (!a.back) miss.push('le dos');
     if (a.batt == null) miss.push('la batterie');
