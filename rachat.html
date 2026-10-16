@@ -409,6 +409,21 @@ html.search-open .dock { opacity: 0; pointer-events: none; }
 @keyframes srFade { from { opacity: 0; } to { opacity: 1; } }
 @keyframes srItem { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
 
+/* ---------- by e-mail, under the WhatsApp button ---------- */
+.mail { display: grid; gap: 12px; }
+.mail-open { justify-self: center; padding: 4px 2px; border: 0; background: none; color: var(--link); font: inherit; font-size: .875rem; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+.mail-open[aria-expanded="true"] { color: var(--ink-2); }
+.mail-f { display: grid; gap: 10px; }
+.mail-f[hidden] { display: none; }
+.mail-say { color: var(--ink-2); font-size: .8125rem; line-height: 1.45; }
+.mail-bot { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+.mail-st { font-size: .875rem; line-height: 1.4; color: var(--ink-2); }
+.mail-st.bad { color: var(--link); }
+.mail-st[hidden] { display: none; }
+.mail-ok { padding: 14px 16px; border-radius: var(--r-m); background: var(--wa-bubble); color: var(--wa-ink); font-size: .9375rem; line-height: 1.45; }
+.mail-open[hidden] { display: none; }
+.nw { white-space: nowrap; }
+
 /* ---------- the configurator, as Apple's buy pages: the device on the left (it stays), the choices on the right ---------- */
 .cfg-sec { padding-block: clamp(40px, 6vw, 80px) clamp(64px, 8vw, 110px); }
 .cfg { display: grid; gap: 28px; align-items: start; }
@@ -816,6 +831,7 @@ html.search-open .dock { opacity: 0; pointer-events: none; }
             <p class="s-stop" id="s-stop" hidden>Ce téléphone ne remplit pas nos conditions de rachat.</p>
             <p class="s-hint" id="s-hint" hidden></p>
             <a class="btn btn-fill btn-wide" id="s-send" href="https://wa.me/596696174732" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.9c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3Z"/></svg>Recevoir mon offre<span class="wide-only">&nbsp;sur WhatsApp</span></a>
+          <div class="mail" data-mail-for="s-send" data-name="s-first" data-subject="Demande de rachat"></div>
             <p class="wa-alt">Une question&nbsp;? Écrivez-nous au <span class="num" id="num-sell">0696 17 47 32</span><button class="copy" type="button" data-copy="0696 17 47 32" data-target="num-sell">Copier</button></p>
           </aside>
         </div>
@@ -1487,6 +1503,59 @@ html.search-open .dock { opacity: 0; pointer-events: none; }
   if ('ResizeObserver' in window) new ResizeObserver(function () { phone.classList.add('pz-still'); drawPhone(A.model || '15'); moveThumb(false); requestAnimationFrame(function () { phone.classList.remove('pz-still'); }); }).observe(dbox);
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { moveThumb(false); });
 
+
+  /* ---------- by e-mail, for those without WhatsApp: the same message, sent through Web3Forms to the owner's inbox.
+     Each block sits under a WhatsApp button (data-mail-for) and sends the message that button would send. ---------- */
+  var MAIL_KEY = '708470b2-60e3-4bca-8cd9-bc9673f336d7';
+  all('[data-mail-for]').forEach(function (box, n) {
+    var wa = $(box.getAttribute('data-mail-for')), nameEl = $(box.getAttribute('data-name') || ''), id = 'm' + n;
+    box.innerHTML =
+      '<button class="mail-open" type="button" aria-expanded="false" aria-controls="' + id + '-f">Pas de WhatsApp&nbsp;? Envoyer par <span class="nw">e-mail</span></button>' +
+      '<form class="mail-f" id="' + id + '-f" novalidate hidden>' +
+        '<p class="mail-say">Le même message nous arrive par e-mail. On vous rappelle ou on vous répond très vite.</p>' +
+        '<div class="fl"><input class="fl-input" id="' + id + '-tel" type="tel" inputmode="tel" autocomplete="tel" required>' +
+          '<label class="fl-label" for="' + id + '-tel">Votre numéro de téléphone</label></div>' +
+        '<div class="fl"><input class="fl-input" id="' + id + '-mail" type="email" autocomplete="email">' +
+          '<label class="fl-label" for="' + id + '-mail">Votre e-mail <span class="fl-opt">(facultatif)</span></label></div>' +
+        '<input class="mail-bot" type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" aria-hidden="true">' +
+        '<button class="btn btn-line btn-wide mail-go" type="submit">Envoyer par e-mail</button>' +
+        '<p class="mail-st" role="status" aria-live="polite" hidden></p>' +
+      '</form>';
+    var open = box.querySelector('.mail-open'), f = box.querySelector('form'), tel = $(id + '-tel'), mail = $(id + '-mail'),
+        go = box.querySelector('.mail-go'), st = box.querySelector('.mail-st'), bot = box.querySelector('.mail-bot');
+    function say(t, bad) { st.textContent = t; st.hidden = !t; st.classList.toggle('bad', !!bad); }
+    [tel, mail].forEach(function (i) { i.addEventListener('input', function () { if (st.classList.contains('bad')) say(''); }); });
+    open.addEventListener('click', function () {
+      var on = f.hidden; f.hidden = !on; open.setAttribute('aria-expanded', on ? 'true' : 'false');
+      if (on) setTimeout(function () { tel.focus({ preventScroll: false }); }, 30);
+    });
+    f.addEventListener('submit', function (e) {
+      e.preventDefault();
+      if (go.disabled) return;
+      if (!wa.getAttribute('href')) { say('Cette demande ne peut pas être envoyée.', true); return; }
+      if (wa.classList.contains('is-off')) { say('Complétez d’abord votre demande ci-dessus.', true); wa.click(); return; }   // same nudge as WhatsApp
+      var digits = tel.value.replace(/\D/g, '');
+      if (digits.length < 10) { say('Indiquez un numéro de téléphone complet, pour qu’on puisse vous rappeler.', true); tel.focus(); return; }
+      var em = mail.value.trim();
+      if (em && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)) { say('Cette adresse e-mail ne semble pas complète.', true); mail.focus(); return; }
+      var msg = ''; try { msg = new URL(wa.href).searchParams.get('text') || ''; } catch (err) {}
+      var who = nameEl && nameEl.value.trim();
+      var data = { access_key: MAIL_KEY, subject: 'Site Phone Island · ' + box.getAttribute('data-subject') + (who ? ' · ' + who : ''),
+                   from_name: 'Site Phone Island', name: who || 'Non indiqué', 'Téléphone': tel.value.trim(), message: msg, botcheck: bot.checked };
+      if (em) data.email = em;
+      go.disabled = true; go.textContent = 'Envoi en cours…'; say('');
+      fetch('https://api.web3forms.com/submit', { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify(data) })
+        .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { if (!r.ok || j.success === false) throw new Error(j.message || r.status); }); })
+        .then(function () {
+          open.hidden = true;
+          f.innerHTML = '<p class="mail-ok"><b>C’est envoyé, merci&nbsp;!</b> On revient vers vous très vite au ' + tel.value.trim().replace(/[<>&"]/g, '') + '.</p>';
+        })
+        .catch(function () {
+          go.disabled = false; go.textContent = 'Envoyer par e-mail';
+          say('L’envoi n’a pas marché. Réessayez dans un instant, ou appelez-nous au 0696 17 47 32.', true);
+        });
+    });
+  });
 
 })();
 </script>
