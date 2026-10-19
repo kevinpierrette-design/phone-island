@@ -1584,9 +1584,10 @@ html.search-open .dock { opacity: 0; pointer-events: none; }
 
   /* ---------- by e-mail, for those without WhatsApp: the same message, sent through Web3Forms to the owner's inbox.
      Each block sits under a WhatsApp button (data-mail-for) and sends the message that button would send. ---------- */
-  var MAIL_KEY = '708470b2-60e3-4bca-8cd9-bc9673f336d7';
-  all('[data-mail-for]').forEach(function (box, n) {
-    var wa = $(box.getAttribute('data-mail-for')), nameEl = $(box.getAttribute('data-name') || ''), id = 'm' + n;
+  var MAIL_KEY = '708470b2-60e3-4bca-8cd9-bc9673f336d7', mailN = 0;
+  all('[data-mail-for]').forEach(function (box) { mailBox(box); });
+  function mailBox(box) {                      // (again on a box: back to its first state)
+    var wa = $(box.getAttribute('data-mail-for')), nameEl = $(box.getAttribute('data-name') || ''), id = 'm' + (mailN++);
     box.innerHTML =
       '<button class="mail-open" type="button" aria-expanded="false" aria-controls="' + id + '-f">Pas de WhatsApp&nbsp;? Envoyer par <span class="nw">e-mail</span></button>' +
       '<form class="mail-f" id="' + id + '-f" novalidate hidden>' +
@@ -1633,7 +1634,7 @@ html.search-open .dock { opacity: 0; pointer-events: none; }
           say('L’envoi n’a pas marché. Réessayez dans un instant, ou appelez-nous au 0696 17 47 32.', true);
         });
     });
-  });
+  }
 
 })();
 </script>

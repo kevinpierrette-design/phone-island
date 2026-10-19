@@ -526,6 +526,93 @@ html.search-open .dock { opacity: 0; pointer-events: none; }
 .none p { max-width: 44ch; color: var(--ink-2); }
 .none .btn { margin-top: 10px; }
 
+/* ---------- a card opens its sheet ---------- */
+.cat-card.can-open { position: relative; }
+.ph-open { position: absolute; inset: 0; z-index: 1; border: 0; border-radius: inherit; background: none; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.ph-open:focus-visible { outline: none; box-shadow: inset 0 0 0 2px var(--link), 0 0 0 4px var(--focus); }
+.can-open .ph-foot .btn { position: relative; z-index: 2; }
+
+/* ---------- the sheet: the article's page, over the shop ---------- */
+html.sheet-on { overflow: hidden; }
+.sheet { width: min(1060px, calc(100% - 48px)); max-width: none; height: min(calc(100dvh - 48px), 860px); max-height: none; margin: auto; padding: 0; border: 0; border-radius: 28px;
+  background: var(--bg); color: var(--ink); box-shadow: 0 30px 80px rgba(27, 20, 13, .32); overflow: hidden; }
+.sheet::backdrop { background: rgba(27, 20, 13, .46); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+.sheet.in { animation: sheetIn .5s var(--ease-out) both; }
+.sheet.in::backdrop { animation: fadeIn .4s var(--ease-out) both; }
+@keyframes sheetIn { from { opacity: 0; transform: translateY(24px) scale(.985); } to { opacity: 1; transform: none; } }
+.sh-scroll { height: 100%; overflow-y: auto; overscroll-behavior: contain; }
+.sh-in { position: relative; display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); align-items: start; }
+.sh-x { position: absolute; top: 16px; right: 16px; z-index: 3; display: grid; place-items: center; width: 38px; height: 38px; border: 0; border-radius: 50%;
+  background: var(--bg-3); color: var(--ink); cursor: pointer; transition: background-color .2s; }
+.sh-x:hover { background: var(--line-2); }
+.sh-x:focus-visible { outline: none; box-shadow: 0 0 0 4px var(--focus); }
+.sh-x svg { width: 18px; height: 18px; }
+.sh-vis { position: sticky; top: 0; display: grid; place-items: center; height: min(calc(100dvh - 48px), 860px); padding: 48px; background: var(--bg-2); color: var(--ink-3); }
+.sh-vis::before { content: ""; position: absolute; inset: 22% 18%; border-radius: 50%; background: var(--halo, transparent); opacity: .32; filter: blur(46px);
+  transition: background-color .5s var(--ease); }
+.sh-vis:not(.is-art)::before { display: none; }
+.sh-vis img { position: relative; width: 100%; max-width: 440px; aspect-ratio: 1; object-fit: contain; mix-blend-mode: multiply; }
+.sh-vis .art { position: relative; width: min(300px, 70%); height: auto; aspect-ratio: 1; color: var(--ink-2); fill: var(--card); stroke: currentColor; stroke-width: 1.6;
+  stroke-linecap: round; stroke-linejoin: round; }
+.sh-vis > svg:not(.art) { position: relative; width: 160px; height: 160px; fill: none; stroke: currentColor; stroke-width: 1; }
+.sh-main { display: grid; gap: 22px; min-width: 0; padding: 56px 48px 44px 44px; }
+.sh-tag { color: var(--link); font-size: .875rem; font-weight: 600; }
+.sh-tag.alt { color: var(--ink-2); }
+.sh-tag:empty { display: none; }
+.sh-name { margin-top: -16px; font-size: clamp(1.75rem, 3.2vw, 2.5rem); line-height: 1.1; letter-spacing: -.02em; text-wrap: balance; }
+.sh-sub { margin-top: -12px; color: var(--ink-2); font-size: 1rem; line-height: 1.45; }
+.sh-sub:empty { display: none; }
+.sh-opts { display: grid; gap: 20px; }
+.sh-opts:empty { display: none; }
+.sh-opt { min-width: 0; margin: 0; padding: 0; border: 0; display: grid; gap: 10px; }
+.sh-opt-l { padding: 0; margin-bottom: 10px; font-size: .9375rem; font-weight: 600; }
+.sh-opt .shc-row { display: flex; flex-wrap: wrap; gap: 4px; margin: -5px; }
+.sh-opt .shc { position: relative; display: inline-flex; padding: 5px; cursor: pointer; }
+.sh-opt .shc input { position: absolute; opacity: 0; pointer-events: none; }
+.sh-opt .shc span { display: block; flex: none; width: 32px; height: 32px; border-radius: 50%; background: var(--c); box-shadow: inset 0 0 0 1px rgba(27, 20, 13, .16);
+  outline: 2px solid transparent; outline-offset: 3px; transition: outline-color .2s; }
+.sh-opt .shc:hover span { outline-color: var(--line-2); }
+.sh-opt .shc input:checked + span { outline-color: var(--ink); }
+.sh-opt .shc input:focus-visible + span { outline-color: var(--link); }
+.sh-opt .shc-name { margin-top: -2px; color: var(--ink-2); font-size: .9375rem; }
+.sh-buy { display: grid; gap: 12px; padding-top: 22px; border-top: 1px solid var(--line); }
+.sh-price { display: grid; gap: 4px; }
+.sh-amt { font-size: 2rem; font-weight: 600; line-height: 1.1; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+.sh-amt small { font-size: .6em; }
+.sh-from { font-size: 1.25rem; font-weight: 600; letter-spacing: -.01em; }
+.sh-ask { color: var(--ink-2); font-size: .9375rem; }
+.sh-for { color: var(--ink-2); font-size: .875rem; }
+.sh-stock { display: inline-flex; align-items: center; gap: 7px; color: #9a4a1f; font-size: .875rem; font-weight: 600; }
+.sh-stock::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+.sh-stock.on { color: #2f7a3e; }
+.sh-perks { display: grid; gap: 16px; padding: 22px 0 0; border-top: 1px solid var(--line); list-style: none; }
+.sh-perks li { display: grid; grid-template-columns: 24px minmax(0, 1fr); gap: 14px; align-items: start; }
+.sh-perks svg { width: 24px; height: 24px; fill: none; stroke: var(--ink); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.sh-perks div { display: grid; gap: 2px; font-size: .9375rem; line-height: 1.4; }
+.sh-perks span { color: var(--ink-2); font-size: .875rem; }
+.sh-specs { display: grid; gap: 6px; padding-top: 22px; border-top: 1px solid var(--line); }
+.sh-specs-t { font-size: 1.1875rem; letter-spacing: -.01em; }
+.sh-specs dl { display: grid; }
+.sh-row { display: grid; grid-template-columns: 9.5em minmax(0, 1fr); gap: 16px; padding: 12px 0; border-bottom: 1px solid var(--line); font-size: .9375rem; line-height: 1.45; }
+.sh-row:last-child { border-bottom: 0; }
+.sh-row dt { color: var(--ink-2); }
+.sh-row dd { margin: 0; min-width: 0; }
+.sh-specs dl { margin: 0; }
+.sh-row dt:empty { display: none; }
+.sh-row dt:empty + dd { grid-column: 1 / -1; }
+@media (max-width: 860px) {
+  .sheet { width: 100%; max-height: 100dvh; height: 100dvh; margin: auto 0 0; border-radius: 0; }
+  .sheet.in { animation: sheetUp .45s var(--ease-out) both; }
+  @keyframes sheetUp { from { transform: translateY(40px); opacity: 0; } to { transform: none; opacity: 1; } }
+  .sh-in { grid-template-columns: minmax(0, 1fr); }
+  .sh-x { position: fixed; top: calc(12px + env(safe-area-inset-top, 0px)); right: 12px; background: rgba(235, 231, 224, .9); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
+  .sh-vis { position: relative; min-height: 0; height: min(52vh, 420px); padding: calc(28px + env(safe-area-inset-top, 0px)) 28px 24px; }
+  .sh-vis img { max-width: 320px; height: 100%; }
+  .sh-vis .art { width: min(220px, 60%); }
+  .sh-main { padding: 26px var(--gutter) calc(40px + env(safe-area-inset-bottom, 0px)); }
+}
+@media (max-width: 420px) { .sh-row { grid-template-columns: minmax(0, 1fr); gap: 2px; } }
+
 </style>
 </head>
 <body>
@@ -793,6 +880,36 @@ html.search-open .dock { opacity: 0; pointer-events: none; }
     </div>
   </section>
 </main>
+<dialog class="sheet" id="sheet" aria-labelledby="sh-name">
+  <div class="sh-scroll" id="sh-scroll">
+    <div class="sh-in">
+      <button class="sh-x" id="sh-x" type="button" aria-label="Fermer la fiche"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6.5 6.5l11 11M17.5 6.5l-11 11"/></svg></button>
+      <div class="sh-vis" id="sh-vis"></div>
+      <div class="sh-main">
+        <p class="sh-tag" id="sh-tag"></p>
+        <h2 class="sh-name" id="sh-name"></h2>
+        <p class="sh-sub" id="sh-sub"></p>
+        <div class="sh-opts" id="sh-opts"></div>
+        <div class="sh-buy">
+          <p class="sh-price" id="sh-price" aria-live="polite"></p>
+          <p class="sh-stock" id="sh-stock"></p>
+          <a class="btn btn-fill btn-wide" id="sh-pay" href="#" target="_blank" rel="noopener" hidden>Payer par carte</a>
+          <a class="btn btn-fill btn-wide" id="sh-wa" href="https://wa.me/596696174732" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.9c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3Z"/></svg><span id="sh-wa-t">Réserver sur WhatsApp</span></a>
+          <div class="mail" id="sh-mail" data-mail-for="sh-wa" data-subject="Boutique"></div>
+        </div>
+        <ul class="sh-perks">
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5.5c0 4.3-2.9 8-7 9.5-4.1-1.5-7-5.2-7-9.5V6l7-3z"/><path d="M8.8 12.2l2.3 2.3 4.3-4.6"/></svg><div><b>Garantie 2 mois</b><span>Sur tout ce que nous vendons.</span></div></li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7.5h11v8.5H3zM14 10.5h3.6l2.9 3v2.5H14z"/><circle cx="7" cy="17.5" r="1.7"/><circle cx="17" cy="17.5" r="1.7"/></svg><div><b>Livraison partout en Martinique</b><span>Ou remise en main propre, sur rendez-vous à Fort-de-France.</span></div></li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="2.5"/><path d="M3 10h18M7 15h4"/></svg><div><b>Paiement</b><span id="sh-pay-l">Réservez sur WhatsApp ou par e-mail, et payez à la remise.</span></div></li>
+        </ul>
+        <section class="sh-specs" aria-labelledby="sh-specs-t">
+          <h3 class="sh-specs-t" id="sh-specs-t">Caractéristiques</h3>
+          <dl id="sh-specs"></dl>
+        </section>
+      </div>
+    </div>
+  </div>
+</dialog>
 
 <footer class="gf">
   <div class="wrap">
@@ -1185,7 +1302,7 @@ html.search-open .dock { opacity: 0; pointer-events: none; }
      where Apple still sells it (null: none). Out of stock until a phone comes in: the phones themselves go in STOCK
      above, with their own price. */
   var IPHONES = [
-    ['iPhone 18', [['iPhone 18 Pro', '256 Go à 1 To', 2026, 'iph-plateau', null, 1480], ['iPhone 18 Pro Max', '256 Go à 2 To', 2026, 'iph-plateau', null, 1630]]],
+    ['iPhone 18', [['iPhone 18 Pro', '256 Go à 2 To', 2026, 'iph-plateau', null, 1480], ['iPhone 18 Pro Max', '256 Go à 2 To', 2026, 'iph-plateau', null, 1630]]],
     ['iPhone 17', [['iPhone 17e', '256 et 512 Go', 2026, 'iph-1', 740, 870], ['iPhone 17', '256 et 512 Go', 2025, 'iph-pill', 950, 1120], ['iPhone Air', '256 Go à 1 To', 2025, 'iph-air', 975, 1330],
                    ['iPhone 17 Pro', '256 Go à 1 To', 2025, 'iph-plateau', 1130, null], ['iPhone 17 Pro Max', '256 Go à 2 To', 2025, 'iph-plateau', 1240, null]]],
     ['iPhone 16', [['iPhone 16e', '128 à 512 Go', 2025, 'iph-1', 555, null], ['iPhone 16', '128 à 512 Go', 2024, 'iph-pill', 690, 1020], ['iPhone 16 Plus', '128 à 512 Go', 2024, 'iph-pill', 715, null],
@@ -1202,7 +1319,7 @@ html.search-open .dock { opacity: 0; pointer-events: none; }
   ];
   CATALOG.iphone = IPHONES.map(function (g) {
     return { title: g[0], items: g[1].map(function (m) {
-      var it = { cat: 'iphone', name: m[0], detail: m[1] + ' · ' + m[2], art: m[3] };
+      var it = { cat: 'iphone', name: m[0], detail: m[1] + ' · ' + m[2], art: m[3], year: m[2], pr: m[4], pn: m[5] };
       if (m[4]) { it.price = m[4]; it.from = 'Reconditionné dès'; if (m[5]) it.extra = 'Neuf dès ' + money(m[5]) + ' €'; }
       else if (m[5]) { it.price = m[5]; it.from = 'Neuf dès'; }
       return it;
@@ -1311,6 +1428,11 @@ html.search-open .dock { opacity: 0; pointer-events: none; }
     if (p.detail) body.appendChild(el('p', 'ph-spec', p.detail));
     if (p.extra) body.appendChild(el('p', 'ph-spec ph-more', p.extra));
     if (!p.dispo) body.appendChild(el('p', 'ph-out', 'Rupture de stock'));
+    if (what != null) {                        // the whole card opens the article's sheet
+      var go = el('button', 'ph-open'); go.type = 'button'; go.setAttribute('aria-label', 'Voir la fiche : ' + p.name);
+      go.addEventListener('click', function () { openSheet(p, what); });
+      li.appendChild(go); li.classList.add('can-open');
+    }
     var foot = el('div', 'ph-foot');
     if (p.price) {
       var pr = el('p', 'ph-price' + (p.from ? ' ph-price-l' : '')), amt = el('span', 'ph-amt', money(p.price));
@@ -1429,7 +1551,7 @@ html.search-open .dock { opacity: 0; pointer-events: none; }
       try { sessionStorage.setItem('pi-vitre', vModel); } catch (e) {}
       ul.textContent = '';
       VKINDS.forEach(function (t, k) {
-        var p = { name: t.name, detail: vModel ? 'Pour ' + iphone(vModel) : t.detail, art: t.art, photo: t.photo,
+        var p = { cat: 'vitres', name: t.name, detail: vModel ? 'Pour ' + iphone(vModel) : t.detail, more: vModel ? t.detail : '', art: t.art, photo: t.photo,
                   price: (VITRES.price[vModel] || {})[t.key] || VITRES.base[t.key], dispo: (VITRES.dispo[vModel] || []).indexOf(t.key) > -1 };
         var li = ccard(p, k, vModel ? t.name + ' pour ' + iphone(vModel) : null);
         if (vModel) li.querySelector('.ph-spec').insertAdjacentElement('afterend', el('p', 'ph-spec ph-more', t.detail));
@@ -1483,11 +1605,13 @@ html.search-open .dock { opacity: 0; pointer-events: none; }
   }
   function fromHash(animate) {
     var h = location.hash.slice(1);
+    if (/^fiche-/.test(h)) return ficheFromHash(h.slice(6));
+    if (FICHE && sheet.open) { closeSheet(true); if (h === current || h === '') return true; }
     if (h === 'accessoires') h = lastAccessory;
     if (own(SECTIONS, h)) { show(h, animate); return true; }
     return false;
   }
-  window.addEventListener('hashchange', function () { fromHash(true); });
+  window.addEventListener('hashchange', function () { if (skipHash) { skipHash = false; return; } fromHash(true); });
   // how many items each section has, next to its name (the accessories count their three sections)
   Object.keys(SECTIONS).concat('accessoires').forEach(function (k) {
     var keys = k === 'accessoires' ? ACCESSORIES : [k], label = document.querySelector('[data-cat="' + k + '"] span');
@@ -1535,11 +1659,237 @@ html.search-open .dock { opacity: 0; pointer-events: none; }
   }
 
 
+  /* ---------- the product sheet: a tap on an article opens its page, as on apple.com — the picture, the choices
+     (condition, capacity, colour for an iPhone), the price, what it is, and how to buy it ---------- */
+
+  /* For every iPhone: its capacities, its colours (Apple's names, the same as on the buy-back page), and what it is. */
+  var CAPS = {
+    '11': ['64 Go', '128 Go', '256 Go'], '11P': ['64 Go', '256 Go', '512 Go'], '12': ['64 Go', '128 Go', '256 Go'], '12P': ['128 Go', '256 Go', '512 Go'],
+    'std': ['128 Go', '256 Go', '512 Go'], 'pro': ['128 Go', '256 Go', '512 Go', '1 To'], 'max': ['256 Go', '512 Go', '1 To'],
+    '17': ['256 Go', '512 Go'], 'air': ['256 Go', '512 Go', '1 To'], '2to': ['256 Go', '512 Go', '1 To', '2 To']
+  };
+  var COLS = {
+    '11': [['Noir', '#2e2e30'], ['Blanc', '#f3f3f1'], ['Vert', '#c6dfcf'], ['Jaune', '#f7e58f'], ['Mauve', '#d4cde6'], ['(PRODUCT)RED', '#c4122e']],
+    '11P': [['Vert nuit', '#4e5851'], ['Gris sidéral', '#535150'], ['Argent', '#ebebe7'], ['Or', '#f5dfc6']],
+    '12': [['Noir', '#25262a'], ['Blanc', '#f5f5f0'], ['(PRODUCT)RED', '#c4122e'], ['Vert', '#d3ebd9'], ['Bleu', '#1f4e79'], ['Mauve', '#b8afe6']],
+    '12P': [['Graphite', '#54524f'], ['Argent', '#e9eae5'], ['Or', '#f3e3c3'], ['Bleu Pacifique', '#2e4a5c']],
+    '13': [['Rose', '#f4d7d2'], ['Bleu', '#276787'], ['Minuit', '#232a31'], ['Lumière stellaire', '#f9f3ee'], ['(PRODUCT)RED', '#ba0c1f'], ['Vert', '#3b4e3c']],
+    '13P': [['Vert alpin', '#55644f'], ['Argent', '#e9eae5'], ['Or', '#f3e3c3'], ['Graphite', '#54524f'], ['Bleu alpin', '#a0b9d2']],
+    '14': [['Bleu', '#a5b8cb'], ['Mauve', '#ddd3e5'], ['Minuit', '#222930'], ['Lumière stellaire', '#f9f3ee'], ['(PRODUCT)RED', '#d7172a'], ['Jaune', '#f4de7a']],
+    '14P': [['Violet intense', '#5a5163'], ['Or', '#f2e3c6'], ['Argent', '#e8eaea'], ['Noir sidéral', '#3d3b39']],
+    '15': [['Rose', '#eed6d5'], ['Jaune', '#f1e8bf'], ['Vert', '#d2dccb'], ['Bleu', '#ccd8e2'], ['Noir', '#36393b']],
+    '15P': [['Titane naturel', '#b8b2a7'], ['Titane bleu', '#3a4554'], ['Titane blanc', '#edede8'], ['Titane noir', '#403f3d']],
+    '16E': [['Noir', '#313133'], ['Blanc', '#f2f2ee']],
+    '16': [['Outremer', '#8a9bea'], ['Sarcelle', '#94c5c0'], ['Rose', '#f0b3d6'], ['Blanc', '#f3f3f1'], ['Noir', '#3a3c3e']],
+    '16P': [['Titane sable', '#c3a893'], ['Titane naturel', '#bfb9af'], ['Titane blanc', '#eeede8'], ['Titane noir', '#3d3d3e']],
+    '17E': [['Noir', '#313133'], ['Blanc', '#f3f3f1'], ['Rose pastel', '#f2d0d8']],
+    '17': [['Lavande', '#d5c7e3'], ['Brume', '#a9bcd8'], ['Sauge', '#abb59a'], ['Blanc', '#f3f3f1'], ['Noir', '#343436']],
+    'AIR': [['Bleu ciel', '#d7e3f0'], ['Or clair', '#eadbbe'], ['Blanc nuage', '#f4f3ef'], ['Noir sidéral', '#2f2f31']],
+    '17P': [['Orange cosmique', '#e8742c'], ['Bleu intense', '#34405a'], ['Argent', '#e2e3e3']],
+    '18P': [['Noir', '#2d2d2f'], ['Argent', '#e3e4e4'], ['Glacier', '#cfdde6'], ['Bordeaux', '#6b2a35']]
+  };
+  /* what each iPhone is: screen, chip, cameras, plug and charging, water, and what sets it apart */
+  var OLED = 'Super Retina XDR (OLED)', PROM = 'Super Retina XDR (OLED), ProMotion 120 Hz, toujours activé';
+  var LMS = 'Lightning · MagSafe et recharge sans fil', CMS = 'USB‑C · MagSafe et recharge sans fil', C3MS = 'USB‑C (USB 3, plus rapide) · MagSafe et recharge sans fil';
+  var IP6 = 'IP68 : jusqu’à 6 m pendant 30 min';
+  function ph(size, scr, chip, cam, plug, water, more) { return { screen: size + ' ' + scr, chip: chip, cam: cam, plug: plug, water: water, more: more }; }
+  var CAM2 = 'Double 12 Mpx : grand-angle et ultra grand-angle';
+  var PRO3_12 = function (z) { return 'Triple 12 Mpx : grand-angle, ultra grand-angle, téléobjectif ' + z + ' · scanner LiDAR'; };
+  var PRO3_14 = function (z) { return 'Triple : principal 48 Mpx, ultra grand-angle 12 Mpx, téléobjectif ' + z + ' 12 Mpx · scanner LiDAR'; };
+  var PRO3_16 = 'Triple : Fusion 48 Mpx, ultra grand-angle 48 Mpx, téléobjectif 5× 12 Mpx · scanner LiDAR';
+  var PRO3_17 = 'Triple Fusion 48 Mpx : principal, ultra grand-angle, téléobjectif 4× (jusqu’à 8× en qualité optique)';
+  var PRO3_18 = 'Triple Fusion 48 Mpx : principal à ouverture variable, ultra grand-angle, téléobjectif 4× (jusqu’à 8× en qualité optique)';
+  var AI = 'Apple Intelligence';
+  var IPH = {
+    'iPhone 11': ['11', '11', ph('6,1″', 'Liquid Retina (LCD)', 'A13 Bionic', CAM2, 'Lightning · recharge sans fil', 'IP68 : jusqu’à 2 m pendant 30 min', 'Face ID · 4G')],
+    'iPhone 11 Pro': ['11P', '11P', ph('5,8″', OLED, 'A13 Bionic', 'Triple 12 Mpx : grand-angle, ultra grand-angle, téléobjectif 2×', 'Lightning · recharge sans fil', 'IP68 : jusqu’à 4 m pendant 30 min', 'Face ID · 4G')],
+    'iPhone 11 Pro Max': ['11P', '11P', ph('6,5″', OLED, 'A13 Bionic', 'Triple 12 Mpx : grand-angle, ultra grand-angle, téléobjectif 2×', 'Lightning · recharge sans fil', 'IP68 : jusqu’à 4 m pendant 30 min', 'Face ID · 4G')],
+    'iPhone 12 mini': ['12', '12', ph('5,4″', OLED, 'A14 Bionic', CAM2, LMS, IP6, 'Face ID · 5G')],
+    'iPhone 12': ['12', '12', ph('6,1″', OLED, 'A14 Bionic', CAM2, LMS, IP6, 'Face ID · 5G')],
+    'iPhone 12 Pro': ['12P', '12P', ph('6,1″', OLED, 'A14 Bionic', PRO3_12('2×'), LMS, IP6, 'Face ID · 5G · contour en acier inoxydable')],
+    'iPhone 12 Pro Max': ['12P', '12P', ph('6,7″', OLED, 'A14 Bionic', PRO3_12('2,5×'), LMS, IP6, 'Face ID · 5G · contour en acier inoxydable')],
+    'iPhone 13 mini': ['std', '13', ph('5,4″', OLED, 'A15 Bionic', CAM2, LMS, IP6, 'Face ID · 5G')],
+    'iPhone 13': ['std', '13', ph('6,1″', OLED, 'A15 Bionic', CAM2, LMS, IP6, 'Face ID · 5G')],
+    'iPhone 13 Pro': ['pro', '13P', ph('6,1″', 'Super Retina XDR (OLED), ProMotion 120 Hz', 'A15 Bionic', PRO3_12('3×') + ' · mode macro', LMS, IP6, 'Face ID · 5G · contour en acier inoxydable')],
+    'iPhone 13 Pro Max': ['pro', '13P', ph('6,7″', 'Super Retina XDR (OLED), ProMotion 120 Hz', 'A15 Bionic', PRO3_12('3×') + ' · mode macro', LMS, IP6, 'Face ID · 5G · contour en acier inoxydable')],
+    'iPhone 14': ['std', '14', ph('6,1″', OLED, 'A15 Bionic', 'Double 12 Mpx : principal et ultra grand-angle', LMS, IP6, 'Face ID · 5G · détection des accidents')],
+    'iPhone 14 Plus': ['std', '14', ph('6,7″', OLED, 'A15 Bionic', 'Double 12 Mpx : principal et ultra grand-angle', LMS, IP6, 'Face ID · 5G · détection des accidents')],
+    'iPhone 14 Pro': ['pro', '14P', ph('6,1″', PROM, 'A16 Bionic', PRO3_14('3×'), LMS, IP6, 'Dynamic Island · Face ID · 5G · détection des accidents')],
+    'iPhone 14 Pro Max': ['pro', '14P', ph('6,7″', PROM, 'A16 Bionic', PRO3_14('3×'), LMS, IP6, 'Dynamic Island · Face ID · 5G · détection des accidents')],
+    'iPhone 15': ['std', '15', ph('6,1″', OLED, 'A16 Bionic', 'Double : principal 48 Mpx et ultra grand-angle 12 Mpx', CMS, IP6, 'Dynamic Island · Face ID · 5G')],
+    'iPhone 15 Plus': ['std', '15', ph('6,7″', OLED, 'A16 Bionic', 'Double : principal 48 Mpx et ultra grand-angle 12 Mpx', CMS, IP6, 'Dynamic Island · Face ID · 5G')],
+    'iPhone 15 Pro': ['pro', '15P', ph('6,1″', PROM, 'A17 Pro', PRO3_14('3×'), C3MS, IP6, 'Titane · bouton Action · Dynamic Island · ' + AI)],
+    'iPhone 15 Pro Max': ['max', '15P', ph('6,7″', PROM, 'A17 Pro', PRO3_14('5×'), C3MS, IP6, 'Titane · bouton Action · Dynamic Island · ' + AI)],
+    'iPhone 16e': ['std', '16E', ph('6,1″', OLED, 'A18', 'Fusion 48 Mpx, zoom 2× en qualité optique', 'USB‑C · recharge sans fil (sans MagSafe)', IP6, 'Bouton Action · Face ID · ' + AI)],
+    'iPhone 16': ['std', '16', ph('6,1″', OLED, 'A18', 'Double : Fusion 48 Mpx et ultra grand-angle 12 Mpx', CMS, IP6, 'Commande de l’appareil photo · bouton Action · Dynamic Island · ' + AI)],
+    'iPhone 16 Plus': ['std', '16', ph('6,7″', OLED, 'A18', 'Double : Fusion 48 Mpx et ultra grand-angle 12 Mpx', CMS, IP6, 'Commande de l’appareil photo · bouton Action · Dynamic Island · ' + AI)],
+    'iPhone 16 Pro': ['pro', '16P', ph('6,3″', PROM, 'A18 Pro', PRO3_16, C3MS, IP6, 'Titane · Commande de l’appareil photo · bouton Action · ' + AI)],
+    'iPhone 16 Pro Max': ['max', '16P', ph('6,9″', PROM, 'A18 Pro', PRO3_16, C3MS, IP6, 'Titane · Commande de l’appareil photo · bouton Action · ' + AI)],
+    'iPhone 17e': ['17', '17E', ph('6,1″', OLED, 'A19', 'Fusion 48 Mpx, zoom 2× en qualité optique', CMS, IP6, 'Bouton Action · Face ID · ' + AI)],
+    'iPhone 17': ['17', '17', ph('6,3″', PROM, 'A19', 'Double Fusion 48 Mpx : principal et ultra grand-angle', CMS, IP6, 'Caméra avant Center Stage 18 Mpx · Commande de l’appareil photo · ' + AI)],
+    'iPhone Air': ['air', 'AIR', ph('6,5″', 'Super Retina XDR (OLED), ProMotion 120 Hz', 'A19 Pro', 'Fusion 48 Mpx, zoom 2× en qualité optique', CMS, IP6, '5,6 mm d’épaisseur · titane · eSIM uniquement · ' + AI)],
+    'iPhone 17 Pro': ['air', '17P', ph('6,3″', PROM, 'A19 Pro', PRO3_17, C3MS, IP6, 'Aluminium · caméra avant Center Stage 18 Mpx · ' + AI)],
+    'iPhone 17 Pro Max': ['2to', '17P', ph('6,9″', PROM, 'A19 Pro', PRO3_17, C3MS, IP6, 'Aluminium · caméra avant Center Stage 18 Mpx · ' + AI)],
+    'iPhone 18 Pro': ['2to', '18P', ph('6,3″', PROM, 'A20 Pro', PRO3_18, C3MS, IP6, 'Aluminium · caméra avant Center Stage 18 Mpx · ' + AI)],
+    'iPhone 18 Pro Max': ['2to', '18P', ph('6,9″', PROM, 'A20 Pro', PRO3_18, C3MS, IP6, 'Aluminium · caméra avant Center Stage 18 Mpx · ' + AI)]
+  };
+
+  /* PRICES: the owner's price for each capacity, reconditioned (r) and new (n). Until a model has its own, the
+     smallest capacity shows the « dès » price of the card, and the others are confirmed on WhatsApp. For example:
+     'iPhone 15': { r: { '128 Go': 515, '256 Go': 565, '512 Go': 625 } } */
+  var PRICES = {};
+  /* PAY: the card payment links (SumUp or Stripe), once the shop has its account; the « Payer par carte » button only
+     shows on an article in stock that has one. For an iPhone: 'iPhone 15|r|128 Go'; otherwise the article's name. */
+  var PAY = {};
+
+  var sheet = $('sheet'), FICHE = !!sheet, shPushed = false, skipHash = false, shItem = null;
+  var shState = {};
+  // an id for each article of the catalogue, for its address (boutique.html#fiche-airpods-pro-3)
+  var IDS = {};
+  Object.keys(CATALOG).forEach(function (cat) {
+    CATALOG[cat].forEach(function (g) {
+      g.items.forEach(function (p) {
+        p.cat = p.cat || cat;
+        var id = slug(p.name) + (p.tag === ADAPT && !/adaptable/i.test(p.name) ? '-adaptable' : '');
+        if (IDS[id]) id = slug(p.name + ' ' + (p.detail || '').replace(/ · \d{4}$/, ''));
+        p.id = id; IDS[id] = p;
+      });
+    });
+  });
+
+  function openSheet(p, what, viaHash) {
+    if (!FICHE) return;
+    shItem = p;
+    var info = p.cat === 'iphone' ? IPH[p.name] : null;
+    shState = { what: what, etat: p.pr ? 'r' : 'n', cap: info ? CAPS[info[0]][0] : '', col: info ? COLS[info[1]][0][0] : '' };
+    // the picture
+    var vis = $('sh-vis'); vis.textContent = '';
+    if (p.photo) { var im = el('img'); im.src = p.photo; im.alt = p.name; im.decoding = 'async'; vis.appendChild(im); }
+    else vis.appendChild(p.art ? art(p.art) : drawing(p.cat));
+    vis.classList.toggle('is-art', !p.photo);
+    // the name and what kind of article it is
+    $('sh-tag').textContent = p.cat === 'iphone' ? 'iPhone' : p.tag || (p.cat === 'vitres' ? 'Protection d’écran' : '');
+    $('sh-tag').classList.toggle('alt', p.tag === ADAPT);
+    $('sh-name').textContent = p.name;
+    $('sh-sub').textContent = info ? 'Sorti en ' + (p.year || '') + ' · ' + CAPS[info[0]].join(', ').replace(/, ([^,]*)$/, ' ou $1') : (p.detail || '');
+    // the choices (iPhone only)
+    var opts = $('sh-opts'); opts.textContent = '';
+    if (info) {
+      if (p.pr || p.pn) opts.appendChild(choice('État', 'sh-etat', [p.pr ? ['r', 'Reconditionné'] : null, p.pn ? ['n', 'Neuf'] : null].filter(Boolean), shState.etat, function (v) { shState.etat = v; update(); }));
+      opts.appendChild(choice('Capacité', 'sh-cap', CAPS[info[0]].map(function (c) { return [c, c]; }), shState.cap, function (v) { shState.cap = v; update(); }));
+      opts.appendChild(swatches(COLS[info[1]]));
+    }
+    // what it is
+    var dl = $('sh-specs'); dl.textContent = '';
+    specRows(p, info).forEach(function (r) { var d = el('div', 'sh-row'); d.appendChild(el('dt', '', r[0])); d.appendChild(el('dd', '', r[1])); dl.appendChild(d); });
+    update(); mailBox($('sh-mail'));
+    if (p.id && !viaHash) { history.pushState({ fiche: p.id }, '', '#fiche-' + p.id); shPushed = true; }
+    document.documentElement.classList.add('sheet-on');
+    if (!sheet.open) { if (sheet.showModal) sheet.showModal(); else sheet.setAttribute('open', ''); }
+    sheet.scrollTop = 0; $('sh-scroll').scrollTop = 0;
+    if (!reduce.matches) { sheet.classList.remove('in'); void sheet.offsetWidth; sheet.classList.add('in'); }
+    $('sh-x').focus({ preventScroll: true });
+  }
+  function choice(label, name, list, val, on) {
+    var box = el('fieldset', 'sh-opt'), lg = el('legend', 'sh-opt-l', label), row = el('div', 'chips');
+    box.appendChild(lg);
+    list.forEach(function (o) {
+      var l = el('label', 'chip'), i = el('input'), s = el('span', '', o[1]);
+      i.type = 'radio'; i.name = name; i.value = o[0]; i.checked = o[0] === val;
+      i.addEventListener('change', function () { on(o[0]); });
+      l.appendChild(i); l.appendChild(s); row.appendChild(l);
+    });
+    box.appendChild(row);
+    return box;
+  }
+  function swatches(list) {
+    var box = el('fieldset', 'sh-opt'), lg = el('legend', 'sh-opt-l', 'Couleur'), row = el('div', 'shc-row'), nm = el('p', 'shc-name', shState.col);
+    box.appendChild(lg);
+    list.forEach(function (c) {
+      var l = el('label', 'shc'), i = el('input'), s = el('span');
+      i.type = 'radio'; i.name = 'sh-col'; i.value = c[0]; i.checked = c[0] === shState.col; i.setAttribute('aria-label', c[0]);
+      s.style.setProperty('--c', c[1]);
+      i.addEventListener('change', function () { shState.col = c[0]; nm.textContent = c[0]; $('sh-vis').style.setProperty('--halo', c[1]); update(); });
+      l.appendChild(i); l.appendChild(s); row.appendChild(l);
+    });
+    $('sh-vis').style.setProperty('--halo', list[0][1]);
+    box.appendChild(row); box.appendChild(nm);
+    return box;
+  }
+  function specRows(p, info) {
+    var rows = [];
+    if (info) {
+      var s = info[2];
+      rows.push(['Écran', s.screen], ['Puce', s.chip], ['Appareil photo', s.cam], ['Connectique', s.plug], ['Résistance à l’eau', s.water], ['Et aussi', s.more],
+                ['Capacités', CAPS[info[0]].join(' · ')], ['Couleurs', COLS[info[1]].map(function (c) { return c[0]; }).join(' · ')]);
+      return rows;
+    }
+    if (p.tag === APPLE) rows.push(['Origine', 'D’origine Apple']);
+    if (p.tag === ADAPT) rows.push(['Origine', 'D’une autre marque qu’Apple, sans logo Apple']);
+    if (p.cat === 'vitres') rows.push(['Pose', 'Comprise']);
+    (p.detail || '').split(' · ').filter(function (t) { return t && !/^\d{4}$/.test(t); }).forEach(function (t) { rows.push(['', t]); });
+    if (p.more) rows.push(['', p.more]);
+    if (p.photo && (p.tag === ADAPT || /illustration/i.test(p.group || ''))) rows.push(['Photo', 'Photo d’illustration']);
+    return rows;
+  }
+  function shPrice() {                         // { v: the price, exact: false when it is the « dès » price }
+    var p = shItem, s = shState;
+    if (p.cat !== 'iphone') return p.price ? { v: p.price, exact: true } : null;
+    var mine = ((PRICES[p.name] || {})[s.etat] || {})[s.cap];
+    if (mine) return { v: mine, exact: true };
+    var base = s.etat === 'r' ? p.pr : p.pn, caps = CAPS[IPH[p.name][0]];
+    return base && s.cap === caps[0] ? { v: base, exact: true } : base ? { v: base, exact: false } : null;
+  }
+  function update() {
+    var p = shItem, s = shState, pr = shPrice(), iph = p.cat === 'iphone';
+    var box = $('sh-price'); box.textContent = '';
+    if (pr && pr.exact) { var a = el('span', 'sh-amt', money(pr.v)); a.appendChild(el('small', '', ' €')); box.appendChild(a); }
+    else if (pr) { box.appendChild(el('span', 'sh-from', 'Dès ' + money(pr.v) + ' € en ' + CAPS[IPH[p.name][0]][0])); box.appendChild(el('span', 'sh-ask', 'Prix en ' + s.cap + ' sur demande')); }
+    else box.appendChild(el('span', 'sh-ask', 'Prix sur demande'));
+    if (iph) box.appendChild(el('span', 'sh-for', (s.etat === 'n' ? 'Neuf' : 'Reconditionné') + ' · ' + s.cap + ' · ' + s.col));
+    var st = $('sh-stock'); st.textContent = p.dispo ? 'En stock' : 'Rupture de stock'; st.classList.toggle('on', !!p.dispo);
+    // the words of the request
+    var thing = iph ? p.name + ' ' + (s.etat === 'n' ? 'neuf' : 'reconditionné') + ', ' + s.cap + ', ' + s.col : (s.what || p.name);
+    var price = pr && pr.exact ? money(pr.v) + ' €' : '';
+    var wa = $('sh-wa');
+    wa.href = waLink(p.dispo ? 'Bonjour Phone Island, cet article m’intéresse : ' + thing + (price ? ', ' + price : '') + '. Est-il toujours disponible ?'
+                             : 'Bonjour Phone Island, je cherche : ' + thing + '. Prévenez-moi quand c’est de nouveau disponible, merci.');
+    $('sh-wa-t').textContent = p.dispo ? 'Réserver sur WhatsApp' : 'Me prévenir sur WhatsApp';
+    var link = PAY[iph ? p.name + '|' + s.etat + '|' + s.cap : p.name];
+    var pay = $('sh-pay'); pay.hidden = !(p.dispo && link); if (link) pay.href = link;
+    $('sh-pay-l').textContent = p.dispo && link ? 'Paiement par carte en ligne, sécurisé, ou à la remise.' : 'Réservez sur WhatsApp ou par e-mail, et payez à la remise.';
+    $('sh-mail').setAttribute('data-subject', (p.dispo ? 'Réservation · ' : 'Me prévenir · ') + p.name);
+  }
+  function closeSheet(fromNav) {
+    if (!FICHE || !sheet.open) return;
+    if (fromNav) shPushed = false;             // the address has already changed
+    if (sheet.close) sheet.close(); else sheet.removeAttribute('open');
+    if (!fromNav) afterClose();
+  }
+  function afterClose() {
+    document.documentElement.classList.remove('sheet-on');
+    if (shPushed) { shPushed = false; skipHash = true; history.back(); }
+  }
+  function ficheFromHash(id) {
+    var p = FICHE && own(IDS, id) ? IDS[id] : null;
+    if (!p) return false;
+    if (current !== p.cat || catBox.hidden) show(p.cat, false);
+    openSheet(p, said(p), true);
+    return true;
+  }
+  if (FICHE) {
+    $('sh-x').addEventListener('click', function () { closeSheet(false); });
+    sheet.addEventListener('close', function () { if (document.documentElement.classList.contains('sheet-on')) afterClose(); });
+    sheet.addEventListener('click', function (e) { if (e.target === sheet) closeSheet(false); });   // a tap beside the sheet
+    if (/^#fiche-/.test(location.hash)) ficheFromHash(location.hash.slice(7));
+  }
+
   /* ---------- by e-mail, for those without WhatsApp: the same message, sent through Web3Forms to the owner's inbox.
      Each block sits under a WhatsApp button (data-mail-for) and sends the message that button would send. ---------- */
-  var MAIL_KEY = '708470b2-60e3-4bca-8cd9-bc9673f336d7';
-  all('[data-mail-for]').forEach(function (box, n) {
-    var wa = $(box.getAttribute('data-mail-for')), nameEl = $(box.getAttribute('data-name') || ''), id = 'm' + n;
+  var MAIL_KEY = '708470b2-60e3-4bca-8cd9-bc9673f336d7', mailN = 0;
+  all('[data-mail-for]').forEach(function (box) { mailBox(box); });
+  function mailBox(box) {                      // (again on a box: back to its first state)
+    var wa = $(box.getAttribute('data-mail-for')), nameEl = $(box.getAttribute('data-name') || ''), id = 'm' + (mailN++);
     box.innerHTML =
       '<button class="mail-open" type="button" aria-expanded="false" aria-controls="' + id + '-f">Pas de WhatsApp&nbsp;? Envoyer par <span class="nw">e-mail</span></button>' +
       '<form class="mail-f" id="' + id + '-f" novalidate hidden>' +
@@ -1586,7 +1936,7 @@ html.search-open .dock { opacity: 0; pointer-events: none; }
           say('L’envoi n’a pas marché. Réessayez dans un instant, ou appelez-nous au 0696 17 47 32.', true);
         });
     });
-  });
+  }
 
 })();
 </script>
