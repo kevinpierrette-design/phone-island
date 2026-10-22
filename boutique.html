@@ -9,80 +9,92 @@
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
 <style>
 :root { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
 html { scroll-padding-top: env(safe-area-inset-top, 0px); }
 [hidden] { display: none !important; }
-/* Phone Island, v14: the apple.com way.
-   Light pages (white and a warm light grey) with dark sections for the big moments, one system typeface (SF on
-   Apple devices, Inter elsewhere), large centred headlines, a lot of air, rounded tiles, pill buttons, a thin
-   translucent bar on top. The brand stays in the details: espresso brown for the text and the buttons, gold on the
-   dark sections, cream on one tile, the palm logo in the bar.
-   The site commits to this one look (like apple.com): light pages with dark sections, whatever the device's theme. */
+/* Phone Island, v21: the apple.com way, with the hook and the scroll scenes.
+   Light pages (white and Apple's light grey) with black sections for the big moments (the hook, the zone at night),
+   one system typeface (SF on Apple devices, Inter elsewhere), large centred semibold headlines, a lot of air, rounded
+   tiles, pill buttons, a thin translucent bar on top that settles as the page moves. The brand stays in the details:
+   espresso for the text and the buttons, bronze for the links, gold on the black sections, the palm logo in the bar.
+   Motion runs on transform and opacity only; with « reduce motion », all of it stops (see the end of this file). */
 :root {
   --bg: #ffffff;
-  --bg-2: #f5f3ef;          /* alternate sections, tiles on white */
-  --bg-3: #ebe7e0;          /* pressed, tracks */
+  --bg-2: #f5f5f7;          /* Apple's light grey: alternate sections, tiles on white */
+  --bg-3: #e8e8ed;          /* pressed, tracks */
   --card: #ffffff;          /* cards on the grey */
-  --ink: #1b140d;           /* the brand's espresso, as text */
-  --ink-2: #6e665d;         /* secondary text (5:1 on the grey) */
-  --ink-3: #8a8178;         /* large or decorative text only */
-  --link: #8a5d14;          /* bronze: links on light (5.2:1 on the grey) */
+  --card-hi: #fbfbfd;
+  --glass: rgba(0, 0, 0, .03);
+  --ink: #1d1d1f;           /* Apple's near-black, the brand's espresso in spirit */
+  --ink-2: #6e6e73;         /* secondary text (4.7:1 on the grey) */
+  --ink-3: #86868b;         /* large or decorative text only */
+  --link: #8a5d14;          /* bronze: links on light (5.6:1 on white) */
+  --pick: #1d1d1f;          /* the ring of a chosen option */
   --gold: #e2b662;
   --gold-hi: #ecc47a;
+  --gold-deep: #c98a2e;
+  --ember: #7a4a1a;
   --cream: #f3ebdd;
   --espresso: #1b140d;
-  --line: rgba(27, 20, 13, .12);
-  --line-2: rgba(27, 20, 13, .24);
-  --btn: #1b140d;  --btn-ink: #ffffff;  --btn-hover: #3a2c1f;  --btn-line: rgba(27, 20, 13, .9);
-  --focus: rgba(138, 93, 20, .45);
-  --shadow: 0 4px 18px rgba(27, 20, 13, .08);
-  --shadow-hi: 0 10px 34px rgba(27, 20, 13, .14);
-  --wa-chat: #efeae2; --wa-bubble: #d9fdd3; --wa-ink: #111b21; --wa-muted: #667781; --wa-green: #1f8f4e;
+  --night: #000000;
+  --line: rgba(0, 0, 0, .1);
+  --line-2: rgba(0, 0, 0, .2);
+  --btn: #1d1d1f;  --btn-ink: #ffffff;  --btn-hover: #3a3a3c;  --btn-line: #1d1d1f;
+  --thumb: #ffffff;  --thumb-ink: #1d1d1f;
+  --focus: rgba(138, 93, 20, .35);
+  --shadow: 0 4px 18px rgba(0, 0, 0, .07);
+  --shadow-hi: 0 12px 36px rgba(0, 0, 0, .13);
+  --well: radial-gradient(120% 90% at 50% 38%, #ffffff 0%, #f5f5f7 62%, #ececf0 100%);   /* the lit shelf of a product photo */
+  --wa-chat: #efeae2; --wa-bubble: #d9fdd3; --wa-ink: #111b21; --wa-muted: #667781; --wa-green: #1f8f4e;   /* WhatsApp, light */
   --zone-0: #b8862f; --zone-1: #d4ab62; --zone-2: #e7cd99; --zone-3: #f2e6cf;
+  --chev: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236e6e73' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9.5l6 6 6-6'/%3E%3C/svg%3E");
   --font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Inter", "Helvetica Neue", "Segoe UI", Roboto, Arial, sans-serif;
   --gutter: max(22px, env(safe-area-inset-left, 0px));
-  --nav-h: 48px;
-  --r-xl: clamp(22px, 2.4vw, 30px);
+  --bar-h: 52px;            /* the bar */
+  --tabs-h: 0px;            /* the row of tabs under it (phones and tablets) */
+  --nav-h: calc(var(--bar-h) + var(--tabs-h));   /* all that stays at the top */
+  --r-xl: clamp(22px, 2.4vw, 28px);
   --r-l: 18px;
   --r-m: 12px;
   --ease: cubic-bezier(.25, .1, .25, 1);
-  --ease-out: cubic-bezier(.22, .61, .36, 1);
+  --ease-out: cubic-bezier(.16, 1, .3, 1);
   color-scheme: light;
 }
-/* a dark section: the same names, other values; everything inside follows */
+/* a black section: the same names, other values; everything inside follows */
 .dark {
-  --bg: #0c0a08;
-  --bg-2: #171310;
-  --bg-3: #241d17;
-  --card: #171310;
-  --ink: #f5f1ea;
-  --ink-2: #a39b91;
-  --ink-3: #8d857c;
+  --bg: #000000;
+  --bg-2: #161617;
+  --bg-3: #2c2c2e;
+  --card: #161617;
+  --card-hi: #1d1d1f;
+  --glass: rgba(255, 255, 255, .04);
+  --ink: #f5f5f7;
+  --ink-2: #a1a1a6;
+  --ink-3: #86868b;
   --link: #e2b662;
-  --line: rgba(245, 241, 234, .13);
-  --line-2: rgba(245, 241, 234, .26);
+  --pick: #e2b662;
+  --line: rgba(255, 255, 255, .12);
+  --line-2: rgba(255, 255, 255, .24);
   --btn: #e2b662;  --btn-ink: #1b140d;  --btn-hover: #ecc47a;  --btn-line: #e2b662;
   --focus: rgba(226, 182, 98, .55);
-  --shadow: 0 4px 18px rgba(0, 0, 0, .4);
+  --shadow: 0 4px 18px rgba(0, 0, 0, .5);
   --wa-chat: #0b141a; --wa-bubble: #005c4b; --wa-ink: #e9edef; --wa-muted: #8696a0;       /* WhatsApp, dark mode */
-  --zone-0: #e2b662; --zone-1: #a17a45; --zone-2: #735634; --zone-3: #4a3b29;            /* the island at night */
+  --zone-0: #f2cf86; --zone-1: #c99a4e; --zone-2: #8a6537; --zone-3: #4f3c27;            /* the island at night */
+  --chev: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23a1a1a6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9.5l6 6 6-6'/%3E%3C/svg%3E");
   color-scheme: dark;
 }
 
 *, *::before, *::after { box-sizing: border-box; }
-html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; scroll-padding-top: calc(var(--nav-h) + 12px); }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; scroll-padding-top: calc(var(--nav-h) + 12px); background: var(--bg); }
 html:focus-within { scroll-behavior: smooth; }
-@media (prefers-reduced-motion: reduce) {
-  html:focus-within { scroll-behavior: auto; }
-  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
-}
 body {
   margin: 0; background: var(--bg); color: var(--ink);
   font-family: var(--font); font-size: 1.0625rem; line-height: 1.47; font-weight: 400; letter-spacing: -.016em;
   font-optical-sizing: auto; font-synthesis: none;
   -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility;
+  overflow-x: clip;
 }
 .dark, .light { background: var(--bg); color: var(--ink); }
 img, svg, video, canvas, picture { display: block; max-width: 100%; }
@@ -95,6 +107,7 @@ ul, ol { padding: 0; }
 h1, h2, h3, h4 { font-weight: 600; text-wrap: balance; }
 p { text-wrap: pretty; }
 b, strong { font-weight: 600; }
+::selection { background: rgba(226, 182, 98, .35); color: inherit; }
 :focus-visible { outline: 2px solid var(--link); outline-offset: 3px; border-radius: 4px; }
 .visually-hidden { position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
 .num, .tnum { font-variant-numeric: tabular-nums; }
@@ -108,12 +121,12 @@ b, strong { font-weight: 600; }
 .section-tight { padding-block: clamp(64px, 8vw, 110px); }
 .bg-2 { background: var(--bg-2); }
 
-/* ---------- type: Apple's scale, adapted (SF on Apple devices, Inter elsewhere) ---------- */
+/* ---------- type: Apple's scale (SF on Apple devices, Inter elsewhere), semibold headlines ---------- */
 .t-display { font-size: clamp(2.75rem, 1.55rem + 4.9vw, 5rem); line-height: 1.05; letter-spacing: -.022em; font-weight: 600; }
-.t-headline { font-size: clamp(2.25rem, 1.45rem + 3.3vw, 3.5rem); line-height: 1.07; letter-spacing: -.016em; font-weight: 600; }
-.t-headline-s { font-size: clamp(1.875rem, 1.3rem + 2.3vw, 2.75rem); line-height: 1.09; letter-spacing: -.012em; font-weight: 600; }
+.t-headline { font-size: clamp(2.25rem, 1.45rem + 3.3vw, 3.5rem); line-height: 1.07; letter-spacing: -.018em; font-weight: 600; }
+.t-headline-s { font-size: clamp(1.875rem, 1.3rem + 2.3vw, 2.75rem); line-height: 1.09; letter-spacing: -.014em; font-weight: 600; }
 .t-title { font-size: clamp(1.5rem, 1.2rem + 1.2vw, 2rem); line-height: 1.13; letter-spacing: -.01em; font-weight: 600; }
-.t-sub { font-size: clamp(1.1875rem, .98rem + .9vw, 1.75rem); line-height: 1.19; letter-spacing: -.004em; font-weight: 400; }
+.t-sub { font-size: clamp(1.1875rem, .98rem + .9vw, 1.75rem); line-height: 1.21; letter-spacing: -.006em; font-weight: 400; }
 .t-lead { font-size: clamp(1.0625rem, .94rem + .55vw, 1.3125rem); line-height: 1.38; letter-spacing: -.008em; font-weight: 600; color: var(--ink-2); }
 .t-lead b, .t-lead strong { color: var(--ink); }
 .t-eyebrow { font-size: clamp(1.0625rem, .98rem + .35vw, 1.3125rem); line-height: 1.2; letter-spacing: -.004em; font-weight: 600; color: var(--link); }
@@ -123,32 +136,38 @@ b, strong { font-weight: 600; }
 .muted { color: var(--ink-2); }
 .two b, .two strong { color: var(--ink); font-weight: 600; }
 .two { color: var(--ink-2); }
+/* headings marked for light (.gt): plain ink on the light pages, as on apple.com; on the black sections a quiet light
+   from white to pale gold, the way Apple lights its Pro names */
+.gt { color: var(--ink); }
+.dark .gt { background: linear-gradient(180deg, #ffffff 0%, #f5f5f7 45%, #ecd3a0 100%); -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent; }
 
 /* a centred heading block, as on apple.com */
 .head { display: grid; justify-items: center; gap: 14px; text-align: center; max-width: 860px; margin-inline: auto; }
 .head .t-sub, .head .t-lead { max-width: 40ch; }
+.head .t-sub.muted { color: var(--ink-2); }
 .head + * { margin-top: clamp(40px, 6vw, 72px); }
 .head-l { display: grid; gap: 12px; max-width: 760px; }
 .head-l + * { margin-top: clamp(32px, 5vw, 56px); }
 
-/* ---------- buttons and links ---------- */
+/* ---------- buttons and links: Apple's pills (they lean a little towards the pointer, core.js) ---------- */
 .btn { position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: 11px 22px;
-  border: 0; border-radius: 980px; font-size: 1.0625rem; line-height: 1.18; font-weight: 400; letter-spacing: -.016em; white-space: nowrap; text-align: center;
+  border: 0; border-radius: 980px; font-family: var(--font); font-size: 1.0625rem; line-height: 1.18; font-weight: 400; letter-spacing: -.016em; white-space: nowrap; text-align: center;
   transition: background-color .3s var(--ease), color .3s var(--ease), box-shadow .3s var(--ease), opacity .3s var(--ease); -webkit-tap-highlight-color: transparent; }
 .btn svg { width: 1.15em; height: 1.15em; flex: none; }
 .btn-fill { background: var(--btn); color: var(--btn-ink); }
 .btn-fill:hover { background: var(--btn-hover); }
-.btn-line { background: transparent; color: var(--ink); box-shadow: inset 0 0 0 1px var(--btn-line); }
-.dark .btn-line { color: var(--link); }
-.btn-line:hover { background: var(--ink); color: var(--bg); box-shadow: inset 0 0 0 1px var(--ink); }
-.dark .btn-line:hover { background: var(--link); color: var(--btn-ink); box-shadow: inset 0 0 0 1px var(--link); }
+.btn-line { background: transparent; color: var(--btn-line); box-shadow: inset 0 0 0 1px var(--btn-line); }
+.btn-line:hover { background: var(--btn-line); color: var(--btn-ink); }
+.btn-l { min-height: 52px; padding: 14px 28px; font-size: 1.0625rem; }
 .btn-s { min-height: 36px; padding: 8px 16px; font-size: .9375rem; }
 .btn-xs { min-height: 28px; padding: 4px 12px; font-size: .75rem; letter-spacing: -.005em; }
 .btn-xs::after { content: ""; position: absolute; inset: -8px -4px; }
 .btn-wide { width: 100%; white-space: normal; }
+/* the end of a label that drops on small phones: it follows the words, without the button's gap */
+.btn > .wide-only { margin-inline-start: -8px; }
 @media (max-width: 400px) { .wide-only { display: none; } }
 .btn.is-off, .btn[aria-disabled="true"] { opacity: .42; cursor: not-allowed; }
-.btns { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 14px 16px; }
+.btns { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 16px; }
 .btns-l { justify-content: flex-start; }
 .more { display: inline-flex; align-items: center; gap: .18em; color: var(--link); font-weight: 400; }
 .more svg { width: .78em; height: .78em; margin-top: .08em; transition: transform .3s var(--ease); }
@@ -161,24 +180,29 @@ b, strong { font-weight: 600; }
 .badge { display: inline-flex; align-items: center; min-height: 22px; padding: 2px 9px; border-radius: 980px; background: var(--bg-3); color: var(--ink); font-size: .75rem; font-weight: 600; letter-spacing: 0; }
 .badge-gold { background: var(--gold); color: var(--espresso); }
 
-/* ---------- global bar: thin, translucent; it turns dark over the dark sections ---------- */
+/* ---------- global bar: thin; clear at the very top, then (.compact, once the page moves) translucent with its
+   hairline and a slightly smaller logo; it turns dark over the black sections ---------- */
 .gn { position: sticky; top: 0; z-index: 50; height: calc(var(--nav-h) + env(safe-area-inset-top, 0px)); padding-top: env(safe-area-inset-top, 0px);
-  background: rgba(251, 250, 248, .8); color: rgba(27, 20, 13, .88);
-  -webkit-backdrop-filter: saturate(180%) blur(20px); backdrop-filter: saturate(180%) blur(20px);
+  background: rgba(255, 255, 255, 0); color: rgba(29, 29, 31, .9);
   transition: background-color .5s var(--ease), color .5s var(--ease), box-shadow .5s var(--ease); }
-.gn.scrolled { box-shadow: 0 1px 0 rgba(27, 20, 13, .08); }
-.gn.on-dark { background: rgba(14, 11, 9, .74); color: rgba(245, 241, 234, .92); box-shadow: none; }
-.gn-in { display: flex; align-items: center; gap: 12px; height: var(--nav-h); max-width: calc(1024px + 2 * var(--gutter)); margin-inline: auto; padding-inline: var(--gutter); }
+.gn.compact { background: rgba(251, 251, 253, .8); -webkit-backdrop-filter: saturate(180%) blur(20px); backdrop-filter: saturate(180%) blur(20px); box-shadow: 0 1px 0 rgba(0, 0, 0, .08); }
+.gn.on-dark { color: rgba(245, 245, 247, .92); }
+.gn.on-dark.compact { background: rgba(22, 22, 23, .8); box-shadow: 0 1px 0 rgba(255, 255, 255, .06); }
+.gn-in { display: flex; align-items: center; gap: 12px; height: var(--bar-h); max-width: calc(1024px + 2 * var(--gutter)); margin-inline: auto; padding-inline: var(--gutter); }
 .gn-brand { display: flex; align-items: center; gap: 8px; height: 100%; margin-right: auto; color: inherit; }
-.gn-mark, .gn-name { display: block; background: currentColor; -webkit-mask: var(--m) center / contain no-repeat; mask: var(--m) center / contain no-repeat; }
-.gn-mark { --m: url("assets/mark-96.webp"); width: 28px; height: 29px; }
-.gn-name { --m: url("assets/name-96.webp"); width: 63px; height: 28px; }
+.gn-mark, .gn-name { display: block; background: currentColor; -webkit-mask: var(--m) center / contain no-repeat; mask: var(--m) center / contain no-repeat;
+  transition: width .5s var(--ease-out), height .5s var(--ease-out), background-color .5s var(--ease); }
+.gn-mark { --m: url("assets/mark-96.webp"); width: 30px; height: 31px; }
+.gn-name { --m: url("assets/name-96.webp"); width: 66px; height: 29px; }
+.gn.compact .gn-mark { width: 26px; height: 27px; }
+.gn.compact .gn-name { width: 58px; height: 26px; }
 .gn.on-dark .gn-mark { background: var(--gold); }
 .gn-links { display: none; list-style: none; }
-.gn-links a { display: block; padding: 0 9px; line-height: var(--nav-h); font-size: .75rem; letter-spacing: -.005em; color: inherit; opacity: .88; transition: opacity .25s; }
+.gn-links a { display: block; padding: 0 9px; line-height: var(--bar-h); white-space: nowrap; font-size: .75rem; letter-spacing: -.005em; color: inherit; opacity: .86; transition: opacity .25s; }
 .gn-links a:hover, .gn-links a[aria-current="page"] { opacity: 1; }
 .gn-links a[aria-current="page"] { font-weight: 600; }
 .gn-cta { margin-left: 6px; }
+.gn-cta[aria-current="page"] { box-shadow: 0 0 0 2px var(--focus); }
 .gn.on-dark .gn-cta { background: var(--gold); color: var(--espresso); }
 .gn-end { display: flex; align-items: center; gap: 2px; }
 .gn-burger { display: grid; place-items: center; width: 44px; height: 44px; margin-right: -12px; padding: 0; border: 0; background: transparent; color: inherit; }
@@ -187,51 +211,93 @@ b, strong { font-weight: 600; }
 html.menu-open .gn-burger .l1 { transform: translateY(3px) rotate(45deg); }
 html.menu-open .gn-burger .l2 { transform: translateY(-3px) rotate(-45deg); }
 @media (max-width: 833px) { .gn-cta { display: none; } }
-@media (min-width: 834px) {
-  .gn-links { display: flex; align-items: center; gap: 4px; margin-inline: auto; }
+@media (min-width: 1024px) {                       /* six links: the whole row from 1024 px; below, the menu button */
+  .gn-links { display: flex; align-items: center; gap: 2px; margin-inline: auto; }
   .gn-brand { margin-right: 0; flex: 1 1 0; }
   .gn-end { flex: 1 1 0; display: flex; justify-content: flex-end; }
   .gn-burger { display: none; }
 }
 
-/* the menu on phones: a sheet under the bar, the links come down one after the other */
+/* the tabs under the bar, on phones and tablets (from 1024 px the six links of the bar take their place): Tarifs,
+   Boutique and Rachat always in sight, one tap away; the page you are on is underlined */
+.gn-tabs { display: none; }
+@media (max-width: 1023px) {
+  :root { --tabs-h: 40px; }
+  .gn-tabs { display: flex; justify-content: center; align-items: stretch; gap: clamp(26px, 8vw, 44px); height: var(--tabs-h); padding-inline: var(--gutter);
+    border-top: 1px solid transparent; transition: border-color .5s var(--ease); }
+  .gn.compact .gn-tabs, html.menu-open .gn-tabs, html.search-open .gn-tabs { border-top-color: rgba(0, 0, 0, .07); }
+  .gn.on-dark.compact .gn-tabs { border-top-color: rgba(255, 255, 255, .1); }
+  html.menu-open .gn.on-dark .gn-tabs, html.search-open .gn.on-dark .gn-tabs { border-top-color: rgba(0, 0, 0, .07); }
+  .gn-tabs a { position: relative; display: flex; align-items: center; padding-inline: 2px; white-space: nowrap; font-size: .875rem; letter-spacing: -.01em;
+    color: inherit; opacity: .86; transition: opacity .25s; }
+  .gn-tabs a:hover, .gn-tabs a[aria-current="page"] { opacity: 1; }
+  .gn-tabs a[aria-current="page"] { font-weight: 600; }
+  .gn-tabs a[aria-current="page"]::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 2px; border-radius: 2px; background: currentColor; }
+}
+
+/* the menu: a sheet under the bar, the links come down one after the other */
 .menu { position: fixed; z-index: 49; inset: calc(var(--nav-h) + env(safe-area-inset-top, 0px)) 0 0; overflow-y: auto; overscroll-behavior: contain;
-  background: rgba(251, 250, 248, .98); color: var(--ink); -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px); }
+  background: rgba(251, 251, 253, .98); color: var(--ink); -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px); animation: menuFade .3s var(--ease) both; }
 .menu[hidden] { display: none; }
+@keyframes menuFade { from { opacity: 0; } to { opacity: 1; } }
 .menu-in { display: grid; gap: 34px; padding-block: 18px calc(40px + env(safe-area-inset-bottom, 0px)); }
 .menu-links { display: grid; list-style: none; }
-.menu-links a { display: block; padding: 7px 0; font-size: 1.75rem; line-height: 1.14; font-weight: 600; letter-spacing: -.012em; }
+.menu-links a { display: block; padding: 7px 0; font-size: 1.75rem; line-height: 1.14; font-weight: 600; letter-spacing: -.014em; }
 .menu-links li { opacity: 0; transform: translateY(-6px); animation: menuIn .45s var(--ease-out) forwards; animation-delay: calc(var(--i) * 40ms + 60ms); }
 .menu-sub { display: grid; gap: 14px; justify-items: start; opacity: 0; animation: menuIn .45s var(--ease-out) .32s forwards; }
 .menu-sub p { color: var(--ink-2); font-size: .9375rem; }
 @keyframes menuIn { to { opacity: 1; transform: none; } }
 html.menu-open { overflow: hidden; }
-html.menu-open .gn { background: rgba(251, 250, 248, .98); color: rgba(27, 20, 13, .88); }
+html.menu-open .gn { background: rgba(251, 251, 253, .98); color: rgba(29, 29, 31, .9); box-shadow: none; }
 html.menu-open .gn .gn-mark { background: currentColor; }
 
-/* ---------- reveals: the text rises slowly into place (only once the script runs; at rest everything shows) ---------- */
-.js .rv { opacity: 0; transform: translateY(26px); transition: opacity 1.2s var(--ease-out), transform 1.2s var(--ease-out); transition-delay: calc(var(--d, 0) * 120ms); }
+/* ---------- appearing on scroll: the text rises slowly into place (only once the script runs; at rest everything
+   shows) ---------- */
+.js .rv { opacity: 0; transform: translate3d(0, 26px, 0); transition: opacity 1.1s var(--ease-out), transform 1.2s var(--ease-out); transition-delay: calc(var(--d, 0) * 100ms); }
 .js .rv.in { opacity: 1; transform: none; }
 .js .rv-fade { transform: none; }
 .js .rv-zoom { transform: scale(.96); transform-origin: 50% 60%; }
 .js .rv-zoom.in { transform: none; }
-@media (prefers-reduced-motion: reduce) { .js .rv { opacity: 1; transform: none; transition: none; } }
+/* headings, word by word (.wd, made by core.js): each word rises from behind its own line (a mask a little taller
+   than the line, so accents and descenders are never cut); the heading's block stays still and its text under it
+   follows */
+.wd { display: inline-block; vertical-align: top; overflow: hidden; padding: .26em .07em; margin: -.26em -.07em; }
+.wd-i { display: inline-block; padding: .2em .06em; margin: -.2em -.06em; }   /* padded so a gradient on it covers accents and cedillas */
+.js .rv .wd-i { transform: translate3d(0, 1.6em, 0); transition: transform 1.1s var(--ease-out); transition-delay: calc(var(--d, 0) * 100ms + var(--wi, 0) * 70ms + 60ms); }
+.js .rv.in .wd-i { transform: none; }
+.js .head.rv-words { opacity: 1; transform: none; }
+.js .head.rv-words > :not(h2) { opacity: 0; transform: translate3d(0, 16px, 0); transition: opacity .9s var(--ease-out) .4s, transform 1s var(--ease-out) .4s; }
+.js .head.rv-words.in > :not(h2) { opacity: 1; transform: none; }
+/* lists and forms (data-cascade): the block stays, its items come in one after the other */
+.js [data-cascade].rv { opacity: 1; transform: none; }
+.js [data-cascade].rv > * { opacity: 0; transform: translate3d(0, 22px, 0); transition: opacity .8s var(--ease-out), transform .9s var(--ease-out); transition-delay: calc(var(--d, 0) * 100ms + var(--ci, 0) * 55ms); }
+.js [data-cascade].rv.in > * { opacity: 1; transform: none; }
+
+/* ---------- numbers that roll into place when they come into view (core.js builds the wheels; the real figure stays
+   in the page for screen readers and copies) ---------- */
+.odo { display: inline-flex; align-items: baseline; font-variant-numeric: tabular-nums; }
+.odo-w { display: inline-flex; height: 1.1em; line-height: 1.1em; overflow: hidden; vertical-align: bottom; }
+.odo-c { display: flex; flex-direction: column; transform: translate3d(0, 0, 0); transition: transform 1.9s cubic-bezier(.16, 1, .3, 1); transition-delay: calc(var(--i, 0) * 90ms); }
+.odo-c > span, .odo-s { display: block; height: 1.1em; line-height: 1.1em; }
+.odo.go .odo-c { transform: translate3d(0, calc(var(--t) * -1.1em), 0); }
 
 /* ---------- forms: Apple's boxes, the label inside at the top ---------- */
 .form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; align-content: start; }
 .form .full { grid-column: 1 / -1; }
 @media (max-width: 560px) { .form { grid-template-columns: minmax(0, 1fr); } }
 .fl { position: relative; min-width: 0; }
-.fl-input { display: block; width: 100%; min-height: 58px; margin: 0; padding: 25px 15px 8px; border: 1px solid var(--line-2); border-radius: var(--r-m);
-  background: var(--card); color: var(--ink); font-size: 1.0625rem; line-height: 1.25; -webkit-appearance: none; appearance: none;
+.fl-input { display: block; width: 100%; min-height: 58px; margin: 0; padding: 25px 15px 8px; border: 1px solid #d2d2d7; border-radius: var(--r-m);
+  background-color: var(--card); color: var(--ink); font-size: 1.0625rem; line-height: 1.25; -webkit-appearance: none; appearance: none;
   transition: border-color .2s, box-shadow .2s; }
+.dark .fl-input { border-color: var(--line-2); }
 .fl-input::placeholder { color: var(--ink-3); }
-.fl-input:hover { border-color: rgba(27, 20, 13, .4); }
-.dark .fl-input:hover { border-color: rgba(245, 241, 234, .4); }
+.fl-input:hover { border-color: #86868b; }
+.dark .fl-input:hover { border-color: rgba(245, 245, 247, .4); }
 .fl-input:focus { outline: none; border-color: var(--link); box-shadow: 0 0 0 4px var(--focus); }
 .fl-label { position: absolute; left: 16px; top: 9px; right: 40px; color: var(--ink-2); font-size: .75rem; line-height: 1.33; letter-spacing: -.005em; pointer-events: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .fl-label .fl-opt { color: var(--ink-3); }
-select.fl-input { padding-right: 42px; cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236e665d' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9.5l6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 15px center; background-size: 16px; }
+select.fl-input { padding-right: 42px; cursor: pointer; background-image: var(--chev); background-repeat: no-repeat; background-position: right 15px center; background-size: 16px; }
+.dark select.fl-input option { background: #1d1d1f; color: var(--ink); }
 textarea.fl-input { min-height: 112px; resize: vertical; padding-top: 28px; }
 input[type="date"].fl-input { min-height: 58px; }
 input[type="date"].fl-input::-webkit-date-and-time-value { text-align: left; }
@@ -243,14 +309,14 @@ input[type="date"].fl-input::-webkit-date-and-time-value { text-align: left; }
 .opt { position: relative; display: block; cursor: pointer; }
 .opt input { position: absolute; opacity: 0; pointer-events: none; }
 .opt-in { display: grid; grid-template-columns: auto 1fr; gap: 2px 12px; align-items: start; height: 100%; padding: 15px 16px; border-radius: var(--r-m);
-  background: var(--card); box-shadow: inset 0 0 0 1px var(--line-2); transition: box-shadow .25s var(--ease), background-color .25s; }
-.opt-in svg { grid-row: span 2; width: 26px; height: 26px; margin-top: 1px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+  background: var(--card); box-shadow: inset 0 0 0 1px #d2d2d7; transition: box-shadow .25s var(--ease), background-color .25s; }
+.dark .opt-in { box-shadow: inset 0 0 0 1px var(--line-2); }
+.opt-in svg { grid-row: span 2; width: 26px; height: 26px; margin-top: 1px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; color: var(--link); }
 .opt-in b { font-size: 1.0625rem; font-weight: 600; line-height: 1.3; }
 .opt-in small { color: var(--ink-2); font-size: .875rem; line-height: 1.38; }
 .opt:hover .opt-in { box-shadow: inset 0 0 0 1px var(--ink-3); }
-.opt input:checked + .opt-in { box-shadow: inset 0 0 0 2px var(--ink); }
-.dark .opt input:checked + .opt-in { box-shadow: inset 0 0 0 2px var(--gold); }
-.opt input:focus-visible + .opt-in { box-shadow: inset 0 0 0 2px var(--ink), 0 0 0 4px var(--focus); }
+.opt input:checked + .opt-in { box-shadow: inset 0 0 0 2px var(--pick); }
+.opt input:focus-visible + .opt-in { box-shadow: inset 0 0 0 2px var(--pick), 0 0 0 4px var(--focus); }
 .want .opt-in { box-shadow: inset 0 0 0 1px var(--link), 0 0 0 4px var(--focus); }
 
 /* chips: generations, capacities, yes / no */
@@ -260,7 +326,7 @@ input[type="date"].fl-input::-webkit-date-and-time-value { text-align: left; }
 .chip { position: relative; flex: none; display: inline-flex; cursor: pointer; scroll-snap-align: center; }
 .chip input { position: absolute; opacity: 0; pointer-events: none; }
 .chip span { display: inline-flex; align-items: center; justify-content: center; min-height: 40px; min-width: 44px; padding: 0 16px; border-radius: 980px;
-  background: var(--card); color: var(--ink); box-shadow: inset 0 0 0 1px var(--line-2); font-size: .9375rem; letter-spacing: -.01em; white-space: nowrap;
+  background: var(--card); color: var(--ink); box-shadow: inset 0 0 0 1px #d2d2d7; font-size: .9375rem; letter-spacing: -.01em; white-space: nowrap;
   transition: background-color .25s var(--ease), color .25s var(--ease), box-shadow .25s var(--ease); }
 .chip:hover span { box-shadow: inset 0 0 0 1px var(--ink-3); }
 .chip input:checked + span { background: var(--ink); color: var(--bg); box-shadow: inset 0 0 0 1px var(--ink); }
@@ -269,12 +335,13 @@ input[type="date"].fl-input::-webkit-date-and-time-value { text-align: left; }
 /* segmented control (iOS): the white thumb slides under the chosen model */
 .seg { position: relative; display: flex; gap: 0; padding: 3px; border-radius: 12px; background: var(--bg-3); overflow-x: auto; scrollbar-width: none; max-width: 100%; }
 .seg::-webkit-scrollbar { display: none; }
-.seg-thumb { position: absolute; left: 0; top: 3px; bottom: 3px; width: 0; border-radius: 9px; background: var(--card); box-shadow: 0 3px 8px rgba(27, 20, 13, .12), 0 0 0 .5px rgba(27, 20, 13, .06);
+.seg-thumb { position: absolute; left: 0; top: 3px; bottom: 3px; width: 0; border-radius: 9px; background: var(--thumb); box-shadow: 0 3px 8px rgba(0, 0, 0, .12), 0 0 0 .5px rgba(0, 0, 0, .06);
   transition: transform .45s var(--ease-out), width .45s var(--ease-out); }
 .seg-opt { position: relative; z-index: 1; flex: 1 0 auto; display: flex; cursor: pointer; }
 .seg-opt input { position: absolute; opacity: 0; pointer-events: none; }
 .seg-opt span { display: flex; align-items: center; justify-content: center; width: 100%; min-height: 38px; padding: 0 14px; border-radius: 9px; font-size: .9375rem; color: var(--ink-2); white-space: nowrap; transition: color .3s; }
-.seg-opt input:checked + span { color: var(--ink); font-weight: 600; }
+.seg-opt:hover span { color: var(--ink); }
+.seg-opt input:checked + span { color: var(--thumb-ink); font-weight: 600; }
 .seg-opt input:focus-visible + span { box-shadow: 0 0 0 3px var(--focus); }
 .seg.seg-in .seg-opt { animation: segIn .5s var(--ease-out) both; }
 @keyframes segIn { from { opacity: 0; } to { opacity: 1; } }
@@ -297,9 +364,12 @@ input[type="date"].fl-input::-webkit-date-and-time-value { text-align: left; }
 .wa-need[hidden] { display: none; }
 .wa-alt { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; color: var(--ink-2); font-size: .8125rem; }
 .wa-alt .num { color: var(--ink); font-weight: 600; }
+.dark .wa { box-shadow: 0 0 0 1px var(--line), 0 18px 50px rgba(0, 0, 0, .5); }
+.dark .bubble { box-shadow: none; }
 
-/* ---------- footer: small, quiet, grey, as on apple.com ---------- */
-.gf { background: var(--bg-2); color: var(--ink-2); font-size: .75rem; line-height: 1.34; letter-spacing: -.005em; padding-block: 22px calc(22px + env(safe-area-inset-bottom, 0px)); }
+/* ---------- footer: small, quiet, grey, as on apple.com; a hairline draws itself from the middle as it comes up ---------- */
+.gf { position: relative; background: var(--bg-2); color: var(--ink-2); font-size: .75rem; line-height: 1.34; letter-spacing: -.005em; padding-block: 22px calc(22px + env(safe-area-inset-bottom, 0px)); }
+.gf::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 1px; background: linear-gradient(90deg, rgba(0, 0, 0, 0), rgba(0, 0, 0, .14), rgba(0, 0, 0, 0)); transform: scaleX(var(--p, 1)); }
 .gf-notes { display: grid; gap: 8px; padding-bottom: 16px; border-bottom: 1px solid var(--line); }
 .gf-dir { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 22px 28px; padding-block: 22px 26px; border-bottom: 1px solid var(--line); }
 .gf-dir h3 { margin-bottom: 8px; color: var(--ink); font-size: .75rem; font-weight: 600; }
@@ -312,25 +382,29 @@ input[type="date"].fl-input::-webkit-date-and-time-value { text-align: left; }
 
 /* ---------- phone dock: a floating pill at the bottom of small screens ---------- */
 .dock { position: fixed; z-index: 40; left: 50%; bottom: calc(14px + env(safe-area-inset-bottom, 0px)); display: flex; align-items: center; gap: 8px; padding: 6px;
-  border-radius: 980px; background: rgba(251, 250, 248, .82); box-shadow: 0 8px 30px rgba(27, 20, 13, .16), 0 0 0 .5px rgba(27, 20, 13, .08);
+  border-radius: 980px; background: rgba(251, 251, 253, .82); box-shadow: 0 8px 30px rgba(0, 0, 0, .16), 0 0 0 .5px rgba(0, 0, 0, .08);
   -webkit-backdrop-filter: saturate(180%) blur(20px); backdrop-filter: saturate(180%) blur(20px);
-  transform: translate(-50%, 140%); opacity: 0; transition: transform .6s var(--ease-out), opacity .4s; pointer-events: none; }
-.dock.show { transform: translate(-50%, 0); opacity: 1; pointer-events: auto; }
+  transform: translate3d(-50%, 140%, 0); opacity: 0; transition: transform .6s var(--ease-out), opacity .4s; pointer-events: none; }
+.dock.show { transform: translate3d(-50%, 0, 0); opacity: 1; pointer-events: auto; }
 .dock .btn { min-height: 44px; }
 .dock-wa { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; background: var(--wa-green); color: #fff; }
 .dock-wa svg { width: 22px; height: 22px; }
+.dock.on-dark { background: rgba(22, 22, 23, .78); box-shadow: 0 8px 30px rgba(0, 0, 0, .45), 0 0 0 .5px rgba(245, 245, 247, .12); }
+.dock.on-dark .btn-fill { background: var(--gold); color: var(--espresso); }
 @media (min-width: 834px) { .dock { display: none; } }
 html.menu-open .dock { opacity: 0; pointer-events: none; }
 .skip { position: absolute; left: 12px; top: -60px; z-index: 300; padding: 10px 16px; border-radius: 980px; background: var(--espresso); color: #fff; font-size: .875rem; transition: top .25s; }
 .skip:focus { top: calc(10px + env(safe-area-inset-top, 0px)); }
 
-/* ---------- sub-page heading, as on the Apple Store: one large two-tone line, help on the right ---------- */
+/* ---------- a page's heading, as on the Apple Store: one large two-tone line (the name in ink, what the page is for
+   in grey), the help on the right ---------- */
 .ph-head { padding-block: clamp(40px, 6vw, 80px) clamp(28px, 4vw, 52px); }
 .ph-head-in { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 22px 48px; }
-.ph-title { max-width: 26ch; font-size: clamp(2.25rem, 1.5rem + 3vw, 4rem); line-height: 1.06; letter-spacing: -.022em; font-weight: 600; color: var(--ink-3); }
-.ph-title b { color: var(--ink); }
+.ph-title { max-width: 26ch; font-size: min(clamp(2.25rem, 1.5rem + 3vw, 4rem), calc((100vw - 2 * var(--gutter)) / 8)); line-height: 1.06; letter-spacing: -.022em; font-weight: 600; color: var(--ink-3); }
+.ph-title b { font-weight: 600; color: var(--ink); }
+.ph-title .ph-sub { display: inline; }
 .ph-lead { max-width: 52ch; margin-top: 18px; color: var(--ink-2); font-size: clamp(1.0625rem, .98rem + .4vw, 1.3125rem); line-height: 1.38; }
-.ph-help { display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 4px 12px; max-width: 290px; padding-bottom: 6px; font-size: .875rem; line-height: 1.35; color: var(--ink-2); }
+.ph-help { display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 4px 12px; max-width: 300px; padding-bottom: 6px; font-size: .875rem; line-height: 1.35; color: var(--ink-2); text-align: left; }
 .ph-help-ico { grid-row: span 2; display: grid; place-items: center; width: 42px; height: 42px; border-radius: 50%; background: var(--wa-green); color: #fff; }
 .ph-help-ico svg { width: 22px; height: 22px; }
 .ph-help b { color: var(--ink); font-weight: 600; }
@@ -348,33 +422,27 @@ html.menu-open .dock { opacity: 0; pointer-events: none; }
 .chap[aria-selected="true"]::after, .chap[aria-current="true"]::after { content: ""; position: absolute; left: 50%; bottom: 0; width: 22px; height: 2px; margin-left: -11px; border-radius: 2px; background: var(--ink); }
 .chap small { display: block; margin-top: -4px; color: var(--link); font-size: .6875rem; font-weight: 600; letter-spacing: 0; }
 .chap-n { color: var(--ink-3); font-weight: 400; }
-.dark select.fl-input { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23a39b91' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9.5l6 6 6-6'/%3E%3C/svg%3E"); }
-.dock.on-dark { background: rgba(22, 17, 13, .74); box-shadow: 0 8px 30px rgba(0, 0, 0, .45), 0 0 0 .5px rgba(245, 241, 234, .12); }
-.dock.on-dark .btn-fill { background: var(--gold); color: var(--espresso); }
 
 /* the starry sky of the black sections (the tile is drawn by a small script at the top of the page; without it, plain
-   black): one picture pixel per screen pixel on ordinary screens, two on sharp ones */
+   black) */
 .starry { background-color: #000; background-image: var(--stars, none); background-size: 1024px 1024px; }
 @media (min-resolution: 1.5dppx) { .starry { background-size: 512px 512px; } }
-.dark .sw.z3 { box-shadow: none; }
-.dark .wa { box-shadow: 0 0 0 1px var(--line), 0 18px 50px rgba(0, 0, 0, .5); }
-.dark .bubble { box-shadow: none; }
 
 /* ---------- search, as on apple.com: a panel under the bar, the page blurred behind it ---------- */
-.gn-search { display: grid; place-items: center; width: 40px; height: 44px; padding: 0; border: 0; background: none; color: inherit; opacity: .88; transition: opacity .25s; }
+.gn-search { display: grid; place-items: center; width: 40px; height: 44px; padding: 0; border: 0; background: none; color: inherit; opacity: .86; transition: opacity .25s; }
 .gn-search:hover { opacity: 1; }
 .gn-search svg { width: 17px; height: 17px; }
 @media (min-width: 834px) { .gn-search { margin-right: 4px; } }
 .sr { position: fixed; z-index: 49; inset: calc(var(--nav-h) + env(safe-area-inset-top, 0px)) 0 0; }
 .sr[hidden] { display: none; }
-.sr-panel { position: relative; z-index: 1; max-height: 100%; overflow-y: auto; overscroll-behavior: contain; background: rgb(251, 250, 248); color: var(--ink);
-  box-shadow: 0 22px 44px -24px rgba(27, 20, 13, .3); animation: srDown .45s var(--ease-out); }
+.sr-panel { position: relative; z-index: 1; max-height: 100%; overflow-y: auto; overscroll-behavior: contain; background: rgb(251, 251, 253); color: var(--ink);
+  box-shadow: 0 22px 44px -24px rgba(0, 0, 0, .3); animation: srDown .45s var(--ease-out); }
 .sr .sr-in { max-width: calc(700px + 2 * var(--gutter)); padding-block: clamp(16px, 3vw, 34px) clamp(26px, 4vw, 46px); }
 .sr-form { display: flex; align-items: center; gap: 12px; }
 .sr-ico { display: grid; flex: none; color: var(--ink-2); }
 .sr-ico svg { width: 24px; height: 24px; }
 .sr-input { flex: 1 1 auto; min-width: 0; margin: 0; padding: 4px 0; border: 0; border-radius: 0; background: transparent; color: var(--ink);
-  font-size: clamp(1.5rem, 1.25rem + 1vw, 1.75rem); font-weight: 600; letter-spacing: -.012em; outline: none; -webkit-appearance: none; appearance: none; }
+  font-size: clamp(1.5rem, 1.25rem + 1vw, 1.75rem); font-weight: 600; letter-spacing: -.014em; outline: none; -webkit-appearance: none; appearance: none; }
 .sr-input::placeholder { color: var(--ink-3); font-weight: 600; opacity: 1; }
 .sr-input::-webkit-search-cancel-button, .sr-input::-webkit-search-decoration { -webkit-appearance: none; }
 .sr-clear { display: grid; flex: none; place-items: center; width: 34px; height: 34px; padding: 0; border: 0; background: none; color: var(--ink-3); }
@@ -390,7 +458,7 @@ html.menu-open .dock { opacity: 0; pointer-events: none; }
 .sr-item:hover, [aria-selected="true"] > .sr-item { background: var(--bg-3); }
 .sr-t { font-size: 1.0625rem; font-weight: 600; letter-spacing: -.012em; line-height: 1.3; }
 .sr-s { grid-column: 1; color: var(--ink-2); font-size: .875rem; line-height: 1.35; }
-.sr-s > span + span::before { content: "\00a0· "; }
+.sr-s > span + span::before { content: ",\00a0"; }
 @media (max-width: 559px) { .sr-s > span:nth-child(n+3) { display: none; } }
 .sr-k { grid-column: 2; grid-row: 1 / span 2; color: var(--ink-3); font-size: .75rem; }
 .sr-quick { grid-template-columns: auto minmax(0, 1fr); gap: 10px; padding-block: 7px; font-size: .9375rem; font-weight: 600; letter-spacing: -.01em; }
@@ -399,11 +467,11 @@ html.menu-open .dock { opacity: 0; pointer-events: none; }
 .sr-none[hidden] { display: none; }
 .sr-none b { color: var(--ink); font-weight: 600; }
 .sr-tips { margin-top: 26px; color: var(--ink-3); font-size: .8125rem; line-height: 1.4; }
-.sr-scrim { position: absolute; inset: 0; background: rgba(232, 228, 222, .45); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); animation: srFade .45s var(--ease-out); }
+.sr-scrim { position: absolute; inset: 0; background: rgba(232, 232, 237, .45); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); animation: srFade .45s var(--ease-out); }
 html.search-open { overflow: hidden; }
-html.search-open .gn { background: rgb(251, 250, 248); color: rgba(27, 20, 13, .88); box-shadow: none; }
+html.search-open .gn { background: rgb(251, 251, 253); color: rgba(29, 29, 31, .9); box-shadow: none; }
 html.search-open .gn .gn-mark { background: currentColor; }
-html.search-open .gn.on-dark .gn-cta { background: var(--espresso); color: #fff; }
+html.search-open .gn.on-dark .gn-cta { background: var(--btn); color: var(--btn-ink); }
 html.search-open .dock { opacity: 0; pointer-events: none; }
 @keyframes srDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: none; } }
 @keyframes srFade { from { opacity: 0; } to { opacity: 1; } }
@@ -413,6 +481,7 @@ html.search-open .dock { opacity: 0; pointer-events: none; }
 .mail { display: grid; gap: 12px; }
 .mail-open { justify-self: center; padding: 4px 2px; border: 0; background: none; color: var(--link); font: inherit; font-size: .875rem; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
 .mail-open[aria-expanded="true"] { color: var(--ink-2); }
+.mail-open[hidden] { display: none; }
 .mail-f { display: grid; gap: 10px; }
 .mail-f[hidden] { display: none; }
 .mail-say { color: var(--ink-2); font-size: .8125rem; line-height: 1.45; }
@@ -421,33 +490,78 @@ html.search-open .dock { opacity: 0; pointer-events: none; }
 .mail-st.bad { color: var(--link); }
 .mail-st[hidden] { display: none; }
 .mail-ok { padding: 14px 16px; border-radius: var(--r-m); background: var(--wa-bubble); color: var(--wa-ink); font-size: .9375rem; line-height: 1.45; }
-.mail-open[hidden] { display: none; }
-.nw { white-space: nowrap; }
 
-/* ---------- booking: the form on the left, the WhatsApp message on the right ---------- */
-.book { display: grid; gap: clamp(28px, 4vw, 48px); align-items: start; max-width: 1080px; margin-inline: auto; }
+/* ---------- cards that answer the pointer (.glow): they lift a little, as Apple's tiles do ---------- */
+.glow { position: relative; isolation: isolate; transition: box-shadow .5s var(--ease), translate .5s var(--ease-out); }
+@media (hover: hover) and (pointer: fine) { a.glow:hover, article.glow:hover { box-shadow: var(--shadow-hi); } }
+
+/* ---------- a slow gold light running round a card's edge (the message ready to send, the estimate) ---------- */
+@property --ang { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
+.ring { border: 1px solid transparent;
+  background: linear-gradient(var(--ring-fill, var(--card)), var(--ring-fill, var(--card))) padding-box,
+              conic-gradient(from var(--ang), rgba(226, 182, 98, 0) 0 58%, rgba(201, 138, 46, .85) 80%, #e2b662 86%, rgba(226, 182, 98, 0) 96%) border-box,
+              linear-gradient(var(--line), var(--line)) border-box;
+  animation: ringSpin 7s linear infinite; }
+@keyframes ringSpin { to { --ang: 360deg; } }
+
+/* ---------- from one page to the next: a fade (where the browser can) ---------- */
+@view-transition { navigation: auto; }
+::view-transition-old(root) { animation: vtOut .3s var(--ease) both; }
+::view-transition-new(root) { animation: vtIn .45s var(--ease-out) both; }
+@keyframes vtOut { to { opacity: 0; } }
+@keyframes vtIn { from { opacity: 0; } }
+
+/* ---------- phones: easier to read, even outside in the sun. The small labels a step larger (the root on 17 px), the
+   text itself on 17 px, the second voice a little darker, the buttons a little taller to touch. ---------- */
+@media (max-width: 734px) {
+  html { font-size: 106.25%; }
+  body { font-size: 1rem; }
+  :root { --ink-2: #5e5e63; --ink-3: #78787d; }
+  .dark { --ink-2: #b4b4b9; }
+  .t-body, .opt-in b, .fl-input, .sr-t { font-size: 1rem; }
+  .fl-label { font-size: .75rem; }
+  .gf { font-size: .8125rem; }
+  .btn { min-height: 48px; }
+  .btn-s { min-height: 42px; padding: 8px 18px; }
+}
+
+/* ---------- reduced motion: nothing moves by itself, nothing slides; everything is simply there ---------- */
+@media (prefers-reduced-motion: reduce) {
+  @view-transition { navigation: none; }
+  html:focus-within { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; transition-delay: 0s !important; scroll-behavior: auto !important; }
+  .js .rv, .js .rv .wd-i, .js [data-cascade].rv > *, .js .head.rv-words > :not(h2) { opacity: 1; transform: none; }
+  .ring { animation: none; --ang: 200deg; }
+}
+
+/* ---------- booking: the form on the left, the WhatsApp message on the right (its edge lit by a slow gold light), on
+   Apple's light grey ---------- */
+.book { display: grid; gap: clamp(28px, 4vw, 48px); align-items: start; max-width: 1080px; margin-inline: auto; text-align: left; }
 @media (min-width: 900px) {
   .book { grid-template-columns: minmax(0, 1.2fr) minmax(0, .8fr); }
   .book-wa { position: sticky; top: calc(var(--nav-h) + 24px); }
 }
+.ph-head + .book-sec { padding-top: clamp(28px, 4vw, 52px); }          /* the booking page: the form right under the title */
 .place { min-width: 0; margin: 6px 0 0; padding: 0; border: 0; }
 .place-q { margin-bottom: 12px; padding: 0; font-size: 1.1875rem; font-weight: 600; letter-spacing: -.012em; }
 .place.want .place-q { color: var(--link); }
-.come { display: grid; gap: 14px; padding: 18px; border-radius: var(--r-l); background: var(--card); box-shadow: inset 0 0 0 1px var(--line); }
+.come { display: grid; gap: 14px; padding: 18px; border-radius: var(--r-l); background: var(--card); box-shadow: inset 0 0 0 1px #d2d2d7; }
 .come[hidden] { display: none; }
 .come.want { box-shadow: inset 0 0 0 1px var(--link), 0 0 0 4px var(--focus); }
 .come-fee { font-size: 1.0625rem; }
-.come-fee b { font-weight: 600; }
+.come-fee b { font-weight: 600; color: var(--link); }
 .come-zones { display: grid; gap: 0; list-style: none; border-top: 1px solid var(--line); }
 .come-zones li { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 9px 2px; border-bottom: 1px solid var(--line); color: var(--ink-2); font-size: .9375rem; transition: color .3s; }
 .come-zones li b { font-weight: 600; font-variant-numeric: tabular-nums; }
 .come-zones li.on { color: var(--ink); }
 .come-zones li.on span:nth-child(2) { font-weight: 600; }
 .come-map { font-size: .9375rem; }
-.meet { padding: 14px 16px; border-radius: var(--r-m); background: var(--card); box-shadow: inset 0 0 0 1px var(--line); color: var(--ink-2); font-size: .9375rem; }
+.meet { padding: 14px 16px; border-radius: var(--r-m); background: var(--card); box-shadow: inset 0 0 0 1px #d2d2d7; color: var(--ink-2); font-size: .9375rem; }
 .meet[hidden] { display: none; }
-.sw { display: inline-block; width: 12px; height: 12px; border-radius: 4px; }
-.sw.z0 { background: var(--zone-0); } .sw.z1 { background: var(--zone-1); } .sw.z2 { background: var(--zone-2); } .sw.z3 { background: var(--zone-3); box-shadow: inset 0 0 0 1px rgba(27, 20, 13, .14); }
+.wa.ring { box-shadow: var(--shadow-hi); }
+/* the swatches of the zones (the trip's prices) */
+.sw { display: inline-block; flex: none; width: 12px; height: 12px; border-radius: 4px; }
+.sw.z0 { background: var(--zone-0); } .sw.z1 { background: var(--zone-1); } .sw.z2 { background: var(--zone-2); } .sw.z3 { background: var(--zone-3); box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .14); }
 
 /* ---------- the shop: the Apple Store way (sections as icons, a shelf of cards that slides) ---------- */
 .shop-sec { padding-block: clamp(26px, 3.6vw, 44px) clamp(64px, 8vw, 110px); }
@@ -622,30 +736,37 @@ html.sheet-on { overflow: hidden; }
   <nav class="gn-in" aria-label="Navigation principale">
     <a class="gn-brand" href="index.html" aria-label="Phone Island, accueil"><span class="gn-mark" aria-hidden="true"></span><span class="gn-name" aria-hidden="true"></span></a>
     <ul class="gn-links">
-      <li><a href="index.html#reparations">Réparations</a></li>
+      <li><a href="reparations.html">Réparations</a></li>
       <li><a href="tarifs.html">Tarifs</a></li>
       <li><a href="boutique.html" aria-current="page">Boutique</a></li>
       <li><a href="rachat.html">Rachat</a></li>
+      <li><a href="index.html#deroulement">Comment ça se passe</a></li>
       <li><a href="index.html#zone">Zone</a></li>
     </ul>
     <div class="gn-end">
       <button class="gn-search" id="search-btn" type="button" aria-label="Rechercher sur Phone Island" aria-expanded="false" aria-controls="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="10.6" cy="10.6" r="6.4"/><path d="M15.4 15.4 20 20"/></svg></button>
-      <a class="btn btn-fill btn-xs gn-cta" href="index.html#rendez-vous">Rendez-vous</a>
+      <a class="btn btn-fill btn-xs gn-cta" href="rendez-vous.html">Rendez-vous</a>
       <button class="gn-burger" id="burger" type="button" aria-expanded="false" aria-controls="menu" aria-label="Ouvrir le menu"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" aria-hidden="true"><line class="l1" x1="2.5" y1="6" x2="15.5" y2="6"/><line class="l2" x1="2.5" y1="12" x2="15.5" y2="12"/></svg></button>
     </div>
+  </nav>
+  <nav class="gn-tabs" aria-label="Tarifs, boutique et rachat">
+    <a href="tarifs.html">Tarifs</a>
+    <a href="boutique.html" aria-current="page">Boutique</a>
+    <a href="rachat.html">Rachat</a>
   </nav>
 </header>
 <div class="menu" id="menu" hidden>
   <div class="wrap menu-in">
     <ul class="menu-links">
-      <li style="--i:0"><a href="index.html#reparations">Réparations</a></li>
+      <li style="--i:0"><a href="reparations.html">Réparations</a></li>
       <li style="--i:1"><a href="tarifs.html">Tarifs</a></li>
       <li style="--i:2"><a href="boutique.html">Boutique</a></li>
       <li style="--i:3"><a href="rachat.html">Rachat</a></li>
-      <li style="--i:4"><a href="index.html#zone">Zone et déplacement</a></li>
+      <li style="--i:4"><a href="index.html#deroulement">Comment ça se passe</a></li>
+      <li style="--i:5"><a href="index.html#zone">Zone et déplacement</a></li>
     </ul>
     <div class="menu-sub">
-      <a class="btn btn-fill" href="index.html#rendez-vous">Prendre rendez-vous</a>
+      <a class="btn btn-fill" href="rendez-vous.html">Prendre rendez-vous</a>
       <p>WhatsApp et téléphone&nbsp;: <span class="num">0696 17 47 32</span></p>
     </div>
   </div>
@@ -790,7 +911,7 @@ html.sheet-on { overflow: hidden; }
   <section class="ph-head" data-dock-after aria-labelledby="shop-title">
     <div class="wrap wrap-wide">
       <div class="ph-head-in">
-        <h1 class="ph-title rv" id="shop-title"><b>Boutique.</b> iPhone neufs et reconditionnés, AirPods et accessoires.</h1>
+        <h1 class="ph-title rv" id="shop-title"><b><span class="gt split">Boutique.</span></b> <span class="ph-sub">iPhone neufs et reconditionnés, AirPods et accessoires.</span></h1>
         <p class="ph-help rv" style="--d:1"><span class="ph-help-ico"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.9c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3Z"/></svg></span><b>Une question sur un article&nbsp;?</b><a class="more" href="https://wa.me/596696174732" data-wa="Bonjour Phone Island, j’ai une question sur la boutique." target="_blank" rel="noopener">Écrivez-nous sur WhatsApp<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 6l6 6-6 6"/></svg></a></p>
       </div>
     </div>
@@ -826,14 +947,14 @@ html.sheet-on { overflow: hidden; }
     </div>
   </section>
 
-  <section class="section" id="je-cherche" aria-labelledby="want-title" data-dock-hide>
+  <section class="section want-sec" id="je-cherche" aria-labelledby="want-title" data-dock-hide>
     <div class="wrap wrap-wide">
       <header class="head rv">
-        <h2 class="t-headline" id="want-title">Vous cherchez quelque chose&nbsp;?</h2>
+        <h2 class="t-headline split" id="want-title"><span class="gt">Vous cherchez quelque chose&nbsp;?</span></h2>
         <p class="t-sub muted">Dites-nous quoi. Votre message s’ouvre dans WhatsApp, prêt à partir, et on vous répond.</p>
       </header>
       <div class="book">
-        <form class="form rv" id="want" novalidate>
+        <form class="form rv" id="want" novalidate data-cascade>
           <div class="fl">
             <select class="fl-input" id="w-cat">
               <option value="iphone">Un iPhone</option><option value="airpods">Des AirPods</option><option value="chargeurs">Un chargeur</option>
@@ -866,7 +987,7 @@ html.sheet-on { overflow: hidden; }
             <label class="fl-label" for="w-notes">Précisions <span class="fl-opt">(facultatif)</span></label>
           </div>
         </form>
-        <aside class="wa book-wa rv" style="--d:1" aria-label="Aperçu du message WhatsApp">
+        <aside class="wa book-wa ring rv" style="--d:1" aria-label="Aperçu du message WhatsApp">
           <div class="wa-head">
             <span class="wa-avatar"><img src="assets/mark-96.webp" alt="" width="96" height="98"></span>
             <div><p class="wa-name">Phone Island</p><p class="wa-sub">Votre message, prêt à partir</p></div>
@@ -911,20 +1032,22 @@ html.sheet-on { overflow: hidden; }
   </div>
 </dialog>
 
-<footer class="gf">
+<footer class="gf" data-scene=".9">
   <div class="wrap">
-    <div class="gf-notes">
+    <div class="gf-notes rv">
       <p>Prix des réparations&nbsp;: pièce et main-d’œuvre comprises. Diagnostic gratuit. Délai selon disponibilité de la pièce.</p>
       <p>Déplacement de 10 à 35&nbsp;€ selon votre commune. Si vous venez à nous, pas de déplacement à payer&nbsp;: on vous envoie notre localisation sur WhatsApp.</p>
     </div>
-    <nav class="gf-dir" aria-label="Plan du site">
+    <nav class="gf-dir rv" style="--d:1" aria-label="Plan du site">
       <div>
         <h3>Réparer</h3>
         <ul>
-          <li><a href="index.html#reparations">Réparations</a></li>
+          <li><a href="reparations.html">Réparations</a></li>
           <li><a href="tarifs.html">Tarifs</a></li>
+          <li><a href="tarifs.html#entretien">Entretien et nettoyage</a></li>
+          <li><a href="index.html#deroulement">Comment ça se passe</a></li>
           <li><a href="index.html#zone">Zone et déplacement</a></li>
-          <li><a href="index.html#rendez-vous">Prendre rendez-vous</a></li>
+          <li><a href="rendez-vous.html">Prendre rendez-vous</a></li>
         </ul>
       </div>
       <div>
@@ -946,7 +1069,7 @@ html.sheet-on { overflow: hidden; }
         </ul>
       </div>
     </nav>
-    <div class="gf-base">
+    <div class="gf-base rv" style="--d:2">
       <p>© <span class="year">2026</span> Phone Island. Réparation et vente de smartphones, à domicile partout en Martinique. Fort-de-France.</p>
       <span class="gf-logo" role="img" aria-label="Phone Island"></span>
     </div>
@@ -970,6 +1093,23 @@ html.sheet-on { overflow: hidden; }
   function fold(s) { return String(s).replace(/œ/g, 'oe').replace(/Œ/g, 'oe').replace(/æ/g, 'ae').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase(); }
   function slug(s) { return fold(String(s).replace(/\+/g, ' plus ')).replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, ''); }
   function restart(el, cls) { if (reduce.matches || !el) return; el.classList.remove(cls); void el.offsetWidth; el.classList.add(cls); }
+  /* a jump made while the page loads (an address with #…) stays right once the fonts arrive: Playfair Display can change
+     the heights above the target after the first jump (and the browser may move the page meanwhile). The target is
+     brought back to the top each time fonts finish loading, until the visitor touches, scrolls or types. */
+  var keepJump = (function () {
+    var el = null, user = false;
+    function stop() { user = true; }
+    ['wheel', 'touchstart', 'pointerdown', 'keydown'].forEach(function (t) { window.addEventListener(t, stop, { passive: true, once: true }); });
+    function again() { if (el && !user) el.scrollIntoView({ block: 'start' }); }
+    if (document.fonts && document.fonts.addEventListener) { document.fonts.addEventListener('loadingdone', again); document.fonts.ready.then(again); }
+    window.addEventListener('load', again);
+    return function (target) { el = target; requestAnimationFrame(again); };
+  })();
+  (function () {                          // an anchor of the page itself (index.html#zone)
+    var h = location.hash.slice(1), t = null;
+    try { t = h ? document.getElementById(decodeURIComponent(h)) : null; } catch (e) {}
+    if (t) keepJump(t);
+  })();
 
   /* ---------- the bar: menu on phones; dark over the dark sections; a hairline once the page moves ---------- */
   var gn = $('gn'), burger = $('burger'), menu = $('menu');
@@ -980,21 +1120,47 @@ html.sheet-on { overflow: hidden; }
     document.documentElement.classList.toggle('menu-open', open);
   }
   burger.addEventListener('click', function () { setMenu(menu.hidden); });
-  menu.addEventListener('click', function (e) { if (e.target.closest('a')) setMenu(false); });
+  menu.addEventListener('click', function (e) { if (e.target === menu || e.target.closest('a')) setMenu(false); });   // a link, or the dimmed page around the card
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !menu.hidden) { setMenu(false); burger.focus(); } });
-  window.matchMedia('(min-width: 834px)').addEventListener('change', function (m) { if (m.matches) setMenu(false); });
+  window.matchMedia('(min-width: 1024px)').addEventListener('change', function (m) { if (m.matches) setMenu(false); });
   var darks = all('[data-nav="dark"]'), navTick = false, dockEl = $('dock');
   function darkAt(y) { return darks.some(function (s) { var r = s.getBoundingClientRect(); return r.top <= y && r.bottom > y; }); }
   function navTheme() {
     navTick = false;
     gn.classList.toggle('on-dark', darkAt(gn.getBoundingClientRect().bottom + 1));
     gn.classList.toggle('scrolled', window.scrollY > 4);
+    gn.classList.toggle('compact', window.scrollY > 48);              // the island draws itself in
     if (dockEl) dockEl.classList.toggle('on-dark', darkAt(window.innerHeight - 40));   // the dock too, over the dark sections
   }
   function onNav() { if (!navTick) { navTick = true; requestAnimationFrame(navTheme); } }
   window.addEventListener('scroll', onNav, { passive: true });
   window.addEventListener('resize', onNav);
   navTheme();
+
+  /* ---------- headings (.split): their words rise one after the other from behind a line, when the block around them
+     comes into view. The heading keeps its whole text for screen readers (out of sight); the words drawn are hidden
+     from them. A gold or cream gradient on the heading goes onto each word (the same light, word by word). ---------- */
+  function splitWords(el) {
+    var g = el.classList.contains('gt') ? el : null, kid = el.firstElementChild;
+    if (!g && el.children.length === 1 && kid.classList.contains('gt') && kid.textContent === el.textContent) g = kid;
+    var grad = g ? Array.prototype.filter.call(g.classList, function (c) { return /^gt/.test(c); }) : [];
+    var text = el.textContent.replace(/[ \t\n\r]+/g, ' ').trim();          // only real spaces: « chose ? » stays together
+    var real = document.createElement('span'), line = document.createElement('span');
+    real.className = 'visually-hidden'; real.textContent = text;
+    line.className = 'wd-l'; line.setAttribute('aria-hidden', 'true');
+    text.split(' ').forEach(function (w, i) {
+      if (i) line.appendChild(document.createTextNode(' '));
+      var o = document.createElement('span'), n = document.createElement('span');
+      o.className = 'wd'; n.className = ['wd-i'].concat(grad).join(' '); n.textContent = w; n.style.setProperty('--wi', i);
+      o.appendChild(n); line.appendChild(o);
+    });
+    grad.forEach(function (c) { el.classList.remove(c); });
+    el.textContent = ''; el.appendChild(real); el.appendChild(line);
+    var head = el.closest('.head'); if (head) head.classList.add('rv-words');
+  }
+  if ('IntersectionObserver' in window && !reduce.matches) all('.split').forEach(splitWords);
+  /* lists and forms (data-cascade): their items come in one after the other */
+  all('[data-cascade]').forEach(function (box) { Array.prototype.forEach.call(box.children, function (c, k) { c.style.setProperty('--ci', k); }); });
 
   /* ---------- reveals: each block rises into place once, as it comes into view ---------- */
   if ('IntersectionObserver' in window && !reduce.matches) {
@@ -1003,6 +1169,110 @@ html.sheet-on { overflow: hidden; }
     }, { rootMargin: '0px 0px -12% 0px', threshold: .01 });
     all('.rv').forEach(function (el) { rio.observe(el); });
   } else all('.rv').forEach(function (el) { el.classList.add('in'); });
+
+  /* ---------- scroll scenes: as an element marked data-scene comes up the screen, --p goes from 0 (its top at the
+     bottom of the screen) to 1 (its top at the height given: 62 % of the screen unless data-scene says otherwise);
+     the hero (data-out) gets --x, from 0 to 1 as it scrolls away. The styles move things with them, with transforms
+     and opacity only, so it stays smooth. Without scripts, or with reduced motion, nothing is set: --p stays 1 and
+     everything is in place. Positions are measured when the page changes size, not on every frame. ---------- */
+  var scenes = all('[data-scene], [data-out]');
+  if (scenes.length && !reduce.matches) {
+    var sc = scenes.map(function (el) {
+      var v = el.getAttribute('data-scene');
+      return { el: el, out: el.hasAttribute('data-out'), end: v ? +v : .62, top: 0, h: 1, v: -1, mv: false };
+    });
+    var docTop = function (el) { var y = 0; while (el) { y += el.offsetTop; el = el.offsetParent; } return y; };
+    var scTick = false;
+    var scPaint = function () {
+      scTick = false;
+      var y = window.scrollY, vh = window.innerHeight;
+      sc.forEach(function (s) {
+        var v = s.out ? (y - s.top) / s.h : (vh - (s.top - y)) / (vh * (1 - s.end));
+        v = Math.round(clamp(v, 0, 1) * 1000) / 1000;
+        if (v !== s.v) { s.v = v; s.el.style.setProperty(s.out ? '--x' : '--p', v); }
+        var mv = v > 0 && v < 1;                                 // on its way: it gets its own layer (.mv), only then
+        if (mv !== s.mv) { s.mv = mv; s.el.classList.toggle('mv', mv); }
+      });
+    };
+    var scMeasure = function () { sc.forEach(function (s) { s.top = docTop(s.el); s.h = Math.max(1, s.el.offsetHeight); }); scPaint(); };
+    var scKick = function () { if (!scTick) { scTick = true; requestAnimationFrame(scPaint); } };
+    window.addEventListener('scroll', scKick, { passive: true });
+    window.addEventListener('resize', scMeasure);
+    window.addEventListener('load', scMeasure);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(scMeasure);
+    if ('ResizeObserver' in window) new ResizeObserver(scMeasure).observe(document.body);
+    document.documentElement.classList.add('scenes');
+    scMeasure();
+  }
+
+  /* ---------- buttons lean towards the pointer (with a mouse, not with reduced motion): each one follows a spring,
+     one frame at a time, then rests ---------- */
+  var finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
+  if (finePointer.matches && !reduce.matches && window.WeakMap) {
+    var magState = new WeakMap(), magOn = null;
+    var magRun = function (b, s) {
+      if (s.raf) return;
+      var step = function () {
+        s.x += (s.tx - s.x) * .2; s.y += (s.ty - s.y) * .2;
+        if (Math.abs(s.tx - s.x) < .04 && Math.abs(s.ty - s.y) < .04) { s.x = s.tx; s.y = s.ty; }
+        b.style.transform = s.x || s.y ? 'translate3d(' + s.x.toFixed(2) + 'px,' + s.y.toFixed(2) + 'px,0)' : '';
+        s.raf = s.x !== s.tx || s.y !== s.ty ? requestAnimationFrame(step) : 0;
+      };
+      s.raf = requestAnimationFrame(step);
+    };
+    var magFree = function (b) { var s = magState.get(b); if (s) { s.tx = 0; s.ty = 0; magRun(b, s); } };
+    document.addEventListener('pointermove', function (e) {
+      if (e.pointerType !== 'mouse') return;
+      var b = e.target && e.target.closest ? e.target.closest('.btn') : null;
+      if (b && (b.classList.contains('btn-wide') || b.classList.contains('is-off') || b.closest('.dock'))) b = null;
+      if (magOn && magOn !== b) magFree(magOn);
+      magOn = b;
+      if (!b) return;
+      var s = magState.get(b);
+      if (!s) { s = { x: 0, y: 0, tx: 0, ty: 0, raf: 0 }; magState.set(b, s); }
+      var r = b.getBoundingClientRect(), cx = r.left + r.width / 2 - s.x, cy = r.top + r.height / 2 - s.y;
+      s.tx = clamp((e.clientX - cx) / (r.width / 2), -1, 1) * Math.min(6, r.width * .04);      // a little, as everything here
+      s.ty = clamp((e.clientY - cy) / (r.height / 2), -1, 1) * 3.5;
+      magRun(b, s);
+    }, { passive: true });
+    document.documentElement.addEventListener('pointerleave', function () { if (magOn) { magFree(magOn); magOn = null; } });
+  }
+
+  /* ---------- numbers roll into place when they come into view (.odo): each digit is a wheel that turns once round
+     and stops on it. The real figure stays in the page, out of sight, for screen readers and for copying. ---------- */
+  function odoBuild(el) {
+    var txt = el.textContent, w = document.createElement('span'), n = 0;
+    w.className = 'odo-w'; w.setAttribute('aria-hidden', 'true'); w.style.userSelect = 'none';
+    txt.split('').forEach(function (ch) {
+      var c = document.createElement('span');
+      if (/[0-9]/.test(ch)) {
+        c.className = 'odo-c'; c.style.setProperty('--i', n++); c.style.setProperty('--t', 10 + (+ch));
+        for (var k = 0; k < 20; k++) { var d = document.createElement('span'); d.textContent = k % 10; c.appendChild(d); }
+      } else { c.className = 'odo-s'; c.textContent = ch; }
+      w.appendChild(c);
+    });
+    var real = document.createElement('span'); real.className = 'visually-hidden'; real.textContent = txt;
+    el.textContent = ''; el.appendChild(real); el.appendChild(w);
+  }
+  if ('IntersectionObserver' in window && !reduce.matches) {
+    var odos = all('.odo');
+    odos.forEach(odoBuild);
+    var odoIO = new IntersectionObserver(function (en) {
+      en.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('go'); odoIO.unobserve(e.target); } });
+    }, { threshold: .7 });
+    odos.forEach(function (el) { odoIO.observe(el); });
+  }
+
+  /* ---------- the gold light follows the pointer over the cards that have it (.glow, the shop's cards; with a mouse only) ---------- */
+  if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    document.addEventListener('pointermove', function (e) {
+      var g = e.target && e.target.closest ? e.target.closest('.glow, .cat-card') : null;
+      if (!g) return;
+      var r = g.getBoundingClientRect();
+      g.style.setProperty('--sx', (e.clientX - r.left).toFixed(0) + 'px');
+      g.style.setProperty('--sy', (e.clientY - r.top).toFixed(0) + 'px');
+    }, { passive: true });
+  }
 
   /* ---------- the drawn phones show the visitor's time ---------- */
   function tick() {
@@ -1070,9 +1340,9 @@ html.sheet-on { overflow: hidden; }
   /* ---------- search, as on apple.com: the magnifier in the bar opens a panel; results come as you type ----------
      A model gives its prices (the repair typed comes first), a repair opens its prices, a commune gives the price of the
      trip, a page opens. Nothing is sent anywhere: the list is in the page. */
-  var SEARCH = [["Page","Tarifs","Le prix de votre réparation, modèle par modèle","tarifs.html","tarif prix combien coute cout devis"],["Page","Prendre rendez-vous","Votre message s’ouvre dans WhatsApp","index.html#rendez-vous","rendez vous rdv reserver reservation creneau reparer domicile"],["Page","Boutique","iPhone neufs et reconditionnés, AirPods et accessoires","boutique.html","acheter achat vente neuf reconditionne occasion magasin"],["Page","Rachat","Vendez votre iPhone, on vous fait une offre","rachat.html","vendre revendre reprise estimation estimer offre racheter"],["Page","Zone et déplacement","Les 34 communes et le prix du déplacement","index.html#zone","deplacement domicile commune communes martinique venir carte"],["Page","Réparations","Tout ce qu’on répare","index.html#reparations","reparation reparer panne"],["Page","Comment ça se passe","Vous écrivez, on fixe un créneau, c’est réparé","index.html#deroulement","etapes deroulement fonctionnement delai diagnostic gratuit"],["Réparation","Écran","Vitre fissurée, tactile, taches ou lignes","tarifs.html#ecran","vitre casse cassee fissure fissuree tactile affichage lcd oled noir lignes taches"],["Réparation","Batterie","Autonomie, coupures, batterie gonflée","tarifs.html#batterie","autonomie eteint gonfle gonflee decharge"],["Réparation","Caméras","Photos floues, objectif fissuré","tarifs.html#cameras","camera photo photos objectif flou floue lentille"],["Réparation","Vitre arrière et châssis","Dos cassé, cadre rayé ou tordu","tarifs.html#chassis","dos arriere vitre chassis cadre boitier coque tordu raye"],["Réparation","Port de charge","Le câble tient mal, la charge se coupe","tarifs.html#port","charge connecteur cable chargeur lightning usb"],["Réparation","Son et boutons","Haut-parleurs, micro, boutons volume et power","tarifs.html#son","haut parleur micro microphone bouton boutons volume power ecouteur"],["Réparation","Consoles","Écran de Nintendo Switch, Switch Lite et OLED","tarifs.html#consoles","console nintendo switch jeu"],["Réparation","Réparation PS5","Bientôt disponible","tarifs.html#ps5","ps5 playstation sony manette console"],["Tarifs","Tarifs iPhone","Tous les modèles et leurs prix","tarifs.html#iphone","iphone apple"],["Tarifs","Tarifs Samsung","Tous les modèles et leurs prix","tarifs.html#samsung","samsung galaxy android"],["Tarifs","Tarifs iPad","Tous les modèles et leurs prix","tarifs.html#ipad","ipad tablette apple"],["Tarifs","Tarifs Nintendo Switch","Tous les modèles et leurs prix","tarifs.html#switch","nintendo switch console"],["Boutique","iPhone neufs et reconditionnés","Boutique","boutique.html#iphone","iphone neuf neufs reconditionne reconditionnes occasion acheter"],["Boutique","AirPods et écouteurs","Boutique · d’origine Apple et adaptables","boutique.html#airpods","airpods ecouteurs earpods filaire filaires adaptable adaptables casque max pro 2 3 4 5"],["Boutique","Accessoires","Chargeurs, vitres de protection, coques, batteries externes","boutique.html#accessoires","accessoire"],["Boutique","Chargeurs","Boutique · d’origine Apple et adaptables","boutique.html#chargeurs","chargeur cable cables magsafe adaptateur secteur prise usb lightning voiture"],["Boutique","Vitres de protection","Boutique · standard, anti-espion, hydrogel normal ou mat","boutique.html#vitres","vitre vitres protection verre trempe film anti espion antiespion hydrogel mat mate"],["Boutique","Coques","Boutique · accessoires","boutique.html#coques","coque coques housse etui protection silicone transparente magsafe"],["Boutique","Batteries externes","Boutique · accessoires","boutique.html#batteries","batterie externe powerbank magsafe"],["Contact","WhatsApp et téléphone","0696 17 47 32","https://wa.me/596696174732","contact whatsapp telephone appeler numero message"],["Contact","Instagram","@phone._island","https://www.instagram.com/phone._island/","instagram insta"],["Prix","iPhone 17 Pro Max","","tarifs.html#iphone-17-pro-max","iphone apple",[["Écran",400],["Batterie",170],["Châssis",340],["Fenêtre arrière",125],["Caméra arrière",130],["Caméra avant",125],["Haut-parleur du haut",70],["Haut-parleur du bas",60],["Bouton power",85],["Boutons volume",80]]],["Prix","iPhone 17 Pro","","tarifs.html#iphone-17-pro","iphone apple",[["Écran",340],["Batterie",150],["Châssis",300],["Fenêtre arrière",110],["Caméra arrière",140],["Caméra avant",125],["Haut-parleur du haut",70],["Haut-parleur du bas",60],["Connecteur de charge",85],["Bouton power",85],["Boutons volume",85]]],["Prix","iPhone Air","","tarifs.html#iphone-air","iphone apple",[["Écran",330],["Batterie",130],["Châssis et vitre arrière",260],["Caméra arrière",140],["Caméra avant",135],["Haut-parleur du haut",75],["Haut-parleur du bas",50],["Connecteur de charge",80],["Bouton power",85],["Boutons volume",80]]],["Prix","iPhone 17","","tarifs.html#iphone-17","iphone apple",[["Écran",280],["Batterie",110],["Châssis",200],["Vitre arrière",100],["Caméra arrière",130],["Caméra avant",105],["Haut-parleur du haut",75],["Haut-parleur du bas",60],["Connecteur de charge",80],["Bouton power",85],["Boutons volume",85]]],["Prix","iPhone 17e","","tarifs.html#iphone-17e","iphone apple",[["Caméra arrière",100],["Haut-parleur du haut",60],["Haut-parleur du bas",60],["Connecteur de charge",80],["Boutons volume",70]]],["Prix","iPhone 16 Pro Max","","tarifs.html#iphone-16-pro-max","iphone apple",[["Écran",360],["Batterie",150],["Châssis et vitre arrière",320],["Caméra arrière",140],["Caméra avant",90],["Haut-parleur du haut",75],["Haut-parleur du bas",60],["Connecteur de charge",70],["Bouton power",80],["Boutons volume",80]]],["Prix","iPhone 16 Pro","","tarifs.html#iphone-16-pro","iphone apple",[["Écran",300],["Batterie",130],["Châssis et vitre arrière",280],["Caméra arrière",130],["Caméra avant",90],["Haut-parleur du haut",65],["Haut-parleur du bas",55],["Connecteur de charge",70],["Bouton power",80],["Boutons volume",70]]],["Prix","iPhone 16 Plus","","tarifs.html#iphone-16-plus","iphone apple",[["Écran",280],["Batterie",100],["Châssis",200],["Vitre arrière",110],["Caméra arrière",130],["Caméra avant",75],["Haut-parleur du haut",70],["Haut-parleur du bas",70],["Connecteur de charge",75],["Bouton power",80],["Boutons volume",80]]],["Prix","iPhone 16","","tarifs.html#iphone-16","iphone apple",[["Écran",250],["Batterie",90],["Châssis",180],["Vitre arrière",90],["Caméra arrière",120],["Caméra avant",85],["Haut-parleur du haut",70],["Haut-parleur du bas",60],["Connecteur de charge",75],["Bouton power",80],["Boutons volume",80]]],["Prix","iPhone 16e","","tarifs.html#iphone-16e","iphone apple",[["Écran",260],["Batterie",130],["Châssis et vitre arrière",230],["Caméra arrière",100],["Caméra avant",85],["Haut-parleur du haut",60],["Haut-parleur du bas",60],["Connecteur de charge",80],["Boutons volume",75]]],["Prix","iPhone 15 Pro Max","","tarifs.html#iphone-15-pro-max","iphone apple",[["Écran",220],["Batterie",90],["Châssis et vitre arrière",275],["Caméra arrière",120],["Caméra avant",75],["Haut-parleur du haut",70],["Haut-parleur du bas",60],["Connecteur de charge",80],["Bouton power",70],["Boutons volume",70]]],["Prix","iPhone 15 Pro","","tarifs.html#iphone-15-pro","iphone apple",[["Écran",200],["Batterie",85],["Châssis et vitre arrière",250],["Caméra arrière",120],["Caméra avant",75],["Haut-parleur du haut",65],["Haut-parleur du bas",60],["Connecteur de charge",80],["Bouton power",65],["Boutons volume",65]]],["Prix","iPhone 15 Plus","","tarifs.html#iphone-15-plus","iphone apple",[["Écran",180],["Batterie",80],["Châssis",180],["Vitre arrière",80],["Caméra arrière",100],["Caméra avant",70],["Haut-parleur du haut",65],["Haut-parleur du bas",55],["Connecteur de charge",80],["Bouton power",65],["Boutons volume",75]]],["Prix","iPhone 15","","tarifs.html#iphone-15","iphone apple",[["Écran",160],["Batterie",80],["Châssis",150],["Vitre arrière",70],["Caméra arrière",120],["Caméra avant",65],["Haut-parleur du haut",70],["Haut-parleur du bas",60],["Connecteur de charge",80],["Bouton power",65],["Boutons volume",75]]],["Prix","iPhone 14 Pro Max","","tarifs.html#iphone-14-pro-max","iphone apple",[["Écran",190],["Batterie",90],["Châssis et vitre arrière",240],["Caméra arrière",120],["Caméra avant",65],["Haut-parleur du haut",60],["Haut-parleur du bas",60],["Connecteur de charge",75],["Boutons volume",70]]],["Prix","iPhone 14 Pro","","tarifs.html#iphone-14-pro","iphone apple",[["Écran",170],["Batterie",75],["Châssis et vitre arrière",200],["Caméra arrière",130],["Caméra avant",65],["Haut-parleur du haut",60],["Haut-parleur du bas",60],["Connecteur de charge",80],["Bouton power",70],["Boutons volume",70]]],["Prix","iPhone 14 Plus","","tarifs.html#iphone-14-plus","iphone apple",[["Écran",175],["Batterie",85],["Châssis",170],["Vitre arrière",60],["Caméra arrière",100],["Caméra avant",75],["Haut-parleur du haut",65],["Haut-parleur du bas",55],["Connecteur de charge",70],["Bouton power",70],["Boutons volume",70]]],["Prix","iPhone 14","","tarifs.html#iphone-14","iphone apple",[["Écran",140],["Batterie",80],["Châssis",140],["Vitre arrière",60],["Caméra arrière",90],["Caméra avant",70],["Haut-parleur du haut",65],["Haut-parleur du bas",55],["Connecteur de charge",65],["Bouton power",70],["Boutons volume",65]]],["Prix","iPhone 13 Pro Max","","tarifs.html#iphone-13-pro-max","iphone apple",[["Écran",155],["Batterie",70],["Châssis et vitre arrière",165],["Caméra arrière",140],["Caméra avant",60],["Haut-parleur du haut",65],["Haut-parleur du bas",65],["Connecteur de charge",75]]],["Prix","iPhone 13 Pro","","tarifs.html#iphone-13-pro","iphone apple",[["Écran",140],["Batterie",65],["Châssis et vitre arrière",150],["Caméra arrière",140],["Caméra avant",65],["Haut-parleur du haut",65],["Haut-parleur du bas",55],["Connecteur de charge",75]]],["Prix","iPhone 13","","tarifs.html#iphone-13","iphone apple",[["Écran",130],["Batterie",60],["Châssis et vitre arrière",120],["Caméra arrière",65],["Caméra avant",60],["Haut-parleur du haut",65],["Haut-parleur du bas",55],["Connecteur de charge",70],["Bouton power",75]]],["Prix","iPhone 13 mini","","tarifs.html#iphone-13-mini","iphone apple",[["Écran",145],["Batterie",60],["Châssis et vitre arrière",115],["Caméra arrière",65],["Caméra avant",65],["Haut-parleur du haut",70],["Haut-parleur du bas",55],["Connecteur de charge",70]]],["Prix","iPhone 12 Pro Max","","tarifs.html#iphone-12-pro-max","iphone apple",[["Écran",125],["Batterie",70],["Châssis et vitre arrière",155],["Caméra arrière",130],["Caméra avant",60],["Haut-parleur du haut",70],["Haut-parleur du bas",60],["Connecteur de charge",75],["Bouton power",65],["Boutons volume",65]]],["Prix","iPhone 12 Pro","","tarifs.html#iphone-12-pro","iphone apple",[["Écran",110],["Batterie",50],["Châssis et vitre arrière",140],["Caméra arrière",160],["Caméra avant",60],["Haut-parleur du haut",65],["Haut-parleur du bas",50],["Connecteur de charge",70],["Bouton power",75],["Boutons volume",75]]],["Prix","iPhone 12","","tarifs.html#iphone-12","iphone apple",[["Écran",100],["Batterie",50],["Châssis et vitre arrière",120],["Caméra arrière",70],["Caméra avant",60],["Haut-parleur du haut",65],["Haut-parleur du bas",50],["Connecteur de charge",70],["Bouton power",75],["Boutons volume",75]]],["Prix","iPhone 12 mini","","tarifs.html#iphone-12-mini","iphone apple",[["Écran",120],["Batterie",50],["Châssis et vitre arrière",130],["Caméra arrière",100],["Caméra avant",60],["Haut-parleur du haut",65],["Haut-parleur du bas",60],["Connecteur de charge",65],["Bouton power",70],["Boutons volume",70]]],["Prix","iPhone 11 Pro Max","","tarifs.html#iphone-11-pro-max","iphone apple",[["Écran",85],["Batterie",75],["Châssis et vitre arrière",130],["Caméra arrière",90],["Caméra avant",60],["Haut-parleur du haut",65],["Haut-parleur du bas",55],["Connecteur de charge",80],["Bouton power",75]]],["Prix","iPhone 11 Pro","","tarifs.html#iphone-11-pro","iphone apple",[["Écran",70],["Batterie",60],["Châssis et vitre arrière",120],["Caméra arrière",90],["Caméra avant",65],["Haut-parleur du haut",70],["Haut-parleur du bas",50],["Connecteur de charge",80],["Bouton power",75],["Boutons volume",75]]],["Prix","iPhone 11","","tarifs.html#iphone-11","iphone apple",[["Écran",65],["Batterie",50],["Châssis et vitre arrière",110],["Caméra arrière",65],["Caméra avant",55],["Haut-parleur du haut",65],["Haut-parleur du bas",50],["Connecteur de charge",65],["Bouton power",65],["Boutons volume",75]]],["Prix","iPhone XR","","tarifs.html#iphone-xr","iphone apple",[["Écran",60],["Batterie",50],["Châssis et vitre arrière",100],["Caméra arrière",65],["Caméra avant",55],["Haut-parleur du haut",65],["Haut-parleur du bas",50],["Connecteur de charge",60],["Bouton power",75],["Boutons volume",75]]],["Prix","iPhone XS Max","","tarifs.html#iphone-xs-max","iphone apple",[["Écran",70],["Batterie",65],["Châssis et vitre arrière",110],["Caméra arrière",70],["Caméra avant",60],["Haut-parleur du haut",65],["Haut-parleur du bas",50],["Connecteur de charge",60],["Bouton power",85],["Boutons volume",65]]],["Prix","iPhone XS","","tarifs.html#iphone-xs","iphone apple",[["Écran",50],["Batterie",60],["Châssis et vitre arrière",90],["Caméra arrière",70],["Caméra avant",60],["Haut-parleur du haut",60],["Haut-parleur du bas",50],["Connecteur de charge",65],["Bouton power",70],["Boutons volume",65]]],["Prix","iPhone X","","tarifs.html#iphone-x","iphone apple",[["Écran",45],["Batterie",60],["Châssis et vitre arrière",80],["Caméra arrière",60],["Caméra avant",55],["Haut-parleur du haut",60],["Haut-parleur du bas",50],["Connecteur de charge",60],["Bouton power",70],["Boutons volume",65]]],["Prix","iPhone SE (2022)","","tarifs.html#iphone-se-2022","iphone apple",[["Écran",45],["Batterie",45],["Châssis et vitre arrière",90]]],["Prix","iPhone 8 Plus","","tarifs.html#iphone-8-plus","iphone apple",[["Écran",30],["Batterie",40],["Châssis et vitre arrière",70]]],["Prix","iPhone 8","","tarifs.html#iphone-8","iphone apple",[["Écran",30],["Batterie",40],["Châssis et vitre arrière",60]]],["Prix","iPhone 7 / 7 Plus","","tarifs.html#iphone-7-7-plus","iphone apple",[["Écran",25],["Batterie",40],["Châssis et vitre arrière",55]]],["Prix","iPhone 6 / 6s","","tarifs.html#iphone-6-6s","iphone apple",[["Écran",20],["Batterie",30],["Châssis et vitre arrière",40]]],["Prix","Galaxy XCover 7","","tarifs.html#galaxy-xcover-7","samsung galaxy android",[]],["Prix","Galaxy XCover 6 Pro","","tarifs.html#galaxy-xcover-6-pro","samsung galaxy android",[]],["Prix","Galaxy XCover 5","","tarifs.html#galaxy-xcover-5","samsung galaxy android",[]],["Prix","Galaxy M55","","tarifs.html#galaxy-m55","samsung galaxy android",[]],["Prix","Galaxy M53","","tarifs.html#galaxy-m53","samsung galaxy android",[]],["Prix","Galaxy M33","","tarifs.html#galaxy-m33","samsung galaxy android",[]],["Prix","Galaxy M23","","tarifs.html#galaxy-m23","samsung galaxy android",[]],["Prix","Galaxy M13","","tarifs.html#galaxy-m13","samsung galaxy android",[]],["Prix","Galaxy M12","","tarifs.html#galaxy-m12","samsung galaxy android",[]],["Prix","Galaxy A73","","tarifs.html#galaxy-a73","samsung galaxy android",[]],["Prix","Galaxy A72","","tarifs.html#galaxy-a72","samsung galaxy android",[]],["Prix","Galaxy A71","","tarifs.html#galaxy-a71","samsung galaxy android",[["Écran",70]]],["Prix","Galaxy A70","","tarifs.html#galaxy-a70","samsung galaxy android",[["Écran",70]]],["Prix","Galaxy A57","","tarifs.html#galaxy-a57","samsung galaxy android",[]],["Prix","Galaxy A56","","tarifs.html#galaxy-a56","samsung galaxy android",[["Écran",80]]],["Prix","Galaxy A55","","tarifs.html#galaxy-a55","samsung galaxy android",[["Écran",80]]],["Prix","Galaxy A54","","tarifs.html#galaxy-a54","samsung galaxy android",[["Écran",80]]],["Prix","Galaxy A53","","tarifs.html#galaxy-a53","samsung galaxy android",[["Écran",80]]],["Prix","Galaxy A52s","","tarifs.html#galaxy-a52s","samsung galaxy android",[]],["Prix","Galaxy A52","","tarifs.html#galaxy-a52","samsung galaxy android",[["Écran",80]]],["Prix","Galaxy A51","","tarifs.html#galaxy-a51","samsung galaxy android",[["Écran",70]]],["Prix","Galaxy A50","","tarifs.html#galaxy-a50","samsung galaxy android",[["Écran",70]]],["Prix","Galaxy A42","","tarifs.html#galaxy-a42","samsung galaxy android",[["Écran",80]]],["Prix","Galaxy A41","","tarifs.html#galaxy-a41","samsung galaxy android",[["Écran",80]]],["Prix","Galaxy A40","","tarifs.html#galaxy-a40","samsung galaxy android",[["Écran",80]]],["Prix","Galaxy A37","","tarifs.html#galaxy-a37","samsung galaxy android",[]],["Prix","Galaxy A36","","tarifs.html#galaxy-a36","samsung galaxy android",[["Écran",80]]],["Prix","Galaxy A35","","tarifs.html#galaxy-a35","samsung galaxy android",[["Écran",80]]],["Prix","Galaxy A34","","tarifs.html#galaxy-a34","samsung galaxy android",[["Écran",80]]],["Prix","Galaxy A33","","tarifs.html#galaxy-a33","samsung galaxy android",[["Écran",80]]],["Prix","Galaxy A32 5G","","tarifs.html#galaxy-a32-5g","samsung galaxy android",[["Écran",70]]],["Prix","Galaxy A32 4G","","tarifs.html#galaxy-a32-4g","samsung galaxy android",[["Écran",95]]],["Prix","Galaxy A31","","tarifs.html#galaxy-a31","samsung galaxy android",[["Écran",95]]],["Prix","Galaxy A27","","tarifs.html#galaxy-a27","samsung galaxy android",[]],["Prix","Galaxy A26","","tarifs.html#galaxy-a26","samsung galaxy android",[["Écran",80]]],["Prix","Galaxy A25","","tarifs.html#galaxy-a25","samsung galaxy android",[["Écran",70]]],["Prix","Galaxy A24","","tarifs.html#galaxy-a24","samsung galaxy android",[["Écran",70]]],["Prix","Galaxy A23 5G","","tarifs.html#galaxy-a23-5g","samsung galaxy android",[["Écran",70]]],["Prix","Galaxy A22 5G","","tarifs.html#galaxy-a22-5g","samsung galaxy android",[["Écran",70]]],["Prix","Galaxy A21s","","tarifs.html#galaxy-a21s","samsung galaxy android",[["Écran",70]]],["Prix","Galaxy A20e","","tarifs.html#galaxy-a20e","samsung galaxy android",[["Écran",80]]],["Prix","Galaxy A17 5G","","tarifs.html#galaxy-a17-5g","samsung galaxy android",[["Écran",80]]],["Prix","Galaxy A17 4G","","tarifs.html#galaxy-a17-4g","samsung galaxy android",[["Écran",70]]],["Prix","Galaxy A16","","tarifs.html#galaxy-a16","samsung galaxy android",[["Écran",80]]],["Prix","Galaxy A15","","tarifs.html#galaxy-a15","samsung galaxy android",[["Écran",70]]],["Prix","Galaxy A14 4G","","tarifs.html#galaxy-a14-4g","samsung galaxy android",[["Écran",70]]],["Prix","Galaxy A13","","tarifs.html#galaxy-a13","samsung galaxy android",[["Écran",70]]],["Prix","Galaxy A12","","tarifs.html#galaxy-a12","samsung galaxy android",[["Écran",70]]],["Prix","Galaxy A11","","tarifs.html#galaxy-a11","samsung galaxy android",[]],["Prix","Galaxy A10","","tarifs.html#galaxy-a10","samsung galaxy android",[["Écran",70]]],["Prix","Galaxy A07 5G","","tarifs.html#galaxy-a07-5g","samsung galaxy android",[["Écran",80]]],["Prix","Galaxy A06","","tarifs.html#galaxy-a06","samsung galaxy android",[["Écran",70]]],["Prix","Galaxy A05s","","tarifs.html#galaxy-a05s","samsung galaxy android",[["Écran",70]]],["Prix","Galaxy A04s","","tarifs.html#galaxy-a04s","samsung galaxy android",[["Écran",70]]],["Prix","Galaxy A03","","tarifs.html#galaxy-a03","samsung galaxy android",[["Écran",70]]],["Prix","Galaxy A02s","","tarifs.html#galaxy-a02s","samsung galaxy android",[["Écran",70]]],["Prix","Galaxy Z Fold 8","","tarifs.html#galaxy-z-fold-8","samsung galaxy android",[]],["Prix","Galaxy Z Fold 7","","tarifs.html#galaxy-z-fold-7","samsung galaxy android",[]],["Prix","Galaxy Z Fold 6","","tarifs.html#galaxy-z-fold-6","samsung galaxy android",[]],["Prix","Galaxy Z Fold 5","","tarifs.html#galaxy-z-fold-5","samsung galaxy android",[]],["Prix","Galaxy Z Fold 4","","tarifs.html#galaxy-z-fold-4","samsung galaxy android",[]],["Prix","Galaxy Z Fold 3","","tarifs.html#galaxy-z-fold-3","samsung galaxy android",[]],["Prix","Galaxy Z Fold 2","","tarifs.html#galaxy-z-fold-2","samsung galaxy android",[]],["Prix","Galaxy Z Flip 8","","tarifs.html#galaxy-z-flip-8","samsung galaxy android",[]],["Prix","Galaxy Z Flip 7","","tarifs.html#galaxy-z-flip-7","samsung galaxy android",[]],["Prix","Galaxy Z Flip 6","","tarifs.html#galaxy-z-flip-6","samsung galaxy android",[]],["Prix","Galaxy Z Flip 5","","tarifs.html#galaxy-z-flip-5","samsung galaxy android",[]],["Prix","Galaxy Z Flip 4","","tarifs.html#galaxy-z-flip-4","samsung galaxy android",[]],["Prix","Galaxy Z Flip 3","","tarifs.html#galaxy-z-flip-3","samsung galaxy android",[]],["Prix","Galaxy Z Flip (2020)","","tarifs.html#galaxy-z-flip-2020","samsung galaxy android",[]],["Prix","Galaxy Note 20 Ultra","","tarifs.html#galaxy-note-20-ultra","samsung galaxy android",[]],["Prix","Galaxy Note 20","","tarifs.html#galaxy-note-20","samsung galaxy android",[]],["Prix","Galaxy S26 Ultra","","tarifs.html#galaxy-s26-ultra","samsung galaxy android",[]],["Prix","Galaxy S26+","","tarifs.html#galaxy-s26-plus","samsung galaxy android",[]],["Prix","Galaxy S26","","tarifs.html#galaxy-s26","samsung galaxy android",[]],["Prix","Galaxy S25 FE","","tarifs.html#galaxy-s25-fe","samsung galaxy android",[]],["Prix","Galaxy S25 Edge","","tarifs.html#galaxy-s25-edge","samsung galaxy android",[]],["Prix","Galaxy S25 Ultra","","tarifs.html#galaxy-s25-ultra","samsung galaxy android",[]],["Prix","Galaxy S25+","","tarifs.html#galaxy-s25-plus","samsung galaxy android",[]],["Prix","Galaxy S25","","tarifs.html#galaxy-s25","samsung galaxy android",[]],["Prix","Galaxy S24 FE","","tarifs.html#galaxy-s24-fe","samsung galaxy android",[]],["Prix","Galaxy S24 Ultra","","tarifs.html#galaxy-s24-ultra","samsung galaxy android",[]],["Prix","Galaxy S24+","","tarifs.html#galaxy-s24-plus","samsung galaxy android",[]],["Prix","Galaxy S24","","tarifs.html#galaxy-s24","samsung galaxy android",[]],["Prix","Galaxy S23 FE","","tarifs.html#galaxy-s23-fe","samsung galaxy android",[]],["Prix","Galaxy S23 Ultra","","tarifs.html#galaxy-s23-ultra","samsung galaxy android",[["Écran",320],["Vitre arrière",80]]],["Prix","Galaxy S23+","","tarifs.html#galaxy-s23-plus","samsung galaxy android",[["Écran",270],["Vitre arrière",70]]],["Prix","Galaxy S23","","tarifs.html#galaxy-s23","samsung galaxy android",[["Écran",250],["Vitre arrière",65]]],["Prix","Galaxy S22 Ultra","","tarifs.html#galaxy-s22-ultra","samsung galaxy android",[["Écran",290],["Vitre arrière",75]]],["Prix","Galaxy S22+","","tarifs.html#galaxy-s22-plus","samsung galaxy android",[["Écran",250],["Vitre arrière",65]]],["Prix","Galaxy S22","","tarifs.html#galaxy-s22","samsung galaxy android",[["Écran",240],["Vitre arrière",60]]],["Prix","Galaxy S21 FE","","tarifs.html#galaxy-s21-fe","samsung galaxy android",[["Écran",160],["Vitre arrière",55]]],["Prix","Galaxy S21 Ultra","","tarifs.html#galaxy-s21-ultra","samsung galaxy android",[["Écran",250],["Vitre arrière",70]]],["Prix","Galaxy S21+","","tarifs.html#galaxy-s21-plus","samsung galaxy android",[["Écran",190],["Vitre arrière",60]]],["Prix","Galaxy S21","","tarifs.html#galaxy-s21","samsung galaxy android",[["Écran",170],["Vitre arrière",55]]],["Prix","Galaxy S20 FE 5G","","tarifs.html#galaxy-s20-fe-5g","samsung galaxy android",[]],["Prix","Galaxy S20 FE","","tarifs.html#galaxy-s20-fe","samsung galaxy android",[["Écran",130],["Vitre arrière",50]]],["Prix","Galaxy S20 Ultra","","tarifs.html#galaxy-s20-ultra","samsung galaxy android",[["Écran",230],["Vitre arrière",65]]],["Prix","Galaxy S20+","","tarifs.html#galaxy-s20-plus","samsung galaxy android",[["Écran",180],["Vitre arrière",55]]],["Prix","Galaxy S20","","tarifs.html#galaxy-s20","samsung galaxy android",[["Écran",160],["Vitre arrière",50]]],["Prix","Galaxy S10+","","tarifs.html#galaxy-s10-plus","samsung galaxy android",[["Écran",230],["Vitre arrière",55]]],["Prix","Galaxy S10","","tarifs.html#galaxy-s10","samsung galaxy android",[["Écran",200],["Vitre arrière",50]]],["Prix","Galaxy S10e","","tarifs.html#galaxy-s10e","samsung galaxy android",[["Écran",150],["Vitre arrière",50]]],["Prix","iPad Pro 13\" M5","","tarifs.html#ipad-pro-13-m5","ipad tablette apple",[]],["Prix","iPad Pro 13\" M4","","tarifs.html#ipad-pro-13-m4","ipad tablette apple",[]],["Prix","iPad Pro 12,9\"","","tarifs.html#ipad-pro-12-9","ipad tablette apple",[]],["Prix","iPad Pro 11\" M5","","tarifs.html#ipad-pro-11-m5","ipad tablette apple",[]],["Prix","iPad Pro 11\" M4","","tarifs.html#ipad-pro-11-m4","ipad tablette apple",[]],["Prix","iPad Pro 11\"","","tarifs.html#ipad-pro-11","ipad tablette apple",[]],["Prix","iPad Pro 10,5\"","","tarifs.html#ipad-pro-10-5","ipad tablette apple",[]],["Prix","iPad Pro 9,7\"","","tarifs.html#ipad-pro-9-7","ipad tablette apple",[]],["Prix","iPad mini 7","","tarifs.html#ipad-mini-7","ipad tablette apple",[]],["Prix","iPad mini 6","","tarifs.html#ipad-mini-6","ipad tablette apple",[]],["Prix","iPad mini 5","","tarifs.html#ipad-mini-5","ipad tablette apple",[]],["Prix","iPad mini 4","","tarifs.html#ipad-mini-4","ipad tablette apple",[]],["Prix","iPad mini 2 / 3","","tarifs.html#ipad-mini-2-3","ipad tablette apple",[["Vitre tactile",70],["Écran LCD",120]]],["Prix","iPad mini 1","","tarifs.html#ipad-mini-1","ipad tablette apple",[["Vitre tactile",70],["Écran LCD",105]]],["Prix","iPad Air M4","","tarifs.html#ipad-air-m4","ipad tablette apple",[]],["Prix","iPad Air M3","","tarifs.html#ipad-air-m3","ipad tablette apple",[]],["Prix","iPad Air M2","","tarifs.html#ipad-air-m2","ipad tablette apple",[]],["Prix","iPad Air 5","","tarifs.html#ipad-air-5","ipad tablette apple",[]],["Prix","iPad Air 4","","tarifs.html#ipad-air-4","ipad tablette apple",[]],["Prix","iPad Air 3","","tarifs.html#ipad-air-3","ipad tablette apple",[]],["Prix","iPad Air 2","","tarifs.html#ipad-air-2","ipad tablette apple",[["Vitre tactile",70],["Écran LCD",135]]],["Prix","iPad Air","","tarifs.html#ipad-air","ipad tablette apple",[["Vitre tactile",70],["Écran LCD",125]]],["Prix","iPad 10 / 11","","tarifs.html#ipad-10-11","ipad tablette apple",[["Vitre tactile",70]]],["Prix","iPad 9","","tarifs.html#ipad-9","ipad tablette apple",[["Vitre tactile",70]]],["Prix","iPad 7 / 8","","tarifs.html#ipad-7-8","ipad tablette apple",[["Vitre tactile",70]]],["Prix","iPad 6","","tarifs.html#ipad-6","ipad tablette apple",[["Vitre tactile",70]]],["Prix","iPad 5","","tarifs.html#ipad-5","ipad tablette apple",[["Vitre tactile",70]]],["Prix","iPad 3 / 4","","tarifs.html#ipad-3-4","ipad tablette apple",[["Vitre tactile",70],["Écran LCD",100]]],["Prix","iPad 2","","tarifs.html#ipad-2","ipad tablette apple",[["Vitre tactile",70],["Écran LCD",95]]],["Prix","iPad 1","","tarifs.html#ipad-1","ipad tablette apple",[]],["Prix","Nintendo Switch OLED","","tarifs.html#nintendo-switch-oled","nintendo switch console",[["Écran",50]]],["Prix","Nintendo Switch Lite","","tarifs.html#nintendo-switch-lite","nintendo switch console",[["Écran",120]]],["Prix","Nintendo Switch","","tarifs.html#nintendo-switch","nintendo switch console",[["Écran",90]]],["Commune","L'Ajoupa-Bouillon","Déplacement 35 €","index.html#commune-l-ajoupa-bouillon","commune deplacement"],["Commune","Les Anses-d'Arlet","Déplacement 35 €","index.html#commune-les-anses-d-arlet","commune deplacement"],["Commune","Basse-Pointe","Déplacement 35 €","index.html#commune-basse-pointe","commune deplacement"],["Commune","Bellefontaine","Déplacement 35 €","index.html#commune-bellefontaine","commune deplacement"],["Commune","Le Carbet","Déplacement 35 €","index.html#commune-le-carbet","commune deplacement"],["Commune","Case-Pilote","Déplacement 20 €","index.html#commune-case-pilote","commune deplacement"],["Commune","Le Diamant","Déplacement 35 €","index.html#commune-le-diamant","commune deplacement"],["Commune","Ducos","Déplacement 25 €","index.html#commune-ducos","commune deplacement"],["Commune","Fonds-Saint-Denis","Déplacement 35 €","index.html#commune-fonds-saint-denis","commune deplacement"],["Commune","Fort-de-France","Déplacement 10 €","index.html#commune-fort-de-france","commune deplacement"],["Commune","Le François","Déplacement 25 €","index.html#commune-le-francois","commune deplacement"],["Commune","Grand'Rivière","Déplacement 35 €","index.html#commune-grand-riviere","commune deplacement"],["Commune","Gros-Morne","Déplacement 25 €","index.html#commune-gros-morne","commune deplacement"],["Commune","Le Lamentin","Déplacement 20 €","index.html#commune-le-lamentin","commune deplacement"],["Commune","Le Lorrain","Déplacement 35 €","index.html#commune-le-lorrain","commune deplacement"],["Commune","Macouba","Déplacement 35 €","index.html#commune-macouba","commune deplacement"],["Commune","Le Marigot","Déplacement 35 €","index.html#commune-le-marigot","commune deplacement"],["Commune","Le Marin","Déplacement 35 €","index.html#commune-le-marin","commune deplacement"],["Commune","Le Morne-Rouge","Déplacement 35 €","index.html#commune-le-morne-rouge","commune deplacement"],["Commune","Le Morne-Vert","Déplacement 35 €","index.html#commune-le-morne-vert","commune deplacement"],["Commune","Le Prêcheur","Déplacement 35 €","index.html#commune-le-precheur","commune deplacement"],["Commune","Rivière-Pilote","Déplacement 35 €","index.html#commune-riviere-pilote","commune deplacement"],["Commune","Rivière-Salée","Déplacement 35 €","index.html#commune-riviere-salee","commune deplacement"],["Commune","Le Robert","Déplacement 20 €","index.html#commune-le-robert","commune deplacement"],["Commune","Saint-Esprit","Déplacement 35 €","index.html#commune-saint-esprit","commune deplacement"],["Commune","Saint-Joseph","Déplacement 20 €","index.html#commune-saint-joseph","commune deplacement"],["Commune","Saint-Pierre","Déplacement 35 €","index.html#commune-saint-pierre","commune deplacement"],["Commune","Sainte-Anne","Déplacement 35 €","index.html#commune-sainte-anne","commune deplacement"],["Commune","Sainte-Luce","Déplacement 35 €","index.html#commune-sainte-luce","commune deplacement"],["Commune","Sainte-Marie","Déplacement 35 €","index.html#commune-sainte-marie","commune deplacement"],["Commune","Schœlcher","Déplacement 20 €","index.html#commune-schoelcher","commune deplacement"],["Commune","La Trinité","Déplacement 25 €","index.html#commune-la-trinite","commune deplacement"],["Commune","Les Trois-Îlets","Déplacement 35 €","index.html#commune-les-trois-ilets","commune deplacement"],["Commune","Le Vauclin","Déplacement 35 €","index.html#commune-le-vauclin","commune deplacement"]];
+  var SEARCH = [["Page","Tarifs","Le prix de votre réparation, modèle par modèle","tarifs.html","tarif prix combien coute cout devis"],["Page","Prendre rendez-vous","Votre message s’ouvre dans WhatsApp","rendez-vous.html","rendez vous rdv reserver reservation creneau reparer domicile"],["Page","Boutique","iPhone neufs et reconditionnés, AirPods et accessoires","boutique.html","acheter achat vente neuf reconditionne occasion magasin"],["Page","Rachat","Vendez votre iPhone, on vous fait une offre","rachat.html","vendre revendre reprise estimation estimer offre racheter"],["Page","Zone et déplacement","Les 34 communes et le prix du déplacement","index.html#zone","deplacement domicile commune communes martinique venir carte"],["Page","Réparations","Tout ce qu’on répare","reparations.html","reparation reparer panne"],["Page","Comment ça se passe","Vous écrivez, on fixe un créneau, c’est réparé","index.html#deroulement","etapes deroulement fonctionnement delai diagnostic gratuit"],["Réparation","Écran","Vitre fissurée, tactile, taches ou lignes","tarifs.html#ecran","vitre casse cassee fissure fissuree tactile affichage lcd oled noir lignes taches"],["Réparation","Batterie","Autonomie, coupures, batterie gonflée","tarifs.html#batterie","autonomie eteint gonfle gonflee decharge"],["Réparation","Caméras","Photos floues, objectif fissuré","tarifs.html#cameras","camera photo photos objectif flou floue lentille"],["Réparation","Vitre arrière et châssis","Dos cassé, cadre rayé ou tordu","tarifs.html#chassis","dos arriere vitre chassis cadre boitier coque tordu raye"],["Réparation","Port de charge","Le câble tient mal, la charge se coupe","tarifs.html#port","charge connecteur cable chargeur lightning usb"],["Réparation","Son et boutons","Haut-parleurs, micro, boutons volume et power","tarifs.html#son","haut parleur micro microphone bouton boutons volume power ecouteur"],["Réparation","Consoles","Écran de Nintendo Switch, Switch Lite et OLED","tarifs.html#consoles","console nintendo switch jeu"],["Réparation","Réparation PS5","Bientôt disponible","tarifs.html#ps5","ps5 playstation sony manette console"],["Entretien","Entretien et nettoyage","PS4, PS5, PC et désoxydation iPhone","tarifs.html#entretien","entretien nettoyage nettoyer depoussierage poussiere pate thermique console ordinateur desoxydation"],["Entretien","Désoxydation iPhone","60 € · Après un contact avec l’eau ou un liquide","tarifs.html#desoxydation","desoxydation desoxyder oxydation oxyde eau liquide mouille tombe piscine mer pluie humidite iphone"],["Entretien","Nettoyage PS4","50 € · Dépoussiérage et pâte thermique","tarifs.html#nettoyage-ps4","nettoyage nettoyer entretien depoussierage poussiere pate thermique ps4 playstation console chauffe surchauffe bruit ventilateur"],["Entretien","Nettoyage PS5","60 € · Ventilateur, radiateur et grilles","tarifs.html#nettoyage-ps5","nettoyage nettoyer entretien depoussierage poussiere ps5 playstation console chauffe surchauffe bruit ventilateur"],["Entretien","Nettoyage PC fixe","50 € · Dépoussiérage et pâte thermique","tarifs.html#nettoyage-pc","nettoyage nettoyer entretien depoussierage poussiere pate thermique pc ordinateur fixe tour chauffe surchauffe bruit ventilateur"],["Entretien","Nettoyage PC portable","dès 60 € · Démontage, dépoussiérage, pâte thermique","tarifs.html#nettoyage-pc-portable","nettoyage nettoyer entretien depoussierage poussiere pate thermique pc ordinateur portable laptop chauffe surchauffe bruit ventilateur"],["Tarifs","Tarifs iPhone","Tous les modèles et leurs prix","tarifs.html#iphone","iphone apple"],["Tarifs","Tarifs Samsung","Tous les modèles et leurs prix","tarifs.html#samsung","samsung galaxy android"],["Tarifs","Tarifs iPad","Tous les modèles et leurs prix","tarifs.html#ipad","ipad tablette apple"],["Tarifs","Tarifs Nintendo Switch","Tous les modèles et leurs prix","tarifs.html#switch","nintendo switch console"],["Boutique","iPhone neufs et reconditionnés","Boutique","boutique.html#iphone","iphone neuf neufs reconditionne reconditionnes occasion acheter"],["Boutique","AirPods et écouteurs","Boutique · d’origine Apple et adaptables","boutique.html#airpods","airpods ecouteurs earpods filaire filaires adaptable adaptables casque max pro 2 3 4 5"],["Boutique","Accessoires","Chargeurs, vitres de protection, coques, batteries externes","boutique.html#accessoires","accessoire"],["Boutique","Chargeurs","Boutique · d’origine Apple et adaptables","boutique.html#chargeurs","chargeur cable cables magsafe adaptateur secteur prise usb lightning voiture"],["Boutique","Vitres de protection","Boutique · standard, anti-espion, hydrogel normal ou mat","boutique.html#vitres","vitre vitres protection verre trempe film anti espion antiespion hydrogel mat mate"],["Boutique","Coques","Boutique · accessoires","boutique.html#coques","coque coques housse etui protection silicone transparente magsafe"],["Boutique","Batteries externes","Boutique · accessoires","boutique.html#batteries","batterie externe powerbank magsafe"],["Contact","WhatsApp et téléphone","0696 17 47 32","https://wa.me/596696174732","contact whatsapp telephone appeler numero message"],["Contact","Instagram","@phone._island","https://www.instagram.com/phone._island/","instagram insta"],["Prix","iPhone 17 Pro Max","","tarifs.html#iphone-17-pro-max","iphone apple",[["Écran",400],["Batterie",170],["Châssis",340],["Fenêtre arrière",125],["Caméra arrière",130],["Caméra avant",125],["Haut-parleur du haut",70],["Haut-parleur du bas",60],["Bouton power",85],["Boutons volume",80]]],["Prix","iPhone 17 Pro","","tarifs.html#iphone-17-pro","iphone apple",[["Écran",340],["Batterie",150],["Châssis",300],["Fenêtre arrière",110],["Caméra arrière",140],["Caméra avant",125],["Haut-parleur du haut",70],["Haut-parleur du bas",60],["Connecteur de charge",85],["Bouton power",85],["Boutons volume",85]]],["Prix","iPhone Air","","tarifs.html#iphone-air","iphone apple",[["Écran",330],["Batterie",130],["Châssis et vitre arrière",260],["Caméra arrière",140],["Caméra avant",135],["Haut-parleur du haut",75],["Haut-parleur du bas",50],["Connecteur de charge",80],["Bouton power",85],["Boutons volume",80]]],["Prix","iPhone 17","","tarifs.html#iphone-17","iphone apple",[["Écran",280],["Batterie",110],["Châssis",200],["Vitre arrière",100],["Caméra arrière",130],["Caméra avant",105],["Haut-parleur du haut",75],["Haut-parleur du bas",60],["Connecteur de charge",80],["Bouton power",85],["Boutons volume",85]]],["Prix","iPhone 17e","","tarifs.html#iphone-17e","iphone apple",[["Caméra arrière",100],["Haut-parleur du haut",60],["Haut-parleur du bas",60],["Connecteur de charge",80],["Boutons volume",70]]],["Prix","iPhone 16 Pro Max","","tarifs.html#iphone-16-pro-max","iphone apple",[["Écran",360],["Batterie",150],["Châssis et vitre arrière",320],["Caméra arrière",140],["Caméra avant",90],["Haut-parleur du haut",75],["Haut-parleur du bas",60],["Connecteur de charge",70],["Bouton power",80],["Boutons volume",80]]],["Prix","iPhone 16 Pro","","tarifs.html#iphone-16-pro","iphone apple",[["Écran",300],["Batterie",130],["Châssis et vitre arrière",280],["Caméra arrière",130],["Caméra avant",90],["Haut-parleur du haut",65],["Haut-parleur du bas",55],["Connecteur de charge",70],["Bouton power",80],["Boutons volume",70]]],["Prix","iPhone 16 Plus","","tarifs.html#iphone-16-plus","iphone apple",[["Écran",280],["Batterie",100],["Châssis",200],["Vitre arrière",110],["Caméra arrière",130],["Caméra avant",75],["Haut-parleur du haut",70],["Haut-parleur du bas",70],["Connecteur de charge",75],["Bouton power",80],["Boutons volume",80]]],["Prix","iPhone 16","","tarifs.html#iphone-16","iphone apple",[["Écran",250],["Batterie",90],["Châssis",180],["Vitre arrière",90],["Caméra arrière",120],["Caméra avant",85],["Haut-parleur du haut",70],["Haut-parleur du bas",60],["Connecteur de charge",75],["Bouton power",80],["Boutons volume",80]]],["Prix","iPhone 16e","","tarifs.html#iphone-16e","iphone apple",[["Écran",260],["Batterie",130],["Châssis et vitre arrière",230],["Caméra arrière",100],["Caméra avant",85],["Haut-parleur du haut",60],["Haut-parleur du bas",60],["Connecteur de charge",80],["Boutons volume",75]]],["Prix","iPhone 15 Pro Max","","tarifs.html#iphone-15-pro-max","iphone apple",[["Écran",220],["Batterie",90],["Châssis et vitre arrière",275],["Caméra arrière",120],["Caméra avant",75],["Haut-parleur du haut",70],["Haut-parleur du bas",60],["Connecteur de charge",80],["Bouton power",70],["Boutons volume",70]]],["Prix","iPhone 15 Pro","","tarifs.html#iphone-15-pro","iphone apple",[["Écran",200],["Batterie",85],["Châssis et vitre arrière",250],["Caméra arrière",120],["Caméra avant",75],["Haut-parleur du haut",65],["Haut-parleur du bas",60],["Connecteur de charge",80],["Bouton power",65],["Boutons volume",65]]],["Prix","iPhone 15 Plus","","tarifs.html#iphone-15-plus","iphone apple",[["Écran",180],["Batterie",80],["Châssis",180],["Vitre arrière",80],["Caméra arrière",100],["Caméra avant",70],["Haut-parleur du haut",65],["Haut-parleur du bas",55],["Connecteur de charge",80],["Bouton power",65],["Boutons volume",75]]],["Prix","iPhone 15","","tarifs.html#iphone-15","iphone apple",[["Écran",160],["Batterie",80],["Châssis",150],["Vitre arrière",70],["Caméra arrière",120],["Caméra avant",65],["Haut-parleur du haut",70],["Haut-parleur du bas",60],["Connecteur de charge",80],["Bouton power",65],["Boutons volume",75]]],["Prix","iPhone 14 Pro Max","","tarifs.html#iphone-14-pro-max","iphone apple",[["Écran",190],["Batterie",90],["Châssis et vitre arrière",240],["Caméra arrière",120],["Caméra avant",65],["Haut-parleur du haut",60],["Haut-parleur du bas",60],["Connecteur de charge",75],["Boutons volume",70]]],["Prix","iPhone 14 Pro","","tarifs.html#iphone-14-pro","iphone apple",[["Écran",170],["Batterie",75],["Châssis et vitre arrière",200],["Caméra arrière",130],["Caméra avant",65],["Haut-parleur du haut",60],["Haut-parleur du bas",60],["Connecteur de charge",80],["Bouton power",70],["Boutons volume",70]]],["Prix","iPhone 14 Plus","","tarifs.html#iphone-14-plus","iphone apple",[["Écran",175],["Batterie",85],["Châssis",170],["Vitre arrière",60],["Caméra arrière",100],["Caméra avant",75],["Haut-parleur du haut",65],["Haut-parleur du bas",55],["Connecteur de charge",70],["Bouton power",70],["Boutons volume",70]]],["Prix","iPhone 14","","tarifs.html#iphone-14","iphone apple",[["Écran",140],["Batterie",80],["Châssis",140],["Vitre arrière",60],["Caméra arrière",90],["Caméra avant",70],["Haut-parleur du haut",65],["Haut-parleur du bas",55],["Connecteur de charge",65],["Bouton power",70],["Boutons volume",65]]],["Prix","iPhone 13 Pro Max","","tarifs.html#iphone-13-pro-max","iphone apple",[["Écran",155],["Batterie",70],["Châssis et vitre arrière",165],["Caméra arrière",140],["Caméra avant",60],["Haut-parleur du haut",65],["Haut-parleur du bas",65],["Connecteur de charge",75]]],["Prix","iPhone 13 Pro","","tarifs.html#iphone-13-pro","iphone apple",[["Écran",140],["Batterie",65],["Châssis et vitre arrière",150],["Caméra arrière",140],["Caméra avant",65],["Haut-parleur du haut",65],["Haut-parleur du bas",55],["Connecteur de charge",75]]],["Prix","iPhone 13","","tarifs.html#iphone-13","iphone apple",[["Écran",130],["Batterie",60],["Châssis et vitre arrière",120],["Caméra arrière",65],["Caméra avant",60],["Haut-parleur du haut",65],["Haut-parleur du bas",55],["Connecteur de charge",70],["Bouton power",75]]],["Prix","iPhone 13 mini","","tarifs.html#iphone-13-mini","iphone apple",[["Écran",145],["Batterie",60],["Châssis et vitre arrière",115],["Caméra arrière",65],["Caméra avant",65],["Haut-parleur du haut",70],["Haut-parleur du bas",55],["Connecteur de charge",70]]],["Prix","iPhone 12 Pro Max","","tarifs.html#iphone-12-pro-max","iphone apple",[["Écran",125],["Batterie",70],["Châssis et vitre arrière",155],["Caméra arrière",130],["Caméra avant",60],["Haut-parleur du haut",70],["Haut-parleur du bas",60],["Connecteur de charge",75],["Bouton power",65],["Boutons volume",65]]],["Prix","iPhone 12 Pro","","tarifs.html#iphone-12-pro","iphone apple",[["Écran",110],["Batterie",50],["Châssis et vitre arrière",140],["Caméra arrière",160],["Caméra avant",60],["Haut-parleur du haut",65],["Haut-parleur du bas",50],["Connecteur de charge",70],["Bouton power",75],["Boutons volume",75]]],["Prix","iPhone 12","","tarifs.html#iphone-12","iphone apple",[["Écran",100],["Batterie",50],["Châssis et vitre arrière",120],["Caméra arrière",70],["Caméra avant",60],["Haut-parleur du haut",65],["Haut-parleur du bas",50],["Connecteur de charge",70],["Bouton power",75],["Boutons volume",75]]],["Prix","iPhone 12 mini","","tarifs.html#iphone-12-mini","iphone apple",[["Écran",120],["Batterie",50],["Châssis et vitre arrière",130],["Caméra arrière",100],["Caméra avant",60],["Haut-parleur du haut",65],["Haut-parleur du bas",60],["Connecteur de charge",65],["Bouton power",70],["Boutons volume",70]]],["Prix","iPhone 11 Pro Max","","tarifs.html#iphone-11-pro-max","iphone apple",[["Écran",85],["Batterie",75],["Châssis et vitre arrière",130],["Caméra arrière",90],["Caméra avant",60],["Haut-parleur du haut",65],["Haut-parleur du bas",55],["Connecteur de charge",80],["Bouton power",75]]],["Prix","iPhone 11 Pro","","tarifs.html#iphone-11-pro","iphone apple",[["Écran",70],["Batterie",60],["Châssis et vitre arrière",120],["Caméra arrière",90],["Caméra avant",65],["Haut-parleur du haut",70],["Haut-parleur du bas",50],["Connecteur de charge",80],["Bouton power",75],["Boutons volume",75]]],["Prix","iPhone 11","","tarifs.html#iphone-11","iphone apple",[["Écran",65],["Batterie",50],["Châssis et vitre arrière",110],["Caméra arrière",65],["Caméra avant",55],["Haut-parleur du haut",65],["Haut-parleur du bas",50],["Connecteur de charge",65],["Bouton power",65],["Boutons volume",75]]],["Prix","iPhone XR","","tarifs.html#iphone-xr","iphone apple",[["Écran",60],["Batterie",50],["Châssis et vitre arrière",100],["Caméra arrière",65],["Caméra avant",55],["Haut-parleur du haut",65],["Haut-parleur du bas",50],["Connecteur de charge",60],["Bouton power",75],["Boutons volume",75]]],["Prix","iPhone XS Max","","tarifs.html#iphone-xs-max","iphone apple",[["Écran",70],["Batterie",65],["Châssis et vitre arrière",110],["Caméra arrière",70],["Caméra avant",60],["Haut-parleur du haut",65],["Haut-parleur du bas",50],["Connecteur de charge",60],["Bouton power",85],["Boutons volume",65]]],["Prix","iPhone XS","","tarifs.html#iphone-xs","iphone apple",[["Écran",50],["Batterie",60],["Châssis et vitre arrière",90],["Caméra arrière",70],["Caméra avant",60],["Haut-parleur du haut",60],["Haut-parleur du bas",50],["Connecteur de charge",65],["Bouton power",70],["Boutons volume",65]]],["Prix","iPhone X","","tarifs.html#iphone-x","iphone apple",[["Écran",45],["Batterie",60],["Châssis et vitre arrière",80],["Caméra arrière",60],["Caméra avant",55],["Haut-parleur du haut",60],["Haut-parleur du bas",50],["Connecteur de charge",60],["Bouton power",70],["Boutons volume",65]]],["Prix","iPhone SE (2022)","","tarifs.html#iphone-se-2022","iphone apple",[["Écran",45],["Batterie",45],["Châssis et vitre arrière",90]]],["Prix","iPhone 8 Plus","","tarifs.html#iphone-8-plus","iphone apple",[["Écran",30],["Batterie",40],["Châssis et vitre arrière",70]]],["Prix","iPhone 8","","tarifs.html#iphone-8","iphone apple",[["Écran",30],["Batterie",40],["Châssis et vitre arrière",60]]],["Prix","iPhone 7 / 7 Plus","","tarifs.html#iphone-7-7-plus","iphone apple",[["Écran",25],["Batterie",40],["Châssis et vitre arrière",55]]],["Prix","iPhone 6 / 6s","","tarifs.html#iphone-6-6s","iphone apple",[["Écran",20],["Batterie",30],["Châssis et vitre arrière",40]]],["Prix","Galaxy XCover 7","","tarifs.html#galaxy-xcover-7","samsung galaxy android",[]],["Prix","Galaxy XCover 6 Pro","","tarifs.html#galaxy-xcover-6-pro","samsung galaxy android",[]],["Prix","Galaxy XCover 5","","tarifs.html#galaxy-xcover-5","samsung galaxy android",[]],["Prix","Galaxy M55","","tarifs.html#galaxy-m55","samsung galaxy android",[]],["Prix","Galaxy M53","","tarifs.html#galaxy-m53","samsung galaxy android",[]],["Prix","Galaxy M33","","tarifs.html#galaxy-m33","samsung galaxy android",[]],["Prix","Galaxy M23","","tarifs.html#galaxy-m23","samsung galaxy android",[]],["Prix","Galaxy M13","","tarifs.html#galaxy-m13","samsung galaxy android",[]],["Prix","Galaxy M12","","tarifs.html#galaxy-m12","samsung galaxy android",[]],["Prix","Galaxy A73","","tarifs.html#galaxy-a73","samsung galaxy android",[]],["Prix","Galaxy A72","","tarifs.html#galaxy-a72","samsung galaxy android",[]],["Prix","Galaxy A71","","tarifs.html#galaxy-a71","samsung galaxy android",[["Écran",70]]],["Prix","Galaxy A70","","tarifs.html#galaxy-a70","samsung galaxy android",[["Écran",70]]],["Prix","Galaxy A57","","tarifs.html#galaxy-a57","samsung galaxy android",[]],["Prix","Galaxy A56","","tarifs.html#galaxy-a56","samsung galaxy android",[["Écran",80]]],["Prix","Galaxy A55","","tarifs.html#galaxy-a55","samsung galaxy android",[["Écran",80]]],["Prix","Galaxy A54","","tarifs.html#galaxy-a54","samsung galaxy android",[["Écran",80]]],["Prix","Galaxy A53","","tarifs.html#galaxy-a53","samsung galaxy android",[["Écran",80]]],["Prix","Galaxy A52s","","tarifs.html#galaxy-a52s","samsung galaxy android",[]],["Prix","Galaxy A52","","tarifs.html#galaxy-a52","samsung galaxy android",[["Écran",80]]],["Prix","Galaxy A51","","tarifs.html#galaxy-a51","samsung galaxy android",[["Écran",70]]],["Prix","Galaxy A50","","tarifs.html#galaxy-a50","samsung galaxy android",[["Écran",70]]],["Prix","Galaxy A42","","tarifs.html#galaxy-a42","samsung galaxy android",[["Écran",80]]],["Prix","Galaxy A41","","tarifs.html#galaxy-a41","samsung galaxy android",[["Écran",80]]],["Prix","Galaxy A40","","tarifs.html#galaxy-a40","samsung galaxy android",[["Écran",80]]],["Prix","Galaxy A37","","tarifs.html#galaxy-a37","samsung galaxy android",[]],["Prix","Galaxy A36","","tarifs.html#galaxy-a36","samsung galaxy android",[["Écran",80]]],["Prix","Galaxy A35","","tarifs.html#galaxy-a35","samsung galaxy android",[["Écran",80]]],["Prix","Galaxy A34","","tarifs.html#galaxy-a34","samsung galaxy android",[["Écran",80]]],["Prix","Galaxy A33","","tarifs.html#galaxy-a33","samsung galaxy android",[["Écran",80]]],["Prix","Galaxy A32 5G","","tarifs.html#galaxy-a32-5g","samsung galaxy android",[["Écran",70]]],["Prix","Galaxy A32 4G","","tarifs.html#galaxy-a32-4g","samsung galaxy android",[["Écran",95]]],["Prix","Galaxy A31","","tarifs.html#galaxy-a31","samsung galaxy android",[["Écran",95]]],["Prix","Galaxy A27","","tarifs.html#galaxy-a27","samsung galaxy android",[]],["Prix","Galaxy A26","","tarifs.html#galaxy-a26","samsung galaxy android",[["Écran",80]]],["Prix","Galaxy A25","","tarifs.html#galaxy-a25","samsung galaxy android",[["Écran",70]]],["Prix","Galaxy A24","","tarifs.html#galaxy-a24","samsung galaxy android",[["Écran",70]]],["Prix","Galaxy A23 5G","","tarifs.html#galaxy-a23-5g","samsung galaxy android",[["Écran",70]]],["Prix","Galaxy A22 5G","","tarifs.html#galaxy-a22-5g","samsung galaxy android",[["Écran",70]]],["Prix","Galaxy A21s","","tarifs.html#galaxy-a21s","samsung galaxy android",[["Écran",70]]],["Prix","Galaxy A20e","","tarifs.html#galaxy-a20e","samsung galaxy android",[["Écran",80]]],["Prix","Galaxy A17 5G","","tarifs.html#galaxy-a17-5g","samsung galaxy android",[["Écran",80]]],["Prix","Galaxy A17 4G","","tarifs.html#galaxy-a17-4g","samsung galaxy android",[["Écran",70]]],["Prix","Galaxy A16","","tarifs.html#galaxy-a16","samsung galaxy android",[["Écran",80]]],["Prix","Galaxy A15","","tarifs.html#galaxy-a15","samsung galaxy android",[["Écran",70]]],["Prix","Galaxy A14 4G","","tarifs.html#galaxy-a14-4g","samsung galaxy android",[["Écran",70]]],["Prix","Galaxy A13","","tarifs.html#galaxy-a13","samsung galaxy android",[["Écran",70]]],["Prix","Galaxy A12","","tarifs.html#galaxy-a12","samsung galaxy android",[["Écran",70]]],["Prix","Galaxy A11","","tarifs.html#galaxy-a11","samsung galaxy android",[]],["Prix","Galaxy A10","","tarifs.html#galaxy-a10","samsung galaxy android",[["Écran",70]]],["Prix","Galaxy A07 5G","","tarifs.html#galaxy-a07-5g","samsung galaxy android",[["Écran",80]]],["Prix","Galaxy A06","","tarifs.html#galaxy-a06","samsung galaxy android",[["Écran",70]]],["Prix","Galaxy A05s","","tarifs.html#galaxy-a05s","samsung galaxy android",[["Écran",70]]],["Prix","Galaxy A04s","","tarifs.html#galaxy-a04s","samsung galaxy android",[["Écran",70]]],["Prix","Galaxy A03","","tarifs.html#galaxy-a03","samsung galaxy android",[["Écran",70]]],["Prix","Galaxy A02s","","tarifs.html#galaxy-a02s","samsung galaxy android",[["Écran",70]]],["Prix","Galaxy Z Fold 8","","tarifs.html#galaxy-z-fold-8","samsung galaxy android",[]],["Prix","Galaxy Z Fold 7","","tarifs.html#galaxy-z-fold-7","samsung galaxy android",[]],["Prix","Galaxy Z Fold 6","","tarifs.html#galaxy-z-fold-6","samsung galaxy android",[]],["Prix","Galaxy Z Fold 5","","tarifs.html#galaxy-z-fold-5","samsung galaxy android",[]],["Prix","Galaxy Z Fold 4","","tarifs.html#galaxy-z-fold-4","samsung galaxy android",[]],["Prix","Galaxy Z Fold 3","","tarifs.html#galaxy-z-fold-3","samsung galaxy android",[]],["Prix","Galaxy Z Fold 2","","tarifs.html#galaxy-z-fold-2","samsung galaxy android",[]],["Prix","Galaxy Z Flip 8","","tarifs.html#galaxy-z-flip-8","samsung galaxy android",[]],["Prix","Galaxy Z Flip 7","","tarifs.html#galaxy-z-flip-7","samsung galaxy android",[]],["Prix","Galaxy Z Flip 6","","tarifs.html#galaxy-z-flip-6","samsung galaxy android",[]],["Prix","Galaxy Z Flip 5","","tarifs.html#galaxy-z-flip-5","samsung galaxy android",[]],["Prix","Galaxy Z Flip 4","","tarifs.html#galaxy-z-flip-4","samsung galaxy android",[]],["Prix","Galaxy Z Flip 3","","tarifs.html#galaxy-z-flip-3","samsung galaxy android",[]],["Prix","Galaxy Z Flip (2020)","","tarifs.html#galaxy-z-flip-2020","samsung galaxy android",[]],["Prix","Galaxy Note 20 Ultra","","tarifs.html#galaxy-note-20-ultra","samsung galaxy android",[]],["Prix","Galaxy Note 20","","tarifs.html#galaxy-note-20","samsung galaxy android",[]],["Prix","Galaxy S26 Ultra","","tarifs.html#galaxy-s26-ultra","samsung galaxy android",[["Écran",350]]],["Prix","Galaxy S26+","","tarifs.html#galaxy-s26-plus","samsung galaxy android",[["Écran",280]]],["Prix","Galaxy S26","","tarifs.html#galaxy-s26","samsung galaxy android",[["Écran",230]]],["Prix","Galaxy S25 FE","","tarifs.html#galaxy-s25-fe","samsung galaxy android",[["Écran",210]]],["Prix","Galaxy S25 Edge","","tarifs.html#galaxy-s25-edge","samsung galaxy android",[["Écran",400]]],["Prix","Galaxy S25 Ultra","","tarifs.html#galaxy-s25-ultra","samsung galaxy android",[["Écran",320],["Écran compatible",210]]],["Prix","Galaxy S25+","","tarifs.html#galaxy-s25-plus","samsung galaxy android",[["Écran",260],["Écran compatible",220]]],["Prix","Galaxy S25","","tarifs.html#galaxy-s25","samsung galaxy android",[["Écran",230]]],["Prix","Galaxy S24 FE","","tarifs.html#galaxy-s24-fe","samsung galaxy android",[["Écran",230]]],["Prix","Galaxy S24 Ultra","","tarifs.html#galaxy-s24-ultra","samsung galaxy android",[["Écran",300],["Écran compatible",220]]],["Prix","Galaxy S24+","","tarifs.html#galaxy-s24-plus","samsung galaxy android",[["Écran",300],["Écran compatible",220]]],["Prix","Galaxy S24","","tarifs.html#galaxy-s24","samsung galaxy android",[["Écran",250]]],["Prix","Galaxy S23 FE","","tarifs.html#galaxy-s23-fe","samsung galaxy android",[["Écran",180],["Écran compatible",160]]],["Prix","Galaxy S23 Ultra","","tarifs.html#galaxy-s23-ultra","samsung galaxy android",[["Écran",370],["Écran compatible",200],["Vitre arrière",80]]],["Prix","Galaxy S23+","","tarifs.html#galaxy-s23-plus","samsung galaxy android",[["Écran",280],["Écran compatible",190],["Vitre arrière",70]]],["Prix","Galaxy S23","","tarifs.html#galaxy-s23","samsung galaxy android",[["Écran",250],["Vitre arrière",65]]],["Prix","Galaxy S22 Ultra","","tarifs.html#galaxy-s22-ultra","samsung galaxy android",[["Écran",320],["Écran compatible",200],["Vitre arrière",75]]],["Prix","Galaxy S22+","","tarifs.html#galaxy-s22-plus","samsung galaxy android",[["Écran",300],["Écran compatible",190],["Vitre arrière",65]]],["Prix","Galaxy S22","","tarifs.html#galaxy-s22","samsung galaxy android",[["Écran",270],["Vitre arrière",60]]],["Prix","Galaxy S21 FE","","tarifs.html#galaxy-s21-fe","samsung galaxy android",[["Écran",280],["Écran compatible",150],["Vitre arrière",55]]],["Prix","Galaxy S21 Ultra","","tarifs.html#galaxy-s21-ultra","samsung galaxy android",[["Écran",320],["Écran compatible",210],["Vitre arrière",70]]],["Prix","Galaxy S21+","","tarifs.html#galaxy-s21-plus","samsung galaxy android",[["Écran",220],["Écran compatible",200],["Vitre arrière",60]]],["Prix","Galaxy S21","","tarifs.html#galaxy-s21","samsung galaxy android",[["Écran",280],["Écran compatible",170],["Vitre arrière",55]]],["Prix","Galaxy S20 FE 5G","","tarifs.html#galaxy-s20-fe-5g","samsung galaxy android",[]],["Prix","Galaxy S20 FE","","tarifs.html#galaxy-s20-fe","samsung galaxy android",[["Écran",180],["Vitre arrière",50]]],["Prix","Galaxy S20 Ultra","","tarifs.html#galaxy-s20-ultra","samsung galaxy android",[["Écran",210],["Vitre arrière",65]]],["Prix","Galaxy S20+","","tarifs.html#galaxy-s20-plus","samsung galaxy android",[["Écran",190],["Vitre arrière",55]]],["Prix","Galaxy S20","","tarifs.html#galaxy-s20","samsung galaxy android",[["Écran",150],["Vitre arrière",50]]],["Prix","Galaxy S10+","","tarifs.html#galaxy-s10-plus","samsung galaxy android",[["Écran",160],["Vitre arrière",55]]],["Prix","Galaxy S10","","tarifs.html#galaxy-s10","samsung galaxy android",[["Écran",160],["Vitre arrière",50]]],["Prix","Galaxy S10e","","tarifs.html#galaxy-s10e","samsung galaxy android",[["Écran",220],["Vitre arrière",50]]],["Prix","iPad Pro 13\" M5","","tarifs.html#ipad-pro-13-m5","ipad tablette apple",[]],["Prix","iPad Pro 13\" M4","","tarifs.html#ipad-pro-13-m4","ipad tablette apple",[]],["Prix","iPad Pro 12,9\"","","tarifs.html#ipad-pro-12-9","ipad tablette apple",[]],["Prix","iPad Pro 11\" M5","","tarifs.html#ipad-pro-11-m5","ipad tablette apple",[]],["Prix","iPad Pro 11\" M4","","tarifs.html#ipad-pro-11-m4","ipad tablette apple",[]],["Prix","iPad Pro 11\"","","tarifs.html#ipad-pro-11","ipad tablette apple",[]],["Prix","iPad Pro 10,5\"","","tarifs.html#ipad-pro-10-5","ipad tablette apple",[]],["Prix","iPad Pro 9,7\"","","tarifs.html#ipad-pro-9-7","ipad tablette apple",[]],["Prix","iPad mini 7","","tarifs.html#ipad-mini-7","ipad tablette apple",[]],["Prix","iPad mini 6","","tarifs.html#ipad-mini-6","ipad tablette apple",[]],["Prix","iPad mini 5","","tarifs.html#ipad-mini-5","ipad tablette apple",[]],["Prix","iPad mini 4","","tarifs.html#ipad-mini-4","ipad tablette apple",[]],["Prix","iPad mini 2 / 3","","tarifs.html#ipad-mini-2-3","ipad tablette apple",[["Vitre tactile",70],["Écran LCD",120]]],["Prix","iPad mini 1","","tarifs.html#ipad-mini-1","ipad tablette apple",[["Vitre tactile",70],["Écran LCD",105]]],["Prix","iPad Air M4","","tarifs.html#ipad-air-m4","ipad tablette apple",[]],["Prix","iPad Air M3","","tarifs.html#ipad-air-m3","ipad tablette apple",[]],["Prix","iPad Air M2","","tarifs.html#ipad-air-m2","ipad tablette apple",[]],["Prix","iPad Air 5","","tarifs.html#ipad-air-5","ipad tablette apple",[]],["Prix","iPad Air 4","","tarifs.html#ipad-air-4","ipad tablette apple",[]],["Prix","iPad Air 3","","tarifs.html#ipad-air-3","ipad tablette apple",[]],["Prix","iPad Air 2","","tarifs.html#ipad-air-2","ipad tablette apple",[["Vitre tactile",70],["Écran LCD",135]]],["Prix","iPad Air","","tarifs.html#ipad-air","ipad tablette apple",[["Vitre tactile",70],["Écran LCD",125]]],["Prix","iPad 10 / 11","","tarifs.html#ipad-10-11","ipad tablette apple",[["Vitre tactile",70]]],["Prix","iPad 9","","tarifs.html#ipad-9","ipad tablette apple",[["Vitre tactile",70]]],["Prix","iPad 7 / 8","","tarifs.html#ipad-7-8","ipad tablette apple",[["Vitre tactile",70]]],["Prix","iPad 6","","tarifs.html#ipad-6","ipad tablette apple",[["Vitre tactile",70]]],["Prix","iPad 5","","tarifs.html#ipad-5","ipad tablette apple",[["Vitre tactile",70]]],["Prix","iPad 3 / 4","","tarifs.html#ipad-3-4","ipad tablette apple",[["Vitre tactile",70],["Écran LCD",100]]],["Prix","iPad 2","","tarifs.html#ipad-2","ipad tablette apple",[["Vitre tactile",70],["Écran LCD",95]]],["Prix","iPad 1","","tarifs.html#ipad-1","ipad tablette apple",[]],["Prix","Nintendo Switch OLED","","tarifs.html#nintendo-switch-oled","nintendo switch console",[["Écran",50]]],["Prix","Nintendo Switch Lite","","tarifs.html#nintendo-switch-lite","nintendo switch console",[["Écran",120]]],["Prix","Nintendo Switch","","tarifs.html#nintendo-switch","nintendo switch console",[["Écran",90]]],["Commune","L'Ajoupa-Bouillon","Déplacement 35 €","index.html#commune-l-ajoupa-bouillon","commune deplacement"],["Commune","Les Anses-d'Arlet","Déplacement 35 €","index.html#commune-les-anses-d-arlet","commune deplacement"],["Commune","Basse-Pointe","Déplacement 35 €","index.html#commune-basse-pointe","commune deplacement"],["Commune","Bellefontaine","Déplacement 35 €","index.html#commune-bellefontaine","commune deplacement"],["Commune","Le Carbet","Déplacement 35 €","index.html#commune-le-carbet","commune deplacement"],["Commune","Case-Pilote","Déplacement 20 €","index.html#commune-case-pilote","commune deplacement"],["Commune","Le Diamant","Déplacement 35 €","index.html#commune-le-diamant","commune deplacement"],["Commune","Ducos","Déplacement 25 €","index.html#commune-ducos","commune deplacement"],["Commune","Fonds-Saint-Denis","Déplacement 35 €","index.html#commune-fonds-saint-denis","commune deplacement"],["Commune","Fort-de-France","Déplacement 10 €","index.html#commune-fort-de-france","commune deplacement"],["Commune","Le François","Déplacement 25 €","index.html#commune-le-francois","commune deplacement"],["Commune","Grand'Rivière","Déplacement 35 €","index.html#commune-grand-riviere","commune deplacement"],["Commune","Gros-Morne","Déplacement 25 €","index.html#commune-gros-morne","commune deplacement"],["Commune","Le Lamentin","Déplacement 20 €","index.html#commune-le-lamentin","commune deplacement"],["Commune","Le Lorrain","Déplacement 35 €","index.html#commune-le-lorrain","commune deplacement"],["Commune","Macouba","Déplacement 35 €","index.html#commune-macouba","commune deplacement"],["Commune","Le Marigot","Déplacement 35 €","index.html#commune-le-marigot","commune deplacement"],["Commune","Le Marin","Déplacement 35 €","index.html#commune-le-marin","commune deplacement"],["Commune","Le Morne-Rouge","Déplacement 35 €","index.html#commune-le-morne-rouge","commune deplacement"],["Commune","Le Morne-Vert","Déplacement 35 €","index.html#commune-le-morne-vert","commune deplacement"],["Commune","Le Prêcheur","Déplacement 35 €","index.html#commune-le-precheur","commune deplacement"],["Commune","Rivière-Pilote","Déplacement 35 €","index.html#commune-riviere-pilote","commune deplacement"],["Commune","Rivière-Salée","Déplacement 35 €","index.html#commune-riviere-salee","commune deplacement"],["Commune","Le Robert","Déplacement 20 €","index.html#commune-le-robert","commune deplacement"],["Commune","Saint-Esprit","Déplacement 35 €","index.html#commune-saint-esprit","commune deplacement"],["Commune","Saint-Joseph","Déplacement 20 €","index.html#commune-saint-joseph","commune deplacement"],["Commune","Saint-Pierre","Déplacement 35 €","index.html#commune-saint-pierre","commune deplacement"],["Commune","Sainte-Anne","Déplacement 35 €","index.html#commune-sainte-anne","commune deplacement"],["Commune","Sainte-Luce","Déplacement 35 €","index.html#commune-sainte-luce","commune deplacement"],["Commune","Sainte-Marie","Déplacement 35 €","index.html#commune-sainte-marie","commune deplacement"],["Commune","Schœlcher","Déplacement 20 €","index.html#commune-schoelcher","commune deplacement"],["Commune","La Trinité","Déplacement 25 €","index.html#commune-la-trinite","commune deplacement"],["Commune","Les Trois-Îlets","Déplacement 35 €","index.html#commune-les-trois-ilets","commune deplacement"],["Commune","Le Vauclin","Déplacement 35 €","index.html#commune-le-vauclin","commune deplacement"]];
   var sr = $('search'), srBtn = $('search-btn'), srIn = $('sr-input'), srList = $('sr-list'), srH = $('sr-h'), srNone = $('sr-none'), srClear = $('sr-clear');
-  var PAGE = ((location.pathname.match(/(tarifs|boutique|rachat)\.html$/) || [0, 'index'])[1]) + '.html';
+  var PAGE = ((location.pathname.match(/(tarifs|boutique|rachat|rendez-vous|reparations)\.html$/) || [0, 'index'])[1]) + '.html';
   function words(s) { return fold(String(s).replace(/\+/g, ' plus ')).split(/[^a-z0-9]+/).filter(Boolean); }
   function squash(s) { return words(s).join(''); }
   var BRAND = /^(iphone|galaxy|ipad|nintendo)/;

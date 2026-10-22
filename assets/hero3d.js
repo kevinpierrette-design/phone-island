@@ -348,7 +348,7 @@
 
     // poses: the back shown three-quarters, then the front, slightly turned
     var BACK = { y: PI + .44, x: .13 }, FRONT = { y: 2 * PI - .2, x: .05 };
-    var S = { t0: 0, playing: false, done: reduce, visible: true, raf: 0, last: 0, paused: 0 };
+    var S = { t0: 0, playing: false, done: reduce, visible: true, raf: 0, last: 0, paused: 0, mode: 'time', rise: false, up: false, want: 1.2, cur: 0, lt: 0, cont: false };
     var drag = { on: false, x: 0, v: 0, off: 0, lastMove: 0 };
     var look = { x: 0, y: 0, tx: 0, ty: 0 };
 
@@ -388,15 +388,37 @@
     function frame(now) {
       S.raf = 0;
       if (!S.visible) return;
-      var t = (now - S.t0) / 1000, p;
-      if (S.done || t > 10.2) {
-        S.done = true;
-        p = idle(now / 1000);
-        P.U.uR.value = 0; P.lock.opacity = 1; P.notifMat.opacity = 1; P.notif.position.y = P.notifY; P.notif.scale.setScalar(1);
-      } else if (!S.playing) {
-        p = pose(0);
-      } else {
+      var t, p, more = false;
+      if (S.mode === 'scrub') {
+        // v15: the page's scroll sets the moment wanted (S.want); the moment shown (S.cur) follows it smoothly.
+        // Before that, rise() plays the start (the phone comes up, 0 to 1.2 s) on its own.
+        t = 0;
+        if (S.rise) {
+          t = (now - S.t0) / 1000;
+          if (t >= 1.2) { S.rise = false; S.up = true; S.cur = 1.2; } else more = true;
+        }
+        if (S.up) {
+          // eased by time, not by frame: as smooth on a slow phone as on a fast one (a frame that starts from rest
+          // counts as one sixtieth of a second)
+          var dt = S.cont ? Math.min(.25, Math.max(0, (now - S.lt) / 1000)) : .016, d = S.want - S.cur;
+          S.cur = Math.abs(d) < .004 ? S.want : S.cur + d * (1 - Math.exp(-dt / .12));
+          if (S.cur !== S.want) more = true;
+          t = S.cur;
+        }
+        S.done = S.up && t >= 10.1;
+        S.lt = now;
         p = pose(t);
+      } else {
+        t = (now - S.t0) / 1000;
+        if (S.done || t > 10.2) {
+          S.done = true;
+          p = idle(now / 1000);
+          P.U.uR.value = 0; P.lock.opacity = 1; P.notifMat.opacity = 1; P.notif.position.y = P.notifY; P.notif.scale.setScalar(1);
+        } else if (!S.playing) {
+          p = pose(0);
+        } else {
+          p = pose(t);
+        }
       }
       // the finger or the mouse turns it; let go and it comes back
       if (!drag.on) { drag.off += drag.v; drag.v *= .92; if (now - drag.lastMove > 1400) drag.off *= .94; }
@@ -406,8 +428,9 @@
       cvs.style.opacity = p.k;
       if (S.done && now % 1000 < 40) redrawLock(false);
       renderer.render(scene, camera);
-      var waiting = !S.playing && !S.done;
-      if ((!reduce && !waiting) || drag.on || Math.abs(drag.off) > .001) S.raf = requestAnimationFrame(frame);
+      var moving = drag.on || Math.abs(drag.off) > .001 || Math.abs(look.tx - look.x) + Math.abs(look.ty - look.y) > .002;
+      if (S.mode === 'scrub') { S.cont = more || moving; if (S.cont) S.raf = requestAnimationFrame(frame); }
+      else if ((!reduce && (S.playing || S.done)) || moving) S.raf = requestAnimationFrame(frame);
     }
     function kick() { if (!S.raf && S.visible) S.raf = requestAnimationFrame(frame); }
 
@@ -416,6 +439,16 @@
       S.done = false; S.playing = true; S.t0 = performance.now(); drag.off = 0; drag.v = 0;
       P.lock.opacity = 0; P.notifMat.opacity = 0;
       kick();
+    }
+    function rise() {                     // v15: the phone comes up by itself, then the scroll takes over
+      if (S.rise || S.up) return;
+      S.mode = 'scrub'; S.playing = true; S.rise = true; S.t0 = performance.now();
+      kick();
+    }
+    function scrub(t) {                   // v15: the moment of the repair the scroll has reached (seconds)
+      S.mode = 'scrub';
+      S.want = Math.max(1.2, Math.min(10.15, t));
+      if (S.up) kick();
     }
     function setVisible(v) {
       if (v === S.visible) return;
@@ -459,7 +492,7 @@
       if (reduce) { S.done = true; }
       kick();
       function seek(t) { S.done = false; S.playing = true; S.t0 = performance.now() - t * 1000; S.raf = 0; frame(performance.now()); cancelAnimationFrame(S.raf); S.raf = 0; }
-      return { play: play, replay: play, setVisible: setVisible, canvas: cvs, seek: seek };
+      return { play: play, replay: play, setVisible: setVisible, canvas: cvs, seek: seek, rise: rise, scrub: scrub };
     });
   };
 })();
