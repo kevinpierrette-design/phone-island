@@ -579,7 +579,18 @@ html.intro-on { overflow: hidden; }
 .intro-skip { position: absolute; top: calc(14px + env(safe-area-inset-top, 0px)); right: max(16px, env(safe-area-inset-right, 0px)); min-height: 40px; padding: 8px 18px;
   border: 1px solid rgba(245, 245, 247, .24); border-radius: 980px; background: transparent; color: #a1a1a6; font-size: .8125rem; cursor: pointer; transition: color .2s, border-color .2s; }
 .intro-skip:hover { color: #f5f5f7; border-color: rgba(245, 245, 247, .5); }
-.intro .il, .intro-tag { opacity: 0; }
+/* v23: « Bienvenue » comes first, in the white-to-gold of the site's big titles on black */
+.intro-hi { margin: 0; font-size: clamp(1.6rem, min(6.4vw, 6.2vh), 3.25rem); line-height: 1.1; font-weight: 600; letter-spacing: -.022em; text-align: center;
+  background: linear-gradient(180deg, #ffffff 0%, #f5f5f7 45%, #ecd3a0 100%); -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent; }
+/* the palms grow from the bottom up: a window rises over each one while the picture inside moves down by as much
+   (moves only, which the graphics card plays by itself) */
+.intro-logo .il-wipe { position: absolute; overflow: hidden; }
+.intro-logo .il-wipe-in { position: absolute; inset: 0; }
+.intro .il, .intro-tag, .intro-hi { opacity: 0; }
+.intro.play .intro-hi { animation: iWord 1.1s var(--ease-out) .1s both; }
+.intro.play .il-wipe { animation: iWipe 1.9s var(--ease-out) var(--wd) both; }
+.intro.play .il-wipe-in { animation: iWipeIn 1.9s var(--ease-out) var(--wd) both; }
+.intro.play .il, .intro.play .il-wipe, .intro.play .il-wipe-in, .intro.play .intro-hi, .intro.play .intro-tag { will-change: transform, opacity; }
 .intro.play .il-horizon { animation: iLine 1.3s var(--ease-out) .15s both; }
 .intro.play .il-w1 { animation: iLine 1.3s var(--ease-out) .4s both; }
 .intro.play .il-w2 { animation: iLine 1.3s var(--ease-out) .6s both; }
@@ -592,7 +603,9 @@ html.intro-on { overflow: hidden; }
 .intro.play .intro-tag { animation: iWord 1.1s var(--ease-out) 3.6s both; }
 @keyframes iLine { from { opacity: 0; transform: scaleX(.15); } to { opacity: 1; transform: none; } }
 @keyframes iSun { from { opacity: 1; transform: translateY(102%); } to { opacity: 1; transform: none; } }
-@keyframes iPalm { from { opacity: 0; clip-path: inset(100% 0 0 0); transform: rotate(-2.5deg); } 35% { opacity: 1; } to { opacity: 1; clip-path: inset(0 0 0 0); transform: none; } }
+@keyframes iPalm { from { opacity: 0; transform: rotate(-2.5deg); } 35% { opacity: 1; } to { opacity: 1; transform: none; } }
+@keyframes iWipe { from { transform: translate3d(0, 100%, 0); } to { transform: none; } }
+@keyframes iWipeIn { from { transform: translate3d(0, -100%, 0); } to { transform: none; } }
 @keyframes iWord { from { opacity: 0; transform: translateY(35%); } to { opacity: 1; transform: none; } }
 html.intro-on .hero .rv { transition: none; }
 
@@ -793,7 +806,8 @@ html.intro-on .hero .rv.in .wd-i, html.intro-on .hero .rv .wd-i { transform: tra
 })();
 </script>
 <div class="intro" id="intro" hidden>
-  <div class="intro-logo" role="img" aria-label="Phone Island"><img class="il il-palmL" src="assets/intro-palmL.webp" alt="" decoding="async" style="left:0.000%;top:0.000%;width:48.673%"><img class="il il-palmR" src="assets/intro-palmR.webp" alt="" decoding="async" style="left:67.064%;top:26.797%;width:32.936%"><img class="il il-horizon" src="assets/intro-horizon.webp" alt="" decoding="async" style="left:13.544%;top:54.382%;width:67.988%"><img class="il il-w1" src="assets/intro-w1.webp" alt="" decoding="async" style="left:11.389%;top:61.129%;width:68.449%"><img class="il il-w2" src="assets/intro-w2.webp" alt="" decoding="async" style="left:14.621%;top:67.749%;width:63.755%"><img class="il il-w3" src="assets/intro-w3.webp" alt="" decoding="async" style="left:25.510%;top:72.510%;width:51.520%"><img class="il il-phone" src="assets/intro-phone.webp" alt="" decoding="async" style="left:24.933%;top:82.156%;width:28.242%"><img class="il il-island" src="assets/intro-island.webp" alt="" decoding="async" style="left:36.899%;top:93.758%;width:36.591%"><span class="il-clip" style="left:33.898%;top:45.996%;width:30.858%;height:8.386%"><img class="il il-sun" src="assets/intro-sun.webp" alt="" decoding="async"></span></div>
+  <p class="intro-hi">Bienvenue</p>
+  <div class="intro-logo" role="img" aria-label="Phone Island"><span class="il-wipe" style="left:-6.000%;top:-4.916%;width:60.673%;height:83.415%;--wd:1.3s"><span class="il-wipe-in"><img class="il il-palmL" src="assets/intro-palmL.webp" alt="" decoding="async" style="left:9.889%;top:5.894%;width:80.222%"></span></span><span class="il-wipe" style="left:61.064%;top:21.881%;width:44.936%;height:61.662%;--wd:1.6s"><span class="il-wipe-in"><img class="il il-palmR" src="assets/intro-palmR.webp" alt="" decoding="async" style="left:13.352%;top:7.973%;width:73.295%"></span></span><img class="il il-horizon" src="assets/intro-horizon.webp" alt="" decoding="async" style="left:13.544%;top:54.382%;width:67.988%"><img class="il il-w1" src="assets/intro-w1.webp" alt="" decoding="async" style="left:11.389%;top:61.129%;width:68.449%"><img class="il il-w2" src="assets/intro-w2.webp" alt="" decoding="async" style="left:14.621%;top:67.749%;width:63.755%"><img class="il il-w3" src="assets/intro-w3.webp" alt="" decoding="async" style="left:25.510%;top:72.510%;width:51.520%"><img class="il il-phone" src="assets/intro-phone.webp" alt="" decoding="async" style="left:24.933%;top:82.156%;width:28.242%"><img class="il il-island" src="assets/intro-island.webp" alt="" decoding="async" style="left:36.899%;top:93.758%;width:36.591%"><span class="il-clip" style="left:33.898%;top:45.996%;width:30.858%;height:8.386%"><img class="il il-sun" src="assets/intro-sun.webp" alt="" decoding="async"></span></div>
   <p class="intro-tag">Réparation de smartphones à domicile, partout en Martinique</p>
   <button class="intro-skip" type="button" id="intro-skip">Passer</button>
 </div>
@@ -1508,14 +1522,17 @@ html.intro-on .hero .rv.in .wd-i, html.intro-on .hero .rv .wd-i { transform: tra
   /* ---------- the hero's light: an animated gradient drawn by the graphics card (WebGL) ----------
      Gold smoke drifting upwards, brightest under the phone, leaning a little towards the pointer. It is drawn at half
      the screen's resolution (it is soft anyway), only while the hero is on screen and the page is visible; the pause
-     button stops it, and it never starts with reduced motion (the painted gradient under it then stays). */
+     button stops it, and it never starts with reduced motion (the painted gradient under it then stays).
+     v23: it is only made once the welcome screen has gone (startLight, at the bottom), so the welcome plays alone; the
+     graphics card compiles it on the side when it can (KHR_parallel_shader_compile), so nothing waits for it. */
   var heroEl = $('hero'), glc = $('hero-gl'), hplay = $('hplay');
   var heroIn = true, heroPaused = false;
-  var GL = (function () {
-    if (reduce.matches || !glc) return null;
+  var GL = null, lightTried = false;
+  function makeGL(ready) {
+    if (reduce.matches || !glc) return;
     var gl = null;
     try { gl = glc.getContext('webgl', { alpha: false, antialias: false, depth: false, stencil: false, premultipliedAlpha: false, preserveDrawingBuffer: false, powerPreference: 'high-performance' }); } catch (e) {}
-    if (!gl) return null;
+    if (!gl) return;
     var VS = 'attribute vec2 a; void main() { gl_Position = vec4(a, 0.0, 1.0); }';
     var FS = [
       '#ifdef GL_FRAGMENT_PRECISION_HIGH',
@@ -1563,17 +1580,21 @@ html.intro-on .hero .rv.in .wd-i, html.intro-on .hero .rv .wd-i { transform: tra
       '  gl_FragColor = vec4(col, 1.0);',
       '}'
     ].join('\n');
-    function shader(type, src) { var s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s); return gl.getShaderParameter(s, gl.COMPILE_STATUS) ? s : null; }
-    var vs = shader(gl.VERTEX_SHADER, VS), fs = shader(gl.FRAGMENT_SHADER, FS);
-    if (!vs || !fs) return null;
-    var pr = gl.createProgram(); gl.attachShader(pr, vs); gl.attachShader(pr, fs); gl.linkProgram(pr);
-    if (!gl.getProgramParameter(pr, gl.LINK_STATUS)) return null;
+    function shader(type, src) { var s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s); return s; }
+    var pr = gl.createProgram(); gl.attachShader(pr, shader(gl.VERTEX_SHADER, VS)); gl.attachShader(pr, shader(gl.FRAGMENT_SHADER, FS)); gl.linkProgram(pr);
+    var par = gl.getExtension('KHR_parallel_shader_compile');
+    (function wait() {                                   // asking whether it is ready does not block; asking if it worked would
+      if (par && !gl.getProgramParameter(pr, par.COMPLETION_STATUS_KHR)) { setTimeout(wait, 40); return; }
+      if (gl.getProgramParameter(pr, gl.LINK_STATUS)) ready(setup());
+    })();
+    function setup() {
     gl.useProgram(pr);
     gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);   // one triangle covers the screen
     var at = gl.getAttribLocation(pr, 'a'); gl.enableVertexAttribArray(at); gl.vertexAttribPointer(at, 2, gl.FLOAT, false, 0, 0);
     var uRes = gl.getUniformLocation(pr, 'uRes'), uTime = gl.getUniformLocation(pr, 'uTime'), uMouse = gl.getUniformLocation(pr, 'uMouse');
-    var st = { on: false, raf: 0, t: 40, last: 0, mx: 0, my: 0, tx: 0, ty: 0, w: 0, h: 0, k: .5, n: 0, sum: 0 };
+    // v23: a third of the screen's resolution to start with (on a laptop's built-in graphics, half cost 11 ms a frame)
+    var st = { on: false, raf: 0, t: 40, last: 0, mx: 0, my: 0, tx: 0, ty: 0, w: 0, h: 0, k: .34, n: 0, sum: 0 };
     function size() {
       var r = glc.getBoundingClientRect(), k = st.k * Math.min(window.devicePixelRatio || 1, 2);
       var w = Math.max(2, Math.round(r.width * k)), h = Math.max(2, Math.round(r.height * k));
@@ -1590,7 +1611,8 @@ html.intro-on .hero .rv.in .wd-i, html.intro-on .hero .rv .wd-i { transform: tra
       var dt = st.last ? (now - st.last) / 1000 : 0;
       st.t += Math.min(.05, dt); st.last = now;                                         // time, not frames: the same speed at any rate
       // a slow screen gets fewer pixels to draw (it is soft light: nobody sees the difference), so it stays at 60 frames a second
-      if (dt) { st.n++; st.sum += dt; if (st.n === 90) { if (st.sum / st.n > .021 && st.k > .26) { st.k *= .72; size(); } st.n = 0; st.sum = 0; } }
+      // v23: judged every half second (not a second and a half), and a single long pause elsewhere on the page does not count
+      if (dt && dt < .1) { st.n++; st.sum += dt; if (st.n === 30) { if (st.sum / st.n > .019 && st.k > .2) { st.k *= .75; size(); } st.n = 0; st.sum = 0; } }
       st.mx += (st.tx - st.mx) * .035; st.my += (st.ty - st.my) * .035;
       draw();
       st.raf = requestAnimationFrame(frame);
@@ -1603,13 +1625,21 @@ html.intro-on .hero .rv.in .wd-i, html.intro-on .hero .rv .wd-i { transform: tra
       run: function (on) { if (on === st.on) return; st.on = on; st.last = 0; if (on && !st.raf) st.raf = requestAnimationFrame(frame); },
       pointer: function (x, y) { st.tx = x; st.ty = y; }
     };
-  })();
-  if (GL && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
-    heroEl.addEventListener('pointermove', function (e) {
-      var r = heroEl.getBoundingClientRect();
-      GL.pointer(clamp((e.clientX - r.left) / r.width * 2 - 1, -1, 1), clamp(1 - (e.clientY - r.top) / r.height * 2, -1, 1));
-    }, { passive: true });
-    heroEl.addEventListener('pointerleave', function () { GL.pointer(0, 0); });
+    }
+  }
+  function startLight() {
+    if (lightTried) return; lightTried = true;
+    makeGL(function (api) {
+      GL = api;
+      if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+        heroEl.addEventListener('pointermove', function (e) {
+          var r = heroEl.getBoundingClientRect();
+          GL.pointer(clamp((e.clientX - r.left) / r.width * 2 - 1, -1, 1), clamp(1 - (e.clientY - r.top) / r.height * 2, -1, 1));
+        }, { passive: true });
+        heroEl.addEventListener('pointerleave', function () { GL.pointer(0, 0); });
+      }
+      heroLive();
+    });
   }
 
   /* ---------- the phone in 3D (three.js and assets/hero3d.js, fetched only when WebGL works) ----------
@@ -1661,7 +1691,13 @@ html.intro-on .hero .rv.in .wd-i, html.intro-on .hero .rv .wd-i { transform: tra
     } else if (failed && !played) { played = true; setTimeout(function () { stage3.classList.add('is-still'); }, 1600); }
   }
   if (reduce.matches) stage3.classList.add('is-still');
-  else if (canGL()) {
+  /* v23: the 3D is fetched and built once the welcome screen has gone (start3D, at the bottom); until then the phone's
+     first frame stands in, as it always did while the 3D was loading */
+  var started3 = false;
+  function start3D() {
+    if (started3 || reduce.matches) return;
+    started3 = true;
+    if (!canGL()) { failed = true; if (stageIn) playRepair(); return; }
     addScript('https://cdn.jsdelivr.net/npm/three@0.149.0/build/three.min.js')
       .then(function () { return addScript('assets/hero3d.js'); })
       .then(function () { return window.PIHero3D ? window.PIHero3D({ host: host3, base: 'assets/', reduce: false, font: '-apple-system, BlinkMacSystemFont, "SF Pro Display", Inter, "Helvetica Neue", Arial, sans-serif' }) : null; })
@@ -1673,7 +1709,7 @@ html.intro-on .hero .rv.in .wd-i, html.intro-on .hero .rv .wd-i { transform: tra
         if (stageIn) playRepair();
       })
       .catch(function () { hero3 = null; failed = true; stage3.classList.remove('is-live'); if (stageIn) playRepair(); });
-  } else failed = true;
+  }
   if ('IntersectionObserver' in window) {
     new IntersectionObserver(function (en) { heroIn = en[0].isIntersecting; heroLive(); }).observe(heroEl);
     new IntersectionObserver(function (en) {
@@ -1694,16 +1730,22 @@ html.intro-on .hero .rv.in .wd-i, html.intro-on .hero .rv .wd-i { transform: tra
     if (!heroPaused && stageIn) playRepair();
   });
 
-  /* ---------- welcome screen: plays once, then the phone is free to play ---------- */
+  /* ---------- welcome screen: plays once, then the phone is free to play ----------
+     v23: it plays alone. The hero's light and the 3D phone are made only once it has gone (each makes the graphics card
+     work hard for a moment: during the welcome, that made it stutter); three.js is only fetched meanwhile. */
   var intro = $('intro'), root = document.documentElement;
   function heroGo() { heroWanted = true; hkStart(); if (stageIn) playRepair(); }
+  function later(fn, ms) { setTimeout(function () { if (window.requestIdleCallback) requestIdleCallback(fn, { timeout: 600 }); else fn(); }, ms); }
   if (root.classList.contains('intro-on')) {
     var done = false, timer = 0;
+    if (!reduce.matches) { var pf = document.createElement('link'); pf.rel = 'prefetch'; pf.href = 'https://cdn.jsdelivr.net/npm/three@0.149.0/build/three.min.js'; document.head.appendChild(pf); }
     var finish = function () {
       if (done) return; done = true; clearTimeout(timer);
       intro.classList.add('out'); root.classList.remove('intro-on');
       setTimeout(function () { intro.hidden = true; }, 1050);
       heroGo();
+      later(startLight, 1050);                           // once the welcome has faded
+      later(start3D, 2200);                              // the first trouble has mended by then; the next comes at 3.2 s
     };
     var playIntro = function () { intro.classList.add('play'); timer = setTimeout(finish, 5900); };
     var imgs = all('img', intro).map(function (im) { return im.decode ? im.decode().catch(function () {}) : Promise.resolve(); });
@@ -1711,7 +1753,7 @@ html.intro-on .hero .rv.in .wd-i, html.intro-on .hero .rv .wd-i { transform: tra
     $('intro-skip').addEventListener('click', finish);
     intro.addEventListener('click', function (e) { if (e.target !== $('intro-skip')) finish(); });
     document.addEventListener('keydown', function (e) { if (!done && (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ')) finish(); });
-  } else { heroGo(); }
+  } else { heroGo(); startLight(); start3D(); }
 
 
   /* ---------- the zone (home page): touch a commune on the map (or choose it in the list) for the price of the trip. The
