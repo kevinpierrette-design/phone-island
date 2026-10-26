@@ -2,6 +2,8 @@
 
 Le site de Phone Island : réparation de smartphones à domicile dans les 34 communes de Martinique.
 
+En ligne sur https://phone-island.com
+
 - `index.html` : l’accueil (comment ça se passe, la zone et le prix du déplacement)
 - `reparations.html` : tout ce qu’on répare
 - `tarifs.html` : les prix des réparations
