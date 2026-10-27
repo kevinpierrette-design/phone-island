@@ -1039,7 +1039,7 @@ html.sheet-on { overflow: hidden; }
         <ul class="sh-perks">
           <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5.5c0 4.3-2.9 8-7 9.5-4.1-1.5-7-5.2-7-9.5V6l7-3z"/><path d="M8.8 12.2l2.3 2.3 4.3-4.6"/></svg><div><b>Garantie 2 mois</b><span>Sur tout ce que nous vendons.</span></div></li>
           <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7.5h11v8.5H3zM14 10.5h3.6l2.9 3v2.5H14z"/><circle cx="7" cy="17.5" r="1.7"/><circle cx="17" cy="17.5" r="1.7"/></svg><div><b>Livraison partout en Martinique</b><span>Ou remise en main propre, sur rendez-vous à Fort-de-France.</span></div></li>
-          <li><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="2.5"/><path d="M3 10h18M7 15h4"/></svg><div><b>Paiement</b><span id="sh-pay-l">Par carte, avec un lien de paiement sécurisé envoyé sur WhatsApp, ou à la remise.</span></div></li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="2.5"/><path d="M3 10h18M7 15h4"/></svg><div><b>Paiement</b><span id="sh-pay-l">Par carte, avec un lien de paiement sécurisé envoyé sur WhatsApp, ou en espèces à la remise.</span></div></li>
         </ul>
         <section class="sh-specs" aria-labelledby="sh-specs-t">
           <h3 class="sh-specs-t" id="sh-specs-t">Caractéristiques</h3>
@@ -1055,7 +1055,7 @@ html.sheet-on { overflow: hidden; }
     <div class="gf-notes rv">
       <p>Prix des réparations&nbsp;: pièce et main-d’œuvre comprises. Diagnostic gratuit. Délai selon disponibilité de la pièce.</p>
       <p>Déplacement de 10 à 35&nbsp;€ selon votre commune. Si vous venez à nous, pas de déplacement à payer&nbsp;: on vous envoie notre localisation sur WhatsApp.</p>
-      <p>Réparations, entretien et boutique&nbsp;: paiement par carte, avec un lien sécurisé envoyé sur WhatsApp, ou à la remise.</p>
+      <p>Réparations, entretien et boutique&nbsp;: paiement par carte, avec un lien sécurisé envoyé sur WhatsApp, ou en espèces à la remise.</p>
     </div>
     <nav class="gf-dir rv" style="--d:1" aria-label="Plan du site">
       <div>
@@ -2056,7 +2056,7 @@ html.sheet-on { overflow: hidden; }
   var PAY = {};
   /* PAY_WAYS: how the client can pay an article in stock, chosen in the sheet and written in the message: [value, chip, words].
      The same choices as the booking form (booking.html, booking.js); Sumeria will be one more line here. */
-  var PAY_WAYS = [['lien', 'Par lien de paiement', 'par lien de paiement'], ['remise', 'À la remise', 'à la remise']];
+  var PAY_WAYS = [['lien', 'Par lien de paiement', 'par lien de paiement'], ['remise', 'En espèces', 'en espèces, à la remise']];
 
   var sheet = $('sheet'), FICHE = !!sheet, shPushed = false, skipHash = false, shItem = null;
   var shState = {};
