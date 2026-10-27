@@ -1041,7 +1041,7 @@ html.sheet-on { overflow: hidden; }
           <div class="mail" id="sh-mail" data-mail-for="sh-wa" data-subject="Boutique"></div>
         </div>
         <ul class="sh-perks">
-          <li id="sh-war"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5.5c0 4.3-2.9 8-7 9.5-4.1-1.5-7-5.2-7-9.5V6l7-3z"/><path class="war-ok" d="M8.8 12.2l2.3 2.3 4.3-4.6"/></svg><div><b id="sh-war-b">Garantie 2 mois</b><span id="sh-war-t">Sur tout ce que nous vendons, sauf les AirPods et chargeurs compatibles.</span></div></li>
+          <li id="sh-war"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5.5c0 4.3-2.9 8-7 9.5-4.1-1.5-7-5.2-7-9.5V6l7-3z"/><path class="war-ok" d="M8.8 12.2l2.3 2.3 4.3-4.6"/></svg><div><b id="sh-war-b">Garantie 2 mois</b><span id="sh-war-t">Sur tout ce que nous vendons, sauf les AirPods et les chargeurs ou batteries compatibles.</span></div></li>
           <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7.5h11v8.5H3zM14 10.5h3.6l2.9 3v2.5H14z"/><circle cx="7" cy="17.5" r="1.7"/><circle cx="17" cy="17.5" r="1.7"/></svg><div><b>Livraison partout en Martinique</b><span>Ou remise en main propre, sur rendez-vous à Fort-de-France.</span></div></li>
           <li><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="2.5"/><path d="M3 10h18M7 15h4"/></svg><div><b>Paiement</b><span id="sh-pay-l">Par carte, avec un lien de paiement sécurisé envoyé sur WhatsApp, ou en espèces à la remise.</span></div></li>
         </ul>
@@ -1564,7 +1564,7 @@ html.sheet-on { overflow: hidden; }
   var APPLE = 'D’origine Apple', ADAPT = 'Adaptable';
   var CATALOG = {
     airpods: [
-      { title: 'AirPods d’origine', note: 'D’origine Apple, des AirPods Pro 2 aux AirPods 5.', items: [
+      { title: 'AirPods d’origine', note: 'D’origine Apple, des AirPods Pro 2 aux AirPods 5. Sans notre garantie de 2 mois.', items: [
         { tag: APPLE, name: 'AirPods 5', detail: 'Réduction active du bruit · 2026', photo: 'assets/shop-airpods-5-hd.webp', art: 'buds', about: "Les AirPods à design ouvert, avec la réduction active du bruit.", specs: [["Puce", "H2"], ["Réduction de bruit", "active : jusqu’à 50 % de bruit en plus supprimé qu’avec les AirPods 4 (selon Apple)"], ["Modes", "Transparence et Audio adaptatif"], ["Autonomie", "jusqu’à 4 h d’écoute, 20 h avec le boîtier (réduction de bruit activée)"], ["Boîtier", "charge par USB‑C"], ["Résistance", "IP57 : poussière, transpiration et eau"], ["Et aussi", "Traduction en direct · audio spatial personnalisé · Bluetooth 5.3"]] },
         { tag: APPLE, name: 'AirPods 5 avec boîtier de charge sans fil', detail: 'Réduction active du bruit · 2026', photo: 'assets/shop-airpods-5-hd.webp', art: 'buds', about: "Les AirPods 5, avec un boîtier qui se recharge aussi sans fil.", specs: [["Puce", "H2"], ["Réduction de bruit", "active : jusqu’à 50 % de bruit en plus supprimé qu’avec les AirPods 4 (selon Apple)"], ["Modes", "Transparence et Audio adaptatif"], ["Autonomie", "jusqu’à 5 h d’écoute, 22 h avec le boîtier (réduction de bruit activée)"], ["Boîtier", "USB‑C, chargeurs Qi et chargeur Apple Watch"], ["Commandes", "capteur de pression : glissez sur la tige pour le volume"], ["Résistance", "IP57 : poussière, transpiration et eau"], ["Et aussi", "Traduction en direct · audio spatial personnalisé"]] },
         { tag: APPLE, name: 'AirPods Pro 3', detail: 'Réduction active du bruit · 2025', photo: 'assets/shop-airpods-pro-3-hd.webp', art: 'tips', about: "Les AirPods intra-auriculaires les plus avancés, avec capteur de fréquence cardiaque.", specs: [["Puce", "H2"], ["Réduction de bruit", "active, avec Transparence et Audio adaptatif"], ["Autonomie", "jusqu’à 8 h d’écoute, 24 h avec le boîtier (réduction de bruit activée)"], ["Boîtier", "USB‑C, MagSafe, chargeurs Qi et chargeur Apple Watch"], ["Résistance", "IP57 : poussière, transpiration et eau"], ["Santé", "fréquence cardiaque pendant le sport · test auditif et aide auditive"], ["Et aussi", "Traduction en direct · audio spatial personnalisé"]] },
@@ -1606,6 +1606,15 @@ html.sheet-on { overflow: hidden; }
         { tag: ADAPT, name: 'Câble USB‑C vers Lightning (1 m)', detail: 'iPhone à prise Lightning', photo: 'assets/shop-cable-usb-c-lightning-hd.webp', art: 'cable', about: "Pour charger vite un iPhone à prise Lightning avec un chargeur USB‑C.", specs: [["Charge rapide", "jusqu’à 20 W"], ["Longueur", "1 m"]] },
         { tag: ADAPT, name: 'Câble USB vers Lightning (1 m)', detail: 'Pour les anciens chargeurs', art: 'cable', about: "Pour un iPhone à prise Lightning, avec un ancien chargeur à prise USB classique.", specs: [["Prise", "USB‑A : anciens chargeurs, ordinateur, voiture"], ["Usage", "charge et transfert de données"], ["Longueur", "1 m"]] },
         { tag: ADAPT, name: 'Chargeur voiture USB‑C', detail: 'Prise allume-cigare', art: 'car', about: "Pour charger votre téléphone en voiture.", specs: [["Prise", "allume-cigare, 12 et 24 V"], ["Port", "USB‑C, avec un câble USB‑C ou USB‑C vers Lightning"]] }
+      ] }
+    ],
+    // v23 (owner, 2026-10-27): Apple's MagSafe battery (2021, A2384, Lightning) at 150 €, a compatible one at 80 €
+    batteries: [
+      { title: 'Batteries d’origine', note: 'D’origine Apple.', items: [
+        { tag: APPLE, name: 'Batterie externe MagSafe', detail: 'Sans fil, aimantée · prise Lightning', photo: 'assets/shop-batterie-magsafe-hd.webp', art: 'magsafe', price: 150, about: "La batterie externe d’Apple : elle se fixe au dos de l’iPhone par aimants et le recharge sans fil.", specs: [["Capacité", "1 460 mAh sous 7,62 V, soit 11,13 Wh"], ["Charge sans fil", "jusqu’à 7,5 W ; jusqu’à 15 W quand elle est branchée sur un chargeur de 20 W ou plus"], ["Recharge", "selon Apple, jusqu’à 70 % d’un iPhone mini, 60 % d’un iPhone 12 à 14 (Pro compris), 40 % d’un Plus ou d’un Pro Max"], ["Compatibles", "iPhone 12, 13 et 14 selon Apple, avec iOS 14.7 ou plus récent"], ["Prise", "Lightning ; câble et chargeur vendus à part"], ["Et aussi", "niveau de charge affiché dans le widget Batteries de l’iPhone · 115 g, 11 mm d’épaisseur"]] }
+      ] },
+      { title: 'Batteries adaptables', note: 'La version compatible de la batterie MagSafe : un produit de qualité, avec les mêmes fonctions principales. Sans notre garantie de 2 mois. Photos d’illustration.', items: [
+        { tag: ADAPT, name: 'Batterie externe MagSafe', detail: 'Sans fil, aimantée', photo: 'assets/shop-adapt-batterie-magsafe-hd.webp', art: 'magsafe', price: 80, about: "La version compatible de la batterie MagSafe : un produit de qualité, avec les mêmes fonctions principales (fixation aimantée, recharge sans fil).", specs: [["Fixation", "aimantée : les iPhone avec MagSafe, ou avec une coque MagSafe"], ["Charge", "sans fil"]] }
       ] }
     ]
   };
@@ -2134,12 +2143,13 @@ html.sheet-on { overflow: hidden; }
     $('sh-name').textContent = p.name;
     $('sh-sub').textContent = info ? 'Sorti en ' + (p.year || '') + ' · ' + CAPS[info[0]].join(', ').replace(/, ([^,]*)$/, ' ou $1') : (p.detail || '');
     $('sh-about').textContent = info ? '' : (p.about || '');           // an iPhone: written in update(), with its state
-    // the warranty (owner, 2026-10-27): the shop's 2 months on everything, except the compatible AirPods and chargers
-    var noWar = p.tag === ADAPT && (p.cat === 'airpods' || p.cat === 'chargeurs');
+    // the warranty (owner, 2026-10-27): the shop's 2 months on everything, except the AirPods (Apple's and the
+    // compatible ones: « pas de garantie pour les AirPods ») and the compatible chargers and batteries
+    var noWar = /AirPods/.test(p.name) || (p.tag === ADAPT && (p.cat === 'chargeurs' || p.cat === 'batteries'));
     $('sh-war').classList.toggle('no-war', noWar);
     $('sh-war-b').textContent = noWar ? 'Sans garantie Phone Island' : 'Garantie 2 mois';
-    $('sh-war-t').textContent = noWar ? 'Notre garantie de 2 mois ne couvre pas les AirPods et chargeurs compatibles. La garantie légale s’applique toujours.'
-                                      : 'Sur tout ce que nous vendons, sauf les AirPods et chargeurs compatibles.';
+    $('sh-war-t').textContent = noWar ? 'Notre garantie de 2 mois ne couvre pas les AirPods, ni les chargeurs et batteries compatibles. La garantie légale s’applique toujours.'
+                                      : 'Sur tout ce que nous vendons, sauf les AirPods et les chargeurs ou batteries compatibles.';
     // the choices (iPhone only)
     var opts = $('sh-opts'); opts.textContent = '';
     if (info) {
