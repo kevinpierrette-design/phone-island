@@ -5,6 +5,18 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Rachat · Phone Island</title>
 <meta name="description" content="Vendez votre iPhone à Phone Island, en Martinique : quelques questions sur son état, l’estimation se calcule en direct, et on confirme l’offre sur WhatsApp.">
+<link rel="canonical" href="https://phone-island.com/rachat.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Phone Island">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:title" content="Rachat · Phone Island">
+<meta property="og:description" content="Vendez votre iPhone à Phone Island, en Martinique : quelques questions sur son état, l’estimation se calcule en direct, et on confirme l’offre sur WhatsApp.">
+<meta property="og:url" content="https://phone-island.com/rachat.html">
+<meta property="og:image" content="https://phone-island.com/assets/og-phone-island.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Phone Island, réparation de smartphones à domicile en Martinique">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="icon" type="image/png" href="assets/favicon-64.png">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -983,6 +995,7 @@ html.search-open .dock { opacity: 0; pointer-events: none; }
     <div class="gf-notes rv">
       <p>Prix des réparations&nbsp;: pièce et main-d’œuvre comprises. Diagnostic gratuit. Délai selon disponibilité de la pièce.</p>
       <p>Déplacement de 10 à 35&nbsp;€ selon votre commune. Si vous venez à nous, pas de déplacement à payer&nbsp;: on vous envoie notre localisation sur WhatsApp.</p>
+      <p>Réparations, entretien et boutique&nbsp;: paiement par carte, avec un lien sécurisé envoyé sur WhatsApp, ou à la remise.</p>
     </div>
     <nav class="gf-dir rv" style="--d:1" aria-label="Plan du site">
       <div>
@@ -1846,6 +1859,7 @@ html.search-open .dock { opacity: 0; pointer-events: none; }
       fetch('https://api.web3forms.com/submit', { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify(data) })
         .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { if (!r.ok || j.success === false) throw new Error(j.message || r.status); }); })
         .then(function () {
+          if (box.getAttribute('data-mail-for') === 'wa-send' && window.piCarnet) window.piCarnet('e-mail');   // a repair request: in the carnet too
           open.hidden = true;
           f.innerHTML = '<p class="mail-ok"><b>C’est envoyé, merci&nbsp;!</b> On revient vers vous très vite au ' + tel.value.trim().replace(/[<>&"]/g, '') + '.</p>';
         })

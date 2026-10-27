@@ -5,6 +5,18 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Rendez-vous · Phone Island</title>
 <meta name="description" content="Prenez rendez-vous pour la réparation de votre téléphone : quelques champs, et votre message s’ouvre dans WhatsApp, prêt à partir. Chez vous ou chez nous, partout en Martinique.">
+<link rel="canonical" href="https://phone-island.com/rendez-vous.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Phone Island">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:title" content="Rendez-vous · Phone Island">
+<meta property="og:description" content="Prenez rendez-vous pour la réparation de votre téléphone : quelques champs, et votre message s’ouvre dans WhatsApp, prêt à partir. Chez vous ou chez nous, partout en Martinique.">
+<meta property="og:url" content="https://phone-island.com/rendez-vous.html">
+<meta property="og:image" content="https://phone-island.com/assets/og-phone-island.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Phone Island, réparation de smartphones à domicile en Martinique">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="icon" type="image/png" href="assets/favicon-64.png">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -807,6 +819,7 @@ html.search-open .dock { opacity: 0; pointer-events: none; }
     <div class="gf-notes rv">
       <p>Prix des réparations&nbsp;: pièce et main-d’œuvre comprises. Diagnostic gratuit. Délai selon disponibilité de la pièce.</p>
       <p>Déplacement de 10 à 35&nbsp;€ selon votre commune. Si vous venez à nous, pas de déplacement à payer&nbsp;: on vous envoie notre localisation sur WhatsApp.</p>
+      <p>Réparations, entretien et boutique&nbsp;: paiement par carte, avec un lien sécurisé envoyé sur WhatsApp, ou à la remise.</p>
     </div>
     <nav class="gf-dir rv" style="--d:1" aria-label="Plan du site">
       <div>
@@ -1428,6 +1441,24 @@ html.search-open .dock { opacity: 0; pointer-events: none; }
     setTimeout(function () { (placed ? $('f-town') : document.querySelector('input[name="place"]')).focus({ preventScroll: true }); }, reduce.matches ? 0 : 450);
   });
   $('booking').addEventListener('submit', function (e) { e.preventDefault(); });
+
+  /* v23: each request that leaves (WhatsApp or e-mail) is also written in Phone Island's carnet, a Google Sheet, without
+     the phone number. Sent with sendBeacon, so it goes even as WhatsApp opens; nothing is sent while no carnet is set. */
+  var CARNET = '', CARNET_KEY = 'pi-carnet-2026-k7';
+  function sum(s) { var h = 5381; for (var i = 0; i < s.length; i++) h = (h * 33 + s.charCodeAt(i)) >>> 0; return h.toString(36); }
+  window.piCarnet = function (via) {
+    if (!CARNET) return;
+    var device = $('f-device').value, model = $('f-model').value.trim(), repair = $('f-repair').value;
+    var placeEl = document.querySelector('input[name="place"]:checked'), price = shownPrice(device, model, repair);
+    var d = { k: CARNET_KEY, via: via, device: device, model: model, repair: repair, price: typeof price === 'number' ? price : '',
+              place: placeEl ? placeEl.value : '', town: placeEl && placeEl.value === 'home' ? $('f-town').value : '',
+              date: $('f-date').value, slot: $('f-slot').value, name: $('f-name').value.trim(), notes: $('f-notes').value.trim() };
+    d.id = sum([d.device, d.model, d.repair, d.place, d.town, d.date, d.slot, d.name, d.notes].join('|'));   // twice the same: one line
+    var body = JSON.stringify(d);
+    try { if (navigator.sendBeacon && navigator.sendBeacon(CARNET, new Blob([body], { type: 'text/plain;charset=UTF-8' }))) return; } catch (e) {}
+    try { fetch(CARNET, { method: 'POST', mode: 'no-cors', keepalive: true, headers: { 'Content-Type': 'text/plain;charset=UTF-8' }, body: body }); } catch (e) {}
+  };
+  $('wa-send').addEventListener('click', function () { if (!$('wa-send').classList.contains('is-off')) window.piCarnet('whatsapp'); });
   build();
 
   /* ---------- the booking page: a commune chosen on the home page's map (rendez-vous.html#commune-…, or kept for the visit)
@@ -1495,6 +1526,7 @@ html.search-open .dock { opacity: 0; pointer-events: none; }
       fetch('https://api.web3forms.com/submit', { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify(data) })
         .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { if (!r.ok || j.success === false) throw new Error(j.message || r.status); }); })
         .then(function () {
+          if (box.getAttribute('data-mail-for') === 'wa-send' && window.piCarnet) window.piCarnet('e-mail');   // a repair request: in the carnet too
           open.hidden = true;
           f.innerHTML = '<p class="mail-ok"><b>C’est envoyé, merci&nbsp;!</b> On revient vers vous très vite au ' + tel.value.trim().replace(/[<>&"]/g, '') + '.</p>';
         })

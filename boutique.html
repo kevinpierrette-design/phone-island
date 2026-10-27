@@ -5,6 +5,18 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Boutique · Phone Island</title>
 <meta name="description" content="iPhone neufs et reconditionnés, AirPods et accessoires chez Phone Island, en Martinique. Réservez sur WhatsApp.">
+<link rel="canonical" href="https://phone-island.com/boutique.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Phone Island">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:title" content="Boutique · Phone Island">
+<meta property="og:description" content="iPhone neufs et reconditionnés, AirPods et accessoires chez Phone Island, en Martinique. Réservez sur WhatsApp.">
+<meta property="og:url" content="https://phone-island.com/boutique.html">
+<meta property="og:image" content="https://phone-island.com/assets/og-phone-island.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Phone Island, réparation de smartphones à domicile en Martinique">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="icon" type="image/png" href="assets/favicon-64.png">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -575,7 +587,6 @@ html.search-open .dock { opacity: 0; pointer-events: none; }
 .shelf.show { animation: fadeIn .6s var(--ease-out) both; }
 .shelf-head { margin-bottom: 18px; }
 .shelf-head .two b { color: var(--ink); }
-.shelf-n { margin-left: .35em; }
 .stock { display: flex; gap: 20px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; list-style: none;
   margin: -20px calc(-1 * var(--gutter)) -30px; padding: 20px var(--gutter) 30px; scroll-padding-inline: var(--gutter); }
 .stock::-webkit-scrollbar { display: none; }
@@ -936,7 +947,7 @@ html.sheet-on { overflow: hidden; }
       </nav>
       <div class="shelf" id="shelf">
         <div class="shelf-head" id="shelf-head" hidden>
-          <h2 class="t-title two"><b id="shelf-t">iPhone neufs et reconditionnés</b><span class="shelf-n" id="shelf-n" aria-live="polite"></span></h2>
+          <h2 class="t-title two"><b id="shelf-t">iPhone neufs et reconditionnés</b> <span class="shelf-n" id="shelf-n" aria-live="polite"></span></h2>
           <p class="shelf-note" id="shelf-note" hidden>Appuyez sur «&nbsp;Me prévenir&nbsp;»&nbsp;: votre message part sur WhatsApp, et on vous écrit dès que l’article revient.</p>
         </div>
         <ul class="stock" id="stock" aria-labelledby="shelf-t" hidden></ul>
@@ -1025,7 +1036,7 @@ html.sheet-on { overflow: hidden; }
         <ul class="sh-perks">
           <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5.5c0 4.3-2.9 8-7 9.5-4.1-1.5-7-5.2-7-9.5V6l7-3z"/><path d="M8.8 12.2l2.3 2.3 4.3-4.6"/></svg><div><b>Garantie 2 mois</b><span>Sur tout ce que nous vendons.</span></div></li>
           <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7.5h11v8.5H3zM14 10.5h3.6l2.9 3v2.5H14z"/><circle cx="7" cy="17.5" r="1.7"/><circle cx="17" cy="17.5" r="1.7"/></svg><div><b>Livraison partout en Martinique</b><span>Ou remise en main propre, sur rendez-vous à Fort-de-France.</span></div></li>
-          <li><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="2.5"/><path d="M3 10h18M7 15h4"/></svg><div><b>Paiement</b><span id="sh-pay-l">Réservez sur WhatsApp ou par e-mail, et payez à la remise.</span></div></li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="2.5"/><path d="M3 10h18M7 15h4"/></svg><div><b>Paiement</b><span id="sh-pay-l">Par carte, avec un lien de paiement sécurisé envoyé sur WhatsApp, ou à la remise.</span></div></li>
         </ul>
         <section class="sh-specs" aria-labelledby="sh-specs-t">
           <h3 class="sh-specs-t" id="sh-specs-t">Caractéristiques</h3>
@@ -1041,6 +1052,7 @@ html.sheet-on { overflow: hidden; }
     <div class="gf-notes rv">
       <p>Prix des réparations&nbsp;: pièce et main-d’œuvre comprises. Diagnostic gratuit. Délai selon disponibilité de la pièce.</p>
       <p>Déplacement de 10 à 35&nbsp;€ selon votre commune. Si vous venez à nous, pas de déplacement à payer&nbsp;: on vous envoie notre localisation sur WhatsApp.</p>
+      <p>Réparations, entretien et boutique&nbsp;: paiement par carte, avec un lien sécurisé envoyé sur WhatsApp, ou à la remise.</p>
     </div>
     <nav class="gf-dir rv" style="--d:1" aria-label="Plan du site">
       <div>
@@ -1724,7 +1736,7 @@ html.sheet-on { overflow: hidden; }
     body.appendChild(el('h4', 'ph-name', p.name));
     if (p.detail) body.appendChild(el('p', 'ph-spec', p.detail));
     if (p.extra) body.appendChild(el('p', 'ph-spec ph-more', p.extra));
-    if (!p.dispo) body.appendChild(el('p', 'ph-out', 'Rupture de stock'));
+    if (!p.dispo) body.appendChild(el('p', 'ph-out', 'Indisponible'));
     if (what != null) {                        // the whole card opens the article's sheet
       var go = el('button', 'ph-open'); go.type = 'button'; go.setAttribute('aria-label', 'Voir la fiche : ' + p.name);
       go.addEventListener('click', function () { openSheet(p, what); });
@@ -1887,7 +1899,7 @@ html.sheet-on { overflow: hidden; }
     $('shelf-note').hidden = !kept || inStock > 0;
     stockBox.textContent = '';
     if (open.length) items.forEach(function (p, k) { stockBox.appendChild(card(p, k)); });
-    $('shelf-n').textContent = inStock ? inStock + ' ' + (inStock > 1 ? s.many : s.one) : kept ? 'En rupture de stock.' : '';
+    $('shelf-n').textContent = inStock ? inStock + ' ' + (inStock > 1 ? s.many : s.one) : kept ? 'indisponibles pour le moment.' : '';   // read after the title: « Coques indisponibles pour le moment. »
     if (!open.length && !kept) { $('none-t').textContent = s.none; $('none-p').textContent = s.text; }
     if (cat === 'vitres') renderVitres(); else if (own(CATALOG, cat)) renderCatalog(cat);
     if (animate && !reduce.matches) { shelf.classList.remove('show'); void shelf.offsetWidth; shelf.classList.add('show'); }
@@ -2035,7 +2047,8 @@ html.sheet-on { overflow: hidden; }
      smallest capacity shows the « dès » price of the card, and the others are confirmed on WhatsApp. For example:
      'iPhone 15': { r: { '128 Go': 515, '256 Go': 565, '512 Go': 625 } } */
   var PRICES = {};
-  /* PAY: the card payment links (SumUp or Stripe), once the shop has its account; the « Payer par carte » button only
+  /* PAY: card payment links for articles in stock (v23: empty, the shop sends its Revolut payment links on WhatsApp, for everything; the
+     « Paiement » line of the sheet says so for every article); the « Payer par carte » button only
      shows on an article in stock that has one. For an iPhone: 'iPhone 15|r|128 Go'; otherwise the article's name. */
   var PAY = {};
 
@@ -2155,7 +2168,7 @@ html.sheet-on { overflow: hidden; }
     else if (pr) { box.appendChild(el('span', 'sh-from', 'Dès ' + money(pr.v) + ' € en ' + CAPS[IPH[p.name][0]][0])); box.appendChild(el('span', 'sh-ask', 'Prix en ' + s.cap + ' sur demande')); }
     else box.appendChild(el('span', 'sh-ask', 'Prix sur demande'));
     if (iph) box.appendChild(el('span', 'sh-for', (s.etat === 'n' ? 'Neuf' : 'Reconditionné') + ' · ' + s.cap + ' · ' + s.col));
-    var st = $('sh-stock'); st.textContent = p.dispo ? 'En stock' : 'Rupture de stock'; st.classList.toggle('on', !!p.dispo);
+    var st = $('sh-stock'); st.textContent = p.dispo ? 'En stock' : 'Indisponible'; st.classList.toggle('on', !!p.dispo);
     // the words of the request
     var thing = iph ? p.name + ' ' + (s.etat === 'n' ? 'neuf' : 'reconditionné') + ', ' + s.cap + ', ' + s.col : (s.what || p.name);
     var price = pr && pr.exact ? money(pr.v) + ' €' : '';
@@ -2165,7 +2178,6 @@ html.sheet-on { overflow: hidden; }
     $('sh-wa-t').textContent = p.dispo ? 'Réserver sur WhatsApp' : 'Me prévenir sur WhatsApp';
     var link = PAY[iph ? p.name + '|' + s.etat + '|' + s.cap : p.name];
     var pay = $('sh-pay'); pay.hidden = !(p.dispo && link); if (link) pay.href = link;
-    $('sh-pay-l').textContent = p.dispo && link ? 'Paiement par carte en ligne, sécurisé, ou à la remise.' : 'Réservez sur WhatsApp ou par e-mail, et payez à la remise.';
     $('sh-mail').setAttribute('data-subject', (p.dispo ? 'Réservation · ' : 'Me prévenir · ') + p.name);
   }
   function closeSheet(fromNav) {
@@ -2236,6 +2248,7 @@ html.sheet-on { overflow: hidden; }
       fetch('https://api.web3forms.com/submit', { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify(data) })
         .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { if (!r.ok || j.success === false) throw new Error(j.message || r.status); }); })
         .then(function () {
+          if (box.getAttribute('data-mail-for') === 'wa-send' && window.piCarnet) window.piCarnet('e-mail');   // a repair request: in the carnet too
           open.hidden = true;
           f.innerHTML = '<p class="mail-ok"><b>C’est envoyé, merci&nbsp;!</b> On revient vers vous très vite au ' + tel.value.trim().replace(/[<>&"]/g, '') + '.</p>';
         })
