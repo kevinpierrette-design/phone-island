@@ -702,6 +702,8 @@ html.sheet-on { overflow: hidden; }
 .sh-opt .shc input:focus-visible + span { outline-color: var(--link); }
 .sh-opt .shc-name { margin-top: -2px; color: var(--ink-2); font-size: .9375rem; }
 .sh-buy { display: grid; gap: 12px; padding-top: 22px; border-top: 1px solid var(--line); }
+.sh-paym { margin: 6px 0 4px; }
+.sh-paym:empty { display: none; }
 .sh-price { display: grid; gap: 4px; }
 .sh-amt { font-size: 2rem; font-weight: 600; line-height: 1.1; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
 .sh-amt small { font-size: .6em; }
@@ -1029,6 +1031,7 @@ html.sheet-on { overflow: hidden; }
         <div class="sh-buy">
           <p class="sh-price" id="sh-price" aria-live="polite"></p>
           <p class="sh-stock" id="sh-stock"></p>
+          <div class="sh-paym" id="sh-paym"></div>
           <a class="btn btn-fill btn-wide" id="sh-pay" href="#" target="_blank" rel="noopener" hidden>Payer par carte</a>
           <a class="btn btn-fill btn-wide" id="sh-wa" href="https://wa.me/596696174732" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.9c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3Z"/></svg><span id="sh-wa-t">Réserver sur WhatsApp</span></a>
           <div class="mail" id="sh-mail" data-mail-for="sh-wa" data-subject="Boutique"></div>
@@ -2051,6 +2054,9 @@ html.sheet-on { overflow: hidden; }
      « Paiement » line of the sheet says so for every article); the « Payer par carte » button only
      shows on an article in stock that has one. For an iPhone: 'iPhone 15|r|128 Go'; otherwise the article's name. */
   var PAY = {};
+  /* PAY_WAYS: how the client can pay an article in stock, chosen in the sheet and written in the message: [value, chip, words].
+     The same choices as the booking form (booking.html, booking.js); Sumeria will be one more line here. */
+  var PAY_WAYS = [['lien', 'Par lien de paiement', 'par lien de paiement'], ['remise', 'À la remise', 'à la remise']];
 
   var sheet = $('sheet'), FICHE = !!sheet, shPushed = false, skipHash = false, shItem = null;
   var shState = {};
@@ -2071,7 +2077,7 @@ html.sheet-on { overflow: hidden; }
     if (!FICHE) return;
     shItem = p;
     var info = p.cat === 'iphone' ? IPH[p.name] : null;
-    shState = { what: what, etat: p.pr ? 'r' : 'n', cap: info ? CAPS[info[0]][0] : '', col: info ? COLS[info[1]][0][0] : '' };
+    shState = { what: what, etat: p.pr ? 'r' : 'n', cap: info ? CAPS[info[0]][0] : '', col: info ? COLS[info[1]][0][0] : '', pay: '' };
     // the picture
     var vis = $('sh-vis'); vis.textContent = '';
     var shots = info && p.photos && p.photos[shState.col] ? p.photos : null;   // an iPhone in each of its colours
@@ -2094,6 +2100,9 @@ html.sheet-on { overflow: hidden; }
       opts.appendChild(choice('Capacité', 'sh-cap', CAPS[info[0]].map(function (c) { return [c, c]; }), shState.cap, function (v) { shState.cap = v; update(); }));
       opts.appendChild(swatches(COLS[info[1]]));
     }
+    // how to pay, for an article in stock
+    var pm = $('sh-paym'); pm.textContent = '';
+    if (p.dispo) pm.appendChild(choice('Paiement', 'sh-pm', PAY_WAYS.map(function (w) { return [w[0], w[1]]; }), '', function (v) { shState.pay = v; update(); }));
     // what it is
     var dl = $('sh-specs'); dl.textContent = '';
     specRows(p, info).forEach(function (r) { var d = el('div', 'sh-row'); d.appendChild(el('dt', '', r[0])); d.appendChild(el('dd', '', r[1])); dl.appendChild(d); });
@@ -2173,7 +2182,9 @@ html.sheet-on { overflow: hidden; }
     var thing = iph ? p.name + ' ' + (s.etat === 'n' ? 'neuf' : 'reconditionné') + ', ' + s.cap + ', ' + s.col : (s.what || p.name);
     var price = pr && pr.exact ? money(pr.v) + ' €' : '';
     var wa = $('sh-wa');
+    var way = PAY_WAYS.filter(function (w) { return w[0] === s.pay; })[0];
     wa.href = waLink(p.dispo ? 'Bonjour Phone Island, cet article m’intéresse : ' + thing + (price ? ', ' + price : '') + '. Est-il toujours disponible ?'
+                               + (way ? ' Paiement : ' + way[2] + '.' : '')
                              : 'Bonjour Phone Island, je cherche : ' + thing + '. Prévenez-moi quand c’est de nouveau disponible, merci.');
     $('sh-wa-t').textContent = p.dispo ? 'Réserver sur WhatsApp' : 'Me prévenir sur WhatsApp';
     var link = PAY[iph ? p.name + '|' + s.etat + '|' + s.cap : p.name];
