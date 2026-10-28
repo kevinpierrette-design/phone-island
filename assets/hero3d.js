@@ -92,16 +92,19 @@
     ctx.lineWidth = 1; rrect(ctx, 26.5, 3.6, 6.4, 6.4, 1.5); ctx.stroke();
     ctx.restore();
   }
-  function padlock(ctx, x, y, s) {
+  function padlock(ctx, x, y, s, open) {
     ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
     ctx.fillStyle = ctx.strokeStyle = 'rgba(243,235,221,.9)';
     rrect(ctx, 1.5, 8.5, 13, 10, 2.4); ctx.fill();
-    ctx.lineWidth = 1.7; ctx.beginPath(); ctx.moveTo(4.6, 8.5); ctx.lineTo(4.6, 6); ctx.arc(8, 6, 3.4, PI, 0); ctx.lineTo(11.4, 8.5); ctx.stroke();
+    ctx.lineWidth = 1.7; ctx.beginPath();
+    if (open) { ctx.moveTo(4.6, 4.4); ctx.lineTo(4.6, 3.2); ctx.arc(8, 3.2, 3.4, PI, 0); ctx.lineTo(11.4, 8.5); }   // v23: open, its shackle up
+    else { ctx.moveTo(4.6, 8.5); ctx.lineTo(4.6, 6); ctx.arc(8, 6, 3.4, PI, 0); ctx.lineTo(11.4, 8.5); }
+    ctx.stroke();
     ctx.restore();
   }
-  function drawLock(c, logo, font) {
+  function drawLock(c, logo, font, open) {
     var ctx = c.getContext('2d');
-    ctx.fillStyle = '#000'; ctx.fillRect(0, 0, CW, CH);
+    ctx.clearRect(0, 0, CW, CH);
     var sx = SCR, sy = SCR, sw = CW - 2 * SCR, sh = CH - 2 * SCR;
     ctx.save(); rrect(ctx, sx, sy, sw, sh, SR); ctx.clip();
     ctx.fillStyle = '#000'; ctx.fillRect(sx, sy, sw, sh);
@@ -120,14 +123,22 @@
     if ('letterSpacing' in ctx) ctx.letterSpacing = Math.round(-.035 * 21 * em) + 'px';
     ctx.fillText(time, CW / 2, sy + sh * .146);
     if ('letterSpacing' in ctx) ctx.letterSpacing = '0px';
-    padlock(ctx, CW / 2 - 1.65 * em, sy + sh * .074, 3.3 * em / 16);
+    padlock(ctx, CW / 2 - 1.65 * em, sy + sh * .074, 3.3 * em / 16, open);
     statusIcons(ctx, sx + sw - sw * .066 - 14.5 * em, sy + sh * .0205, 14.5 * em / 34);
     ctx.fillStyle = 'rgba(243,235,221,.9)'; rrect(ctx, CW / 2 - sw * .18, sy + sh * (1 - .011) - 1.15 * em, sw * .36, 1.15 * em, .57 * em); ctx.fill();
     ctx.restore();
+    return time;
+  }
+  function drawRim(c) {                 // v23: the black border, the notch and the camera, over the screen
+    var ctx = c.getContext('2d');
+    ctx.clearRect(0, 0, CW, CH);
+    ctx.fillStyle = '#000'; ctx.fillRect(0, 0, CW, CH);
+    ctx.globalCompositeOperation = 'destination-out';
+    rrect(ctx, SCR, SCR, CW - 2 * SCR, CH - 2 * SCR, SR); ctx.fill();
+    ctx.globalCompositeOperation = 'source-over';
     ctx.fillStyle = '#000'; notchPath(ctx); ctx.fill();
     ctx.fillStyle = '#0c0d10'; rrect(ctx, CW / 2 - 5.6 * PX, SCR - 1.55 * PX, 11.2 * PX, .55 * PX, .27 * PX); ctx.fill();
     frontCam(ctx, true);
-    return time;
   }
   function drawNotif(c, icon, font) {
     var ctx = c.getContext('2d'), w = c.width, h = c.height, s = w / 100;
@@ -207,7 +218,12 @@
     var off = new T.Mesh(face, new T.MeshBasicMaterial({ map: tex.off, toneMapped: false }));
     off.position.z = D / 2 - .03; g.add(off);
     var lockMat = new T.MeshBasicMaterial({ map: tex.lock, toneMapped: false, transparent: true, opacity: 0, depthWrite: false });
-    var lock = new T.Mesh(face, lockMat); lock.position.z = D / 2 - .02; lock.renderOrder = 2; g.add(lock);
+    var lock = new T.Mesh(face, lockMat); lock.position.z = D / 2 - .02; lock.renderOrder = 2.3; g.add(lock);
+    // v23: the video under the lock screen (which slides up off it), and over both the screen's frame
+    var vidMat = new T.MeshBasicMaterial({ map: tex.video, toneMapped: false, transparent: true, opacity: 0, depthWrite: false });
+    var vidM = new T.Mesh(face, vidMat); vidM.position.z = D / 2 - .021; vidM.renderOrder = 2.2; g.add(vidM);
+    var rimMat = new T.MeshBasicMaterial({ map: tex.rim, toneMapped: false, transparent: true, opacity: 0, depthWrite: false });
+    var rimM = new T.Mesh(face, rimMat); rimM.position.z = D / 2 - .018; rimM.renderOrder = 2.4; g.add(rimM);
     var notifMat = new T.MeshBasicMaterial({ map: tex.notif, toneMapped: false, transparent: true, opacity: 0, depthWrite: false });
     var nw = (GW - 2 * 2.2) * .9, nh = nw * tex.notif.image.height / tex.notif.image.width;
     var notif = new T.Mesh(new T.PlaneGeometry(nw, nh), notifMat);
@@ -302,7 +318,7 @@
     addDisc(29.7, 8.6, 2.9, new T.MeshPhysicalMaterial({ map: flashTex, roughness: .3, clearcoat: 1, clearcoatRoughness: .05 }));
     addDisc(29.7, 34.6, 3.0, new T.MeshPhysicalMaterial({ map: lidarTex, roughness: .08, clearcoat: 1, clearcoatRoughness: .02 }));
     addDisc(36.6, 31.6, .5, dark);
-    return { group: g, U: U, lock: lockMat, notif: notif, notifMat: notifMat, notifY: notifY };
+    return { group: g, U: U, lock: lockMat, notif: notif, notifMat: notifMat, notifY: notifY, vid: vidMat, rim: rimMat };
   }
 
   // ------------------------------------------------------------------ the show
@@ -335,6 +351,49 @@
     drawOff(cOff);
     function ctex(c) { var t = new T.CanvasTexture(c); t.encoding = T.sRGBEncoding; t.anisotropy = 4; return t; }
     var tex = { off: ctex(cOff), lock: ctex(cLock), notif: ctex(cNotif) };
+    // v23: the video of the screen, muted, played once to its end after the phone unlocks (then the show starts again).
+    // It is fetched while the repair plays, and paused when it is out of sight.
+    var video = document.createElement('video');
+    video.muted = true; video.defaultMuted = true; video.loop = false; video.playsInline = true; video.preload = 'none';
+    video.setAttribute('muted', ''); video.setAttribute('playsinline', ''); video.setAttribute('aria-hidden', 'true');
+    video.style.cssText = 'position:absolute;left:0;top:0;width:2px;height:2px;opacity:0;pointer-events:none';
+    host.appendChild(video);
+    tex.video = new T.VideoTexture(video); tex.video.encoding = T.sRGBEncoding;
+    var cRim = document.createElement('canvas'); cRim.width = CW; cRim.height = CH; drawRim(cRim);
+    tex.rim = ctex(cRim);
+    var vidState = { asked: false, on: false, primed: false, failed: false };
+    function videoPrep() {                // the file starts coming as the repair plays, so it is there when the phone unlocks
+      if (vidState.asked) return;
+      vidState.asked = true; video.preload = 'auto';
+      // H.264 for every browser that has it (Safari, Chrome, Edge); VP9 for the others
+      video.src = base + (video.canPlayType('video/mp4; codecs="avc1.4D401F"') ? 'hero-video.mp4' : 'hero-video.webm');
+    }
+    function videoOn(on) {
+      if (on) { if (vidState.failed) return; videoPrep(); }
+      if (on === vidState.on) return;
+      vidState.on = on;
+      if (on) {
+        var pr = video.play();
+        if (pr && pr.catch) pr.catch(function (e) { vidState.on = false; if (!e || e.name !== 'AbortError') { vidState.failed = true; kick(); } });
+      } else video.pause();
+    }
+    function videoPrime() {               // its first picture ready before the unlock (an iPhone only fetches a video asked to play)
+      if (vidState.primed || vidState.failed) return;
+      vidState.primed = true; videoPrep();
+      if (video.readyState >= 2) return;
+      var pr = video.play();
+      if (pr && pr.then) pr.then(function () { if (!vidState.on) { video.pause(); try { video.currentTime = 0; } catch (e) {} } },
+        function (e) { if (!vidState.on && (!e || e.name !== 'AbortError')) { vidState.failed = true; kick(); } });
+    }
+    function videoReset() {               // back to its first picture, for the next unlock
+      vidState.primed = false;
+      if (video.readyState && video.currentTime > 0) { try { video.currentTime = 0; } catch (e) {} }
+    }
+    video.addEventListener('ended', function () {     // the end of the video: the phone fades, and the show starts again
+      vidState.on = false;
+      if (S.phase === 'video') { S.phase = 'out'; S.t0 = performance.now(); S.last = 0; kick(); }
+    });
+    video.addEventListener('error', function () { vidState.failed = true; kick(); });
     var loader = new T.TextureLoader();
     var ready = Promise.all([
       new Promise(function (r) { tex.before = loader.load(base + 'hero3d-back.webp', r, undefined, r); }),
@@ -348,7 +407,7 @@
 
     // poses: the back shown three-quarters, then the front, slightly turned
     var BACK = { y: PI + .44, x: .13 }, FRONT = { y: 2 * PI - .2, x: .05 };
-    var S = { t0: 0, playing: false, done: reduce, visible: true, raf: 0, last: 0, paused: 0, mode: 'time', rise: false, up: false, want: 1.2, cur: 0, lt: 0, cont: false };
+    var S = { t0: 0, phase: 'wait', done: reduce, visible: true, raf: 0, last: 0, paused: 0, hold: 0, fadeIn: false, open: false };
     var drag = { on: false, x: 0, v: 0, off: 0, lastMove: 0 };
     var look = { x: 0, y: 0, tx: 0, ty: 0 };
 
@@ -371,9 +430,7 @@
       else if (t < 4.6) { ry = lerp(BACK.y, BACK.y - .2, seg(t, 1.2, 4.6)); rx = BACK.x; }
       else { var e2 = ease(seg(t, 4.6, 7.6)); ry = lerp(BACK.y - .2, FRONT.y, e2); rx = lerp(BACK.x, FRONT.x, e2); py = Math.sin(e2 * PI) * 3; }
       P.U.uR.value = lerp(1.35, 0, ease(seg(t, 2.6, 4.5)));
-      P.lock.opacity = easeOut(seg(t, 7.9, 8.9));
-      var n = easeOut(seg(t, 9.2, 10.0));
-      P.notifMat.opacity = n; P.notif.position.y = P.notifY + (1 - n) * 4.5; P.notif.scale.setScalar(.96 + .04 * n);
+      screen(t);
       return { ry: ry, rx: rx, py: py, k: k };
     }
     function idle(tt) {
@@ -383,41 +440,69 @@
     function redrawLock(force) {
       var d = new Date(), key = d.getHours() + ':' + d.getMinutes();
       if (!force && key === shown) return;
-      shown = key; drawLock(cLock, logoImg, font); tex.lock.needsUpdate = true;
+      shown = key; drawLock(cLock, logoImg, font, S.open); tex.lock.needsUpdate = true;
+    }
+    // v23: the screen at the moment t of the show
+    var UNLOCK = 12.4;                    // when the lock screen starts to slide up (s)
+    function zoom(z) { var r = 1 / z; tex.video.repeat.set(r, r); tex.video.offset.set((1 - r) / 2, (1 - r) / 2); }
+    function screen(t) {
+      var on = easeOut(seg(t, 7.9, 8.9));                        // it wakes on the lock screen
+      var n = easeOut(seg(t, 9.2, 10.0));                        // the notification comes down
+      var u = seg(t, UNLOCK, UNLOCK + .8), d = ease(u) * 1.06;   // the lock screen slides up, out of the screen
+      var open = t >= UNLOCK - .45;                              // the padlock opens just before
+      if (open !== S.open) { S.open = open; redrawLock(true); }
+      tex.lock.offset.y = -d;
+      P.lock.opacity = u >= 1 ? 0 : on;
+      var nu = easeOut(seg(u, 0, .4));                           // the notification goes up with it, and fades
+      P.notifMat.opacity = n * (1 - nu);
+      P.notif.position.y = P.notifY + (1 - n) * 4.5 + d * GH; P.notif.scale.setScalar(.96 + .04 * n);
+      P.rim.opacity = on;                                        // the border, the notch and the camera, over the rest
+      P.vid.opacity = t >= UNLOCK - .2 ? 1 : 0;                  // under the lock screen until it slides away
+      zoom(1 + .07 * (1 - easeOut(seg(t, UNLOCK + .1, UNLOCK + 1.2))));   // it comes forward a little, as on an iPhone
+      if (t >= UNLOCK) videoOn(true);
+      else { videoOn(false); if (t >= 7) videoPrime(); }
+    }
+    function screenVideo() {              // the video, whole
+      P.lock.opacity = 0; P.notifMat.opacity = 0; P.rim.opacity = 1; P.vid.opacity = 1; tex.lock.offset.y = 0; zoom(1);
+    }
+    function still(now) {                 // the video cannot play here: the phone stays on its lock screen (a tap tries again)
+      S.phase = 'still'; S.t0 = now; S.done = true; videoOn(false);
+      if (S.open) { S.open = false; redrawLock(true); }
+      tex.lock.offset.y = 0; zoom(1);
     }
     function frame(now) {
       S.raf = 0;
       if (!S.visible) return;
-      var t, p, more = false;
-      if (S.mode === 'scrub') {
-        // v15: the page's scroll sets the moment wanted (S.want); the moment shown (S.cur) follows it smoothly.
-        // Before that, rise() plays the start (the phone comes up, 0 to 1.2 s) on its own.
-        t = 0;
-        if (S.rise) {
-          t = (now - S.t0) / 1000;
-          if (t >= 1.2) { S.rise = false; S.up = true; S.cur = 1.2; } else more = true;
-        }
-        if (S.up) {
-          // eased by time, not by frame: as smooth on a slow phone as on a fast one (a frame that starts from rest
-          // counts as one sixtieth of a second)
-          var dt = S.cont ? Math.min(.25, Math.max(0, (now - S.lt) / 1000)) : .016, d = S.want - S.cur;
-          S.cur = Math.abs(d) < .004 ? S.want : S.cur + d * (1 - Math.exp(-dt / .12));
-          if (S.cur !== S.want) more = true;
-          t = S.cur;
-        }
-        S.done = S.up && t >= 10.1;
-        S.lt = now;
-        p = pose(t);
-      } else {
+      var dt = S.last ? Math.min(250, now - S.last) : 0, t;
+      S.last = now;
+      if (S.phase === 'show') {
         t = (now - S.t0) / 1000;
-        if (S.done || t > 10.2) {
-          S.done = true;
-          p = idle(now / 1000);
-          P.U.uR.value = 0; P.lock.opacity = 1; P.notifMat.opacity = 1; P.notif.position.y = P.notifY; P.notif.scale.setScalar(1);
-        } else if (!S.playing) {
-          p = pose(0);
-        } else {
-          p = pose(t);
+        // the video has to be able to play before the phone unlocks: until then the lock screen waits (10 s at most)
+        if (t > UNLOCK - .5 && t < UNLOCK && !vidState.failed && video.readyState < 2) {
+          S.t0 += dt; S.hold += dt; t = (now - S.t0) / 1000;
+          if (S.hold > 10000) vidState.failed = true;
+        }
+        if (vidState.failed && t > UNLOCK - .5) still(now);
+        else if (t >= UNLOCK + 1.2) S.phase = 'video';
+      } else if (S.phase === 'video' && vidState.failed) still(now);
+      else if (S.phase === 'out' && now - S.t0 >= 750) play(true);    // faded out: once more, from the start
+      t = (now - S.t0) / 1000;
+      var p, k = 1;
+      if (S.phase === 'show') {
+        p = pose(t);                                             // the repair, the turn, the screen
+        var a = ease(seg(t, 7.6, 9.6)), q = idle(now / 1000);    // then it starts to breathe, from still
+        p.ry += (q.ry - FRONT.y) * a; p.rx += (q.rx - FRONT.x) * a; p.py += q.py * a;
+        if (S.fadeIn) k = easeOut(seg(t, 0, .9));
+        S.done = t > 10.2;
+      } else if (S.phase === 'wait') {
+        p = pose(0);
+      } else {
+        p = idle(now / 1000);
+        if (S.phase === 'video') { screenVideo(); videoOn(true); }
+        else if (S.phase === 'out') { screenVideo(); k = 1 - easeOut(seg(t, 0, .7)); }
+        else {                                                   // still: the lock screen and its notification
+          P.lock.opacity = Math.min(1, P.lock.opacity + dt / 500); P.notifMat.opacity = Math.min(1, P.notifMat.opacity + dt / 500);
+          P.notif.position.y = P.notifY; P.notif.scale.setScalar(1); P.rim.opacity = 1; P.vid.opacity = P.lock.opacity < 1 ? 1 : 0;
         }
       }
       // the finger or the mouse turns it; let go and it comes back
@@ -425,37 +510,40 @@
       look.x += (look.tx - look.x) * .06; look.y += (look.ty - look.y) * .06;
       pivot.rotation.set(p.rx + look.y * .1, p.ry + drag.off + look.x * .22, 0);
       pivot.position.y = p.py;
-      cvs.style.opacity = p.k;
-      if (S.done && now % 1000 < 40) redrawLock(false);
+      cvs.style.opacity = k;
+      if (P.lock.opacity > 0 && now % 1000 < 40) redrawLock(false);
       renderer.render(scene, camera);
       var moving = drag.on || Math.abs(drag.off) > .001 || Math.abs(look.tx - look.x) + Math.abs(look.ty - look.y) > .002;
-      if (S.mode === 'scrub') { S.cont = more || moving; if (S.cont) S.raf = requestAnimationFrame(frame); }
-      else if ((!reduce && (S.playing || S.done)) || moving) S.raf = requestAnimationFrame(frame);
+      if ((!reduce && S.phase !== 'wait') || moving) S.raf = requestAnimationFrame(frame);
     }
     function kick() { if (!S.raf && S.visible) S.raf = requestAnimationFrame(frame); }
 
-    function play() {
-      if (reduce) { S.done = true; kick(); return; }
-      S.done = false; S.playing = true; S.t0 = performance.now(); drag.off = 0; drag.v = 0;
-      P.lock.opacity = 0; P.notifMat.opacity = 0;
+    function play(again) {                // the show from its start (again: after the video, the phone fades in)
+      if (reduce) { still(performance.now()); P.lock.opacity = 1; P.notifMat.opacity = 1; kick(); return; }
+      S.phase = 'show'; S.done = false; S.fadeIn = !!again; S.t0 = performance.now(); S.last = 0; S.hold = 0;
+      drag.off = 0; drag.v = 0;
+      vidState.on = false; video.pause(); videoReset();
+      screen(0);
       kick();
     }
-    function rise() {                     // v15: the phone comes up by itself, then the scroll takes over
-      if (S.rise || S.up) return;
-      S.mode = 'scrub'; S.playing = true; S.rise = true; S.t0 = performance.now();
-      kick();
-    }
-    function scrub(t) {                   // v15: the moment of the repair the scroll has reached (seconds)
-      S.mode = 'scrub';
-      S.want = Math.max(1.2, Math.min(10.15, t));
-      if (S.up) kick();
-    }
-    function setVisible(v) {
+    function setVisible(v) {              // off screen, in a hidden tab or paused: everything waits where it was
       if (v === S.visible) return;
-      if (!v) { S.paused = performance.now(); }
-      else if (S.playing && !S.done && S.paused) { S.t0 += performance.now() - S.paused; }
-      S.visible = v; if (v) kick();
+      if (!v) { S.paused = performance.now(); videoOn(false); }
+      else if (S.paused && (S.phase === 'show' || S.phase === 'out')) S.t0 += performance.now() - S.paused;
+      S.visible = v; S.last = 0;
+      if (v) kick();
     }
+    // when the browser would not play the video by itself, a tap on the phone lets it: the phone then unlocks
+    cvs.addEventListener('click', function () {
+      if (S.phase !== 'still' || reduce) return;
+      vidState.failed = false; vidState.primed = true; videoPrep();
+      var pr = video.play();
+      if (pr && pr.then) pr.then(function () {
+        video.pause(); try { video.currentTime = 0; } catch (e) {}
+        if (S.phase !== 'still') return;
+        S.phase = 'show'; S.fadeIn = false; S.hold = 0; S.last = 0; S.t0 = performance.now() - (UNLOCK - .7) * 1000; kick();
+      }, function () { vidState.failed = true; });
+    });
 
     // drag to turn (horizontal moves only, so the page still scrolls on a phone)
     cvs.style.touchAction = 'pan-y';
@@ -491,8 +579,9 @@
       tex.before.needsUpdate = true;
       if (reduce) { S.done = true; }
       kick();
-      function seek(t) { S.done = false; S.playing = true; S.t0 = performance.now() - t * 1000; S.raf = 0; frame(performance.now()); cancelAnimationFrame(S.raf); S.raf = 0; }
-      return { play: play, replay: play, setVisible: setVisible, canvas: cvs, seek: seek, rise: rise, scrub: scrub };
+      function seek(t) { S.phase = 'show'; S.fadeIn = false; S.hold = 0; S.last = 0; S.t0 = performance.now() - t * 1000; S.raf = 0; frame(performance.now()); cancelAnimationFrame(S.raf); S.raf = 0; }
+      return { play: function () { play(false); }, replay: function () { play(false); }, setVisible: setVisible, canvas: cvs, seek: seek,
+        state: function () { return { phase: S.phase, t: Math.round((performance.now() - S.t0) / 100) / 10, video: Math.round(video.currentTime * 10) / 10 }; } };
     });
   };
 })();
