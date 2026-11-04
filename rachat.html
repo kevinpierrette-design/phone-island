@@ -654,6 +654,10 @@ html.search-open .dock { opacity: 0; pointer-events: none; }
 .pz-tile.wide .pz-txt { margin-top: 0; }
 .pz-name { font-size: 1.0625rem; font-weight: 600; letter-spacing: -.012em; }
 .pz-sub { color: var(--ink-2); font-size: .8125rem; }
+/* v23 (owner, 2026-11-04): a part ordered for the repair, said on its price (bronze, as « Sur devis »), a small clock */
+.pz-order { display: inline-flex; align-items: center; gap: 4px; color: var(--link); font-size: .75rem; font-weight: 600; letter-spacing: .01em; }
+.pz-order svg { width: 12px; height: 12px; flex: none; }
+.pz-n .pz-order { display: flex; margin-top: 2px; }
 .pz-price { grid-area: price; align-self: end; font-size: clamp(1.75rem, 1.5rem + 1vw, 2.25rem); line-height: 1; font-weight: 600; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
 .pz-price small, .pz-v small { margin-left: 2px; font-size: .6em; font-weight: 600; letter-spacing: 0; }
 .pz-quote { font-size: 1.0625rem; font-weight: 600; letter-spacing: -.01em; color: var(--link); }
