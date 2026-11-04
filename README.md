@@ -11,5 +11,6 @@ En ligne sur https://phone-island.com
 - `boutique.html` : iPhone neufs et reconditionnés, AirPods et accessoires
 - `rachat.html` : le rachat de votre iPhone
 - `rendez-vous.html` : prendre rendez-vous sur WhatsApp
+- `confidentialite.html` : vos données et vos droits
 
 Rendez-vous et contact : WhatsApp au 0696 17 47 32.
