@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Liens · Phone Island</title>
+<meta name="description" content="Appel, WhatsApp, Instagram, TikTok, rendez-vous et tarifs : tous les liens de Phone Island, réparation de smartphones à domicile en Martinique.">
+<link rel="canonical" href="https://phone-island.com/liens/">
+<meta name="theme-color" content="#000000">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Phone Island">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:title" content="Liens · Phone Island">
+<meta property="og:description" content="Appel, WhatsApp, Instagram, TikTok, rendez-vous et tarifs : tous les liens de Phone Island.">
+<meta property="og:url" content="https://phone-island.com/liens/">
+<meta property="og:image" content="https://phone-island.com/assets/og-phone-island.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/png" href="../assets/favicon-64.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="preload" href="../assets/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../assets/embleme-or-192.webp" as="image">
+<script>document.documentElement.classList.add('js');</script>
+<style>
+@font-face { font-family: "Inter"; font-style: normal; font-weight: 100 900; font-display: swap; src: url(../assets/inter-latin.woff2) format("woff2"); }
+:root {
+  --bg: #000000; --ink: #f5f5f7; --ink-2: #a1a1a6;
+  --gold: #e2b662; --gold-hi: #f1d48f; --gold-deep: #c98a2e; --espresso: #1b140d;
+  --edge: rgba(255, 255, 255, .09); --edge-gold: rgba(226, 182, 98, .42);
+  --ease: cubic-bezier(.16, 1, .3, 1);
+  --font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Inter", "Helvetica Neue", "Segoe UI", Roboto, Arial, sans-serif;
+  color-scheme: dark;
+}
+html { background: var(--bg); }
+body { margin: 0; min-height: 100vh; background: var(--bg); color: var(--ink); font-family: var(--font); font-size: 1.0625rem; line-height: 1.47; letter-spacing: -.016em;
+  -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility; overflow-x: clip; }
+
+/* the night: stars and gold dust on a canvas, a warm halo, the island drawn huge and tilting in 3D behind everything */
+#sky { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+.halo { position: fixed; left: 50%; top: 50%; z-index: 0; width: 130vmax; height: 130vmax; translate: -50% -58%; pointer-events: none;
+  background: radial-gradient(closest-side, rgba(226, 182, 98, .13), rgba(226, 182, 98, .04) 45%, rgba(226, 182, 98, 0) 72%); }
+.stage { position: fixed; inset: 0; z-index: 0; display: grid; place-items: center; perspective: 1000px; pointer-events: none; overflow: hidden; }
+.bg-emblem { width: min(155vw, 900px); height: auto; opacity: .2; margin-top: 8vh;
+  filter: drop-shadow(0 0 50px rgba(226, 182, 98, .3));
+  transform: translate3d(0, var(--py, 0px), 0) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)); will-change: transform; }
+
+main { position: relative; z-index: 1; max-width: 480px; margin-inline: auto; display: grid; gap: 30px;
+  padding: calc(48px + env(safe-area-inset-top, 0px)) max(20px, env(safe-area-inset-right, 0px)) calc(40px + env(safe-area-inset-bottom, 0px)) max(20px, env(safe-area-inset-left, 0px)); }
+
+/* the name: the drawing with a light that slides across the gold, like foil */
+.id { display: grid; justify-items: center; gap: 12px; text-align: center; }
+.emblem { position: relative; width: 132px; }
+.emblem img { display: block; width: 100%; height: auto; filter: drop-shadow(0 6px 26px rgba(226, 182, 98, .35)); }
+.emblem::after { content: ""; position: absolute; inset: 0; pointer-events: none; mix-blend-mode: screen;
+  -webkit-mask: url(../assets/embleme-or-192.webp) center / contain no-repeat; mask: url(../assets/embleme-or-192.webp) center / contain no-repeat;
+  background: linear-gradient(105deg, rgba(255, 246, 220, 0) 38%, rgba(255, 248, 228, .95) 50%, rgba(255, 246, 220, 0) 62%) 160% 0 / 260% 100% no-repeat;
+  animation: foil 6s ease-in-out 1.4s infinite; }
+@keyframes foil { 0% { background-position: 160% 0; } 38%, 100% { background-position: -70% 0; } }
+.id h1 { margin: 6px 0 0; padding-bottom: .06em; font-size: clamp(2.25rem, 1.9rem + 1.6vw, 2.75rem); line-height: 1.05; letter-spacing: -.028em; font-weight: 600;
+  background: linear-gradient(180deg, #ffffff 0%, #f5f5f7 45%, #ecd3a0 100%); -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent; }
+.id p { margin: 0; max-width: 32ch; color: var(--ink-2); font-size: 1rem; line-height: 1.42; text-wrap: balance; }
+
+/* calling and WhatsApp: two gold bars */
+.main-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.btn { display: flex; align-items: center; justify-content: center; gap: 10px; min-height: 56px; padding: 12px 16px; border-radius: 980px;
+  background: linear-gradient(180deg, #f6dea0 0%, #e2b662 52%, #c99640 100%); color: var(--espresso); font: inherit; font-weight: 600; text-decoration: none;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .55), inset 0 -1px 0 rgba(0, 0, 0, .14), 0 16px 36px -16px rgba(226, 182, 98, .75);
+  transition: transform .4s var(--ease), filter .3s ease; }
+.btn:hover { filter: brightness(1.06); }
+.btn:active { transform: translateY(1px) scale(.985); }
+.btn svg { width: 20px; height: 20px; flex: none; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+/* the lists: frosted glass over the night, a thin gold edge on hover */
+section { display: grid; gap: 12px; }
+.label { display: flex; align-items: center; gap: 12px; margin: 0 4px; font-size: .8125rem; line-height: 1.3; font-weight: 500; letter-spacing: .01em; color: var(--ink-2); }
+.label::after { content: ""; flex: 1; height: 1px; background: linear-gradient(90deg, rgba(226, 182, 98, .45), rgba(226, 182, 98, 0)); }
+.links { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.link { position: relative; display: grid; grid-template-columns: 42px minmax(0, 1fr) 16px; align-items: center; gap: 14px; min-height: 70px; box-sizing: border-box;
+  padding: 12px 16px 12px 14px; border-radius: 20px; border: 1px solid var(--edge); color: var(--ink); text-decoration: none; overflow: hidden;
+  background: linear-gradient(180deg, rgba(255, 255, 255, .08), rgba(255, 255, 255, .035));
+  -webkit-backdrop-filter: blur(18px) saturate(140%); backdrop-filter: blur(18px) saturate(140%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .07), 0 18px 40px -26px rgba(0, 0, 0, 1);
+  transform: perspective(800px) rotateX(var(--tx, 0deg)) rotateY(var(--ty, 0deg));
+  transition: transform .6s var(--ease), border-color .3s ease; }
+.link::before { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: 0; transition: opacity .3s ease;
+  background: radial-gradient(260px circle at var(--mx, 50%) var(--my, 0%), rgba(226, 182, 98, .18), rgba(226, 182, 98, 0) 62%); }
+.link:hover { border-color: var(--edge-gold); }
+.link:hover::before { opacity: 1; }
+.link:active { transform: perspective(800px) scale(.985); }
+.ico { display: grid; place-items: center; width: 42px; height: 42px; border-radius: 50%;
+  background: radial-gradient(circle at 32% 26%, rgba(241, 212, 143, .3), rgba(226, 182, 98, .06) 72%); box-shadow: inset 0 0 0 1px rgba(226, 182, 98, .3); }
+.ico svg { width: 21px; height: 21px; fill: none; stroke: var(--gold-hi); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.link b { display: block; font-weight: 600; line-height: 1.25; }
+.link small { display: block; min-width: 0; color: var(--ink-2); font-size: .875rem; line-height: 1.3; overflow-wrap: anywhere; }
+.chev { width: 16px; height: 16px; fill: none; stroke: var(--ink-2); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transition: transform .4s var(--ease), stroke .3s ease; }
+.link:hover .chev { transform: translateX(3px); stroke: var(--gold); }
+
+.hours { margin: 0; text-align: center; color: var(--ink-2); font-size: .9375rem; line-height: 1.5; }
+.hours b { color: var(--ink); font-weight: 500; }
+.share { justify-self: center; min-height: 44px; padding: 10px 22px; border: 1px solid var(--edge); border-radius: 980px; color: var(--gold); font: inherit; font-size: .9375rem; cursor: pointer;
+  background: rgba(255, 255, 255, .05); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); transition: border-color .3s ease; }
+.share:hover { border-color: var(--edge-gold); }
+footer { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 18px; color: var(--ink-2); font-size: .8125rem; }
+footer a { color: var(--ink-2); }
+footer a:hover { color: var(--ink); }
+:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; border-radius: 8px; }
+.link:focus-visible, .btn:focus-visible { border-radius: 20px; }
+
+/* one entrance: the drawing rises, then everything follows in order */
+.js .rv { opacity: 0; transform: translate3d(0, 20px, 0); }
+.js.ready .rv { opacity: 1; transform: none; transition: opacity .9s var(--ease), transform 1.1s var(--ease); transition-delay: calc(var(--i, 0) * 60ms + 150ms); }
+.js .emblem { opacity: 0; transform: scale(.88) translateY(10px); }
+.js.ready .emblem { opacity: 1; transform: none; transition: opacity 1.2s var(--ease), transform 1.4s var(--ease); }
+@media (prefers-reduced-motion: reduce) {
+  .js .rv, .js .emblem { opacity: 1 !important; transform: none !important; transition: none !important; }
+  .emblem::after { animation: none; opacity: 0; }
+  .link, .btn, .chev { transition: none; }
+}
+</style>
+</head>
+<body>
+<canvas id="sky" aria-hidden="true"></canvas>
+<div class="halo" aria-hidden="true"></div>
+<div class="stage" aria-hidden="true"><img class="bg-emblem" id="bg-emblem" src="../assets/embleme-or-480.webp" alt="" width="480" height="489"></div>
+
+<main>
+  <header class="id">
+    <div class="emblem"><img src="../assets/embleme-or-192.webp" alt="" width="132" height="135"></div>
+    <h1 class="rv">Phone Island</h1>
+    <p class="rv" style="--i:1">Réparation, vente et rachat de smartphones, tablettes et consoles. À domicile, partout en Martinique.</p>
+  </header>
+
+  <div class="main-actions rv" style="--i:2">
+    <a class="btn" href="tel:+596696174732"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 3.5h2.6l1.6 4.4-2 1.4a12 12 0 0 0 5.9 5.9l1.4-2 4.4 1.6v2.6a2 2 0 0 1-2.2 2A16.6 16.6 0 0 1 4.6 5.7a2 2 0 0 1 2-2.2z"/></svg>Appeler</a>
+    <a class="btn" href="https://wa.me/596696174732?text=Bonjour%20Phone%20Island%2C%20" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h14a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-8l-4.5 3.5V17H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z"/></svg>WhatsApp</a>
+  </div>
+
+  <section aria-labelledby="t-reseaux">
+    <h2 class="label rv" id="t-reseaux" style="--i:3">Nos réseaux</h2>
+    <ul class="links">
+      <li class="rv" style="--i:4"><a class="link" href="https://www.instagram.com/phone._island/" target="_blank" rel="noopener">
+        <span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.6"/><path d="M15.6 12v1.4a2.6 2.6 0 0 0 5.2 0V12a8.8 8.8 0 1 0-3.6 7.1"/></svg></span>
+        <span><b>Instagram</b><small>@phone._island</small></span>
+        <svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a></li>
+      <li class="rv" style="--i:5"><a class="link" href="https://www.tiktok.com/@phone_island972" target="_blank" rel="noopener">
+        <span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4.5" width="18" height="15" rx="3.5"/><path d="M10 9.3v5.4l4.6-2.7z"/></svg></span>
+        <span><b>TikTok</b><small>@phone_island972</small></span>
+        <svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a></li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="t-site">
+    <h2 class="label rv" id="t-site" style="--i:6">Sur le site</h2>
+    <ul class="links">
+      <li class="rv" style="--i:7"><a class="link" href="../rendez-vous.html">
+        <span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg></span>
+        <span><b>Prendre rendez-vous</b><small>Réparation à domicile</small></span>
+        <svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a></li>
+      <li class="rv" style="--i:8"><a class="link" href="../tarifs.html">
+        <span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 12.6V5A1.5 1.5 0 0 1 5 3.5h7.6l8.4 8.4a1.5 1.5 0 0 1 0 2.1l-6.5 6.5a1.5 1.5 0 0 1-2.1 0z"/><circle cx="8" cy="8" r="1.5"/></svg></span>
+        <span><b>Les tarifs</b><small>Écran, batterie et plus</small></span>
+        <svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a></li>
+      <li class="rv" style="--i:9"><a class="link" href="../boutique.html">
+        <span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1 12.5H6z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg></span>
+        <span><b>La boutique</b><small>Téléphones et accessoires</small></span>
+        <svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a></li>
+      <li class="rv" style="--i:10"><a class="link" href="../rachat.html">
+        <span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12a8 8 0 0 1-14 5.3M4 12a8 8 0 0 1 14-5.3"/><path d="M18 3v3.7h-3.7M6 21v-3.7h3.7"/></svg></span>
+        <span><b>Vendre son téléphone</b><small>Estimation en direct</small></span>
+        <svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a></li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="t-contact">
+    <h2 class="label rv" id="t-contact" style="--i:11">Contact</h2>
+    <ul class="links">
+      <li class="rv" style="--i:12"><a class="link" href="../phone-island.vcf">
+        <span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="8" r="3.5"/><path d="M3.5 20a6.5 6.5 0 0 1 13 0M19 8v6M16 11h6"/></svg></span>
+        <span><b>Enregistrer le contact</b><small>Phone Island dans vos contacts</small></span>
+        <svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a></li>
+      <li class="rv" style="--i:13"><a class="link" href="mailto:contact@phone-island.com">
+        <span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5.5" width="17" height="13" rx="2"/><path d="M4 7l8 6 8-6"/></svg></span>
+        <span><b>E-mail</b><small>contact@phone-island.com</small></span>
+        <svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a></li>
+    </ul>
+  </section>
+
+  <p class="hours rv" style="--i:14"><b>Du lundi au vendredi</b> de 10&nbsp;h à 18&nbsp;h,<br><b>le samedi</b> de 10&nbsp;h à 16&nbsp;h.</p>
+
+  <button class="share" type="button" id="share" hidden>Partager cette page</button>
+
+  <footer>
+    <a href="../">phone-island.com</a>
+    <a href="../confidentialite.html">Confidentialité</a>
+  </footer>
+</main>
+
+<script>
+(function () {
+  'use strict';
+  var root = document.documentElement;
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var finePointer = window.matchMedia('(pointer: fine)').matches;
+  requestAnimationFrame(function () { requestAnimationFrame(function () { root.classList.add('ready'); }); });
+
+  /* share button, where the phone offers it */
+  var share = document.getElementById('share');
+  if (navigator.share) {
+    share.hidden = false;
+    share.addEventListener('click', function () {
+      navigator.share({ title: 'Phone Island', text: 'Tous les liens de Phone Island', url: 'https://phone-island.com/liens/' }).catch(function () {});
+    });
+  }
+
+  /* the sky: stars at three depths and a slow gold dust, both shifting with the tilt */
+  var c = document.getElementById('sky'), ctx = c.getContext('2d');
+  var W = 0, H = 0, stars = [], dust = [];
+  function rand(a, b) { return a + Math.random() * (b - a); }
+  function resize() {
+    var dpr = Math.min(2, window.devicePixelRatio || 1);
+    W = window.innerWidth; H = window.innerHeight;
+    c.width = Math.round(W * dpr); c.height = Math.round(H * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    var n = Math.min(420, Math.round(W * H / 2400));
+    stars = []; dust = [];
+    for (var i = 0; i < n; i++) stars.push({ x: Math.random(), y: Math.random(), z: rand(.2, 1), r: rand(.3, 1), p: rand(0, 6.28), s: rand(.5, 1.6) });
+    for (var j = 0; j < Math.round(n / 7); j++) dust.push({ x: Math.random(), y: Math.random(), z: rand(.35, 1), r: rand(.7, 1.9), v: rand(.006, .016), p: rand(0, 6.28) });
+  }
+
+  /* where the night leans: the mouse on a computer, the phone's tilt on Android, a slow drift otherwise */
+  var aim = { x: 0, y: 0 }, cur = { x: 0, y: 0 }, tilted = false;
+  if (finePointer) {
+    window.addEventListener('pointermove', function (e) { aim.x = e.clientX / W * 2 - 1; aim.y = e.clientY / H * 2 - 1; tilted = true; }, { passive: true });
+  } else if (window.DeviceOrientationEvent && typeof DeviceOrientationEvent.requestPermission !== 'function') {
+    window.addEventListener('deviceorientation', function (e) {
+      if (e.gamma == null) return;
+      aim.x = Math.max(-1, Math.min(1, e.gamma / 30)); aim.y = Math.max(-1, Math.min(1, (e.beta - 45) / 30)); tilted = true;
+    }, { passive: true });
+  }
+
+  var emblem = document.getElementById('bg-emblem');
+  function frame(t) {
+    if (!tilted) { aim.x = Math.sin(t / 4200) * .45; aim.y = Math.cos(t / 5300) * .3; }
+    cur.x += (aim.x - cur.x) * .05; cur.y += (aim.y - cur.y) * .05;
+    var sy = window.scrollY || 0, sp = Math.min(1, sy / Math.max(1, document.body.scrollHeight - H));
+    emblem.style.setProperty('--ry', (cur.x * 14).toFixed(2) + 'deg');
+    emblem.style.setProperty('--rx', (-cur.y * 10 + (sp - .5) * 16).toFixed(2) + 'deg');
+    emblem.style.setProperty('--py', (-sy * .12).toFixed(1) + 'px');
+
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = '#ffffff';
+    for (var i = 0; i < stars.length; i++) {
+      var s = stars[i];
+      var x = ((s.x * W + cur.x * 18 * s.z) % W + W) % W;
+      var y = ((s.y * H - sy * .05 * s.z + cur.y * 12 * s.z) % H + H) % H;
+      ctx.globalAlpha = s.z * (.45 + .55 * (.5 + .5 * Math.sin(t * .0012 * s.s + s.p)));
+      ctx.beginPath(); ctx.arc(x, y, s.r * (.55 + s.z * .6), 0, 6.283); ctx.fill();
+    }
+    for (var j = 0; j < dust.length; j++) {
+      var d = dust[j];
+      if (!reduce) d.y -= d.v * .0035 * d.z;
+      if (d.y < -.05) { d.y = 1.05; d.x = Math.random(); }
+      var dx = ((d.x * W + Math.sin(t * .0004 + d.p) * 14 + cur.x * 34 * d.z) % W + W) % W;
+      var dy = d.y * H - sy * .09 * d.z + cur.y * 22 * d.z;
+      var g = ctx.createRadialGradient(dx, dy, 0, dx, dy, d.r * 3.2);
+      g.addColorStop(0, 'rgba(246, 222, 160, ' + (.55 * d.z).toFixed(3) + ')');
+      g.addColorStop(1, 'rgba(226, 182, 98, 0)');
+      ctx.globalAlpha = 1; ctx.fillStyle = g;
+      ctx.beginPath(); ctx.arc(dx, dy, d.r * 3.2, 0, 6.283); ctx.fill();
+      ctx.fillStyle = '#ffffff';
+    }
+    ctx.globalAlpha = 1;
+  }
+
+  resize();
+  window.addEventListener('resize', resize);
+  if (reduce) { frame(0); window.addEventListener('scroll', function () { frame(0); }, { passive: true }); return; }
+  var raf = 0;
+  function loop(t) { frame(t); raf = requestAnimationFrame(loop); }
+  raf = requestAnimationFrame(loop);
+  document.addEventListener('visibilitychange', function () {
+    if (document.hidden) cancelAnimationFrame(raf); else raf = requestAnimationFrame(loop);
+  });
+
+  /* each card leans toward the mouse, with a gold light under the cursor */
+  if (finePointer) {
+    Array.prototype.forEach.call(document.querySelectorAll('.link'), function (a) {
+      a.addEventListener('pointermove', function (e) {
+        var r = a.getBoundingClientRect(), x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
+        a.style.setProperty('--ty', ((x - .5) * 7).toFixed(2) + 'deg');
+        a.style.setProperty('--tx', ((.5 - y) * 9).toFixed(2) + 'deg');
+        a.style.setProperty('--mx', (x * 100).toFixed(1) + '%');
+        a.style.setProperty('--my', (y * 100).toFixed(1) + '%');
+      });
+      a.addEventListener('pointerleave', function () { a.style.setProperty('--tx', '0deg'); a.style.setProperty('--ty', '0deg'); });
+    });
+  }
+})();
+</script>
+</body>
+</html>
